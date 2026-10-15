@@ -22,6 +22,7 @@ class Seed:
     registry: object
     fids: dict[str, str] = field(default_factory=dict)
     counter: itertools.count = field(default_factory=lambda: itertools.count(1))
+    outbox: str = ""
 
     def scratch(self) -> str:
         return f"{self.key}:replay:fpv-{next(self.counter)}"
@@ -80,6 +81,37 @@ def fpv_seed(db, redis_raw, golden_genesis, genesis_config):
         "CREATE (i)-[:ROOT_CAUSE {fid: 'seed-rc#0', vf: $vf, vt: $inf, tf: $vf, tt: $inf, ts: 1, te: $inf, "
         "rw: 'seed', by: 'agent:inv', confidence: 70}]->(d)", {"vf": SEED_VF, "inf": 9007199254740991})
     seed.fids["ROOT_CAUSE"] = "seed-rc#0"
+
+    # A06 rules (D-23): agents for every core role, two incidents, a live and an expired lease, an outbox.
+    for aid, role, skills in [("ing-1", "ingest", []), ("dsp-1", "dispatcher", []), ("tri-9", "triage", ["ops"]),
+                              ("inv-1", "investigator", ["ops"]), ("com-1", "comms", ["triage"]),
+                              ("sch-1", "scheduler", []), ("hum-1", "human", [])]:
+        apply("RegisterAgent", {"op": "register", "id": aid, "role": role, "skills": skills})
+
+    def as_agent(rule, p, agent):
+        out = k.submit(rule, p, pid=f"seed-{next(pids)}", agent=agent)
+        assert out.code == "APPLIED", (rule, p, out)
+        return out
+
+    for sid, svc, sig in [("al-1", "a", "cpu"), ("al-2", "b", "disk"), ("al-3", "c", "net")]:
+        as_agent("Observe.alert", {"source_id": sid, "service": svc, "signature": sig, "severity": "high",
+                                   "observed_pt": SEED_VF, "payload_sha": "f" * 64}, "ing-1")
+    as_agent("OpenIncident", {"alert": "al-1", "incident": "i1", "service": "a", "signature": "cpu",
+                              "tasks": [{"id": "t1", "kind": "k", "skill": "ops"}, {"id": "t2", "kind": "k",
+                                                                                     "skill": "ops"},
+                                        {"id": "t3", "kind": "k", "skill": "triage"}]}, "triage-1")
+    as_agent("ClaimTask", {"agent": "inv-1", "task": "t2", "ttl_ms": 900_000}, "inv-1")
+    as_agent("ClaimTask", {"agent": "com-1", "task": "t3", "ttl_ms": 1}, "com-1")
+    as_agent("OpenIncident", {"alert": "al-3", "incident": "i3", "service": "c", "signature": "net",
+                              "tasks": [{"id": "t5", "kind": "k", "skill": "ops"}]}, "triage-1")
+    as_agent("ClaimTask", {"agent": "inv-1", "task": "t5", "ttl_ms": 900_000}, "inv-1")
+    as_agent("CompleteTask", {"task": "t5", "result": "r"}, "inv-1")
+    as_agent("ProposeCause", {"incident": "i3", "cause": "svc:c", "confidence": 60, "cites": []}, "inv-1")
+    post = k.submit("PostUpdate", {"incident": "i1", "message_id": "m1", "body": "b",
+                                   "cites": [{"s": "svc:a", "fid": seed.fids["OWNED_BY"]}]}, pid="seed-post",
+                    agent="com-1")
+    assert post.code == "APPLIED", post
+    seed.outbox = "seed-post"
     yield seed
     for name in redis_raw.execute_command("GRAPH.LIST"):
         if name == key or name.startswith(key + ":"):

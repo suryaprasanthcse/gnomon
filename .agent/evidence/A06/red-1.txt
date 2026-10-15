@@ -1,0 +1,3448 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 761 items / 644 deselected / 117 selected
+
+tests\concurrency\test_claims.py E                                       [  0%]
+tests\integration\rules\test_citations.py EEEEEEEEEEEEEEE                [ 13%]
+tests\integration\rules\test_incident.py FFFFFFFFFFFFFF                  [ 25%]
+tests\integration\rules\test_observe.py FFFFFFFFEEEEEE                   [ 37%]
+tests\integration\rules\test_probes_and_matrix.py FFFFFFFFFFFFFFFFFFFFFF [ 56%]
+FFFFFFFFFFFFFFFFFFFFFFFFFFF.                                             [ 80%]
+tests\integration\rules\test_tasks.py EEEEEEEEEEEEEEEEEEEEEE             [ 99%]
+tests\property\test_lifecycle_props.py E                                 [100%]
+
+=================================== ERRORS ====================================
+____________ ERROR at setup of test_50_parallel_claims_one_winner _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009041E50>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009041E50>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________ ERROR at setup of test_post_update_with_a_live_cite _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000001D4BCE0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000001D4BCE0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ ERROR at setup of test_post_update_rejects_a_retracted_cite _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B6B500>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B6B500>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ ERROR at setup of test_post_update_guards __________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009302030>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009302030>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______________ ERROR at setup of test_post_update_is_comms_only _______________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005BFE0F0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005BFE0F0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______________ ERROR at setup of test_propose_cause_happy_path _______________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098476B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098476B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________ ERROR at setup of test_propose_cause_with_live_cites _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008DF8E90>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008DF8E90>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_ ERROR at setup of test_propose_cause_guards[over0-G1:incident_and_cause_exist] _
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009050AA0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009050AA0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_ ERROR at setup of test_propose_cause_guards[over1-G1:incident_and_cause_exist] _
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009833F50>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009833F50>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______ ERROR at setup of test_propose_cause_guards[over2-G3:cause_typed] ______
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E9F500>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E9F500>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____ ERROR at setup of test_propose_cause_guards[over3-G4:confidence_min] _____
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F4C80>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F4C80>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____ ERROR at setup of test_propose_cause_guards[over4-G5:confidence_max] _____
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009822360>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009822360>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______ ERROR at setup of test_propose_cause_guards[over5-G7:cites_live] _______
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008F34E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008F34E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________ ERROR at setup of test_propose_cause_bounds_are_inclusive __________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008F94C20>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008F94C20>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+________ ERROR at setup of test_duplicate_current_root_cause_rejected _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009300470>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009300470>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ ERROR at setup of test_propose_cause_needs_an_open_incident _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098643B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098643B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ ERROR at setup of test_receipt_delivered ___________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009944E90>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009944E90>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______________ ERROR at setup of test_receipt_attempts_and_dead _______________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B57680>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B57680>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___ ERROR at setup of test_receipt_guards[r-1-delivered-None-G1:new_event] ____
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B54BF0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B54BF0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____ ERROR at setup of test_receipt_guards[r-2-lost-None-G2:valid_outcome] ____
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF7B00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF7B00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_ ERROR at setup of test_receipt_guards[r-3-delivered-nope-G3:outbox_exists] __
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C76FC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C76FC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+________ ERROR at setup of test_receipt_of_delivered_outbox_is_refused ________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C96450>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C96450>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___________________ ERROR at setup of test_claim_happy_path ___________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D58950>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D58950>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________________ ERROR at setup of test_claim_guards _____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D56990>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D56990>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______ ERROR at setup of test_claim_refused_while_a_live_lease_exists ________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C696A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C696A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________ ERROR at setup of test_claim_callers _____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C34650>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C34650>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________________ ERROR at setup of test_complete_happy_path __________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005E4CCB0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005E4CCB0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___________________ ERROR at setup of test_complete_guards ____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009CD4B60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009CD4B60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________ ERROR at setup of test_complete_requires_claimed_task ____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C35D30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C35D30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ ERROR at setup of test_handoff_happy_path __________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF5400>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF5400>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________ ERROR at setup of test_handoff_guards ____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B856A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B856A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________ ERROR at setup of test_handoff_requires_claimed_task _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D55700>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D55700>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ ERROR at setup of test_expire_happy_path ___________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C37890>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005C37890>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___________ ERROR at setup of test_expire_uses_the_rewrites_own_now ___________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005E4E090>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005E4E090>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________ ERROR at setup of test_expire_guards _____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF5400>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009BF5400>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________ ERROR at setup of test_expire_requires_claimed_task _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009CD59A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009CD59A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______________ ERROR at setup of test_expire_is_scheduler_only _______________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C5C320>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C5C320>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________ ERROR at setup of test_task_and_lease_state_machines[R4] ___________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C00D10>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C00D10>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________ ERROR at setup of test_task_and_lease_state_machines[R5] ___________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D5B050>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D5B050>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ ERROR at setup of test_task_and_lease_state_machines[R5-R6] _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C769F0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C769F0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ ERROR at setup of test_task_and_lease_state_machines[R5-R7] _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D0D820>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009D0D820>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ ERROR at setup of test_task_and_lease_state_machines[R5-R8] _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F6120>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F6120>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______ ERROR at setup of test_task_and_lease_state_machines[R5-R8-R5] ________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B55D30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B55D30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______ ERROR at setup of test_task_and_lease_state_machines[R5-R7-R6] ________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B86330>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    @pytest.fixture
+    def opened(ir) -> IR:
+        """An open incident i1 on service a with one task t1 (skill ops)."""
+>       ir.alert()
+
+tests\support\ir_world.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B86330>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______________ ERROR at setup of test_random_lifecycles_keep_i6 _______________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000009043D40>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+golden_genesis = 't:test-golden-cccb70c2'
+genesis_config = {'tenant': 'test', 'agents': [{'id': 'kernel', 'role': 'kernel', 'skills': []}, {'id': 'triage-1', 'role': 'triage', '..., 'triage']}], 'skills': ['ops', 'triage'], 'registry': <gnomon.kernel.registry.Registry object at 0x00000000098F6120>}
+
+    @pytest.fixture(scope="module")
+    def lifecycle_base(db, redis_raw, golden_genesis, genesis_config):
+        from tests.support.ir_world import AGENTS as WORLD_AGENTS
+        from tests.support.ir_world import IR
+    
+        from gnomon.kernel.service import KernelHandle
+    
+        key = f"t:test-life-{uuid.uuid4().hex[:8]}"
+        redis_raw.execute_command("GRAPH.COPY", golden_genesis, key)
+        w = IR(KernelHandle(db.select_graph(key), genesis_config["registry"]), redis_raw)
+        for aid, role, skills in WORLD_AGENTS:
+            w.ok("RegisterAgent", {"op": "register", "id": aid, "role": role, "skills": skills}, "ops-1")
+        w.ok("RegisterEntity.Service", {"id": "a", "name": "a", "tier": "t", "criticality": 3, "user_facing": True},
+             "ops-1")
+>       w.alert()
+
+tests\property\test_lifecycle_props.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B85010>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001100, pids=count(11))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+================================== FAILURES ===================================
+________________________ test_open_incident_happy_path ________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094BE2A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_open_incident_happy_path(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094BE2A0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ test_open_incident_alert_guards[over0-G1:alert_on_service] __________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009865DC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'alert': 'nope'}, guard = 'G1:alert_on_service'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"alert": "nope"}, "G1:alert_on_service"), ({"service": "b"}, "G2:service_matches"),
+         ({"signature": "mem"}, "G3:signature_matches"), ({"tasks": []}, "G4:has_tasks")],
+    )
+    def test_open_incident_alert_guards(ir, over, guard):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009865DC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________ test_open_incident_alert_guards[over1-G2:service_matches] __________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098477D0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'service': 'b'}, guard = 'G2:service_matches'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"alert": "nope"}, "G1:alert_on_service"), ({"service": "b"}, "G2:service_matches"),
+         ({"signature": "mem"}, "G3:signature_matches"), ({"tasks": []}, "G4:has_tasks")],
+    )
+    def test_open_incident_alert_guards(ir, over, guard):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098477D0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________ test_open_incident_alert_guards[over2-G3:signature_matches] _________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B52ED0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'signature': 'mem'}, guard = 'G3:signature_matches'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"alert": "nope"}, "G1:alert_on_service"), ({"service": "b"}, "G2:service_matches"),
+         ({"signature": "mem"}, "G3:signature_matches"), ({"tasks": []}, "G4:has_tasks")],
+    )
+    def test_open_incident_alert_guards(ir, over, guard):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B52ED0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________ test_open_incident_alert_guards[over3-G4:has_tasks] _____________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009833E60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'tasks': []}, guard = 'G4:has_tasks'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"alert": "nope"}, "G1:alert_on_service"), ({"service": "b"}, "G2:service_matches"),
+         ({"signature": "mem"}, "G3:signature_matches"), ({"tasks": []}, "G4:has_tasks")],
+    )
+    def test_open_incident_alert_guards(ir, over, guard):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009833E60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+______________ test_open_incident_identity_and_duplicate_guards _______________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009867B30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_open_incident_identity_and_duplicate_guards(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009867B30>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______________________ test_open_incident_skill_guard ________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E9FAD0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_open_incident_skill_guard(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E9FAD0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________________ test_open_incident_caller __________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F72C0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_open_incident_caller(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F72C0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___________________________ test_resolve_happy_path ___________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094A4E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_resolve_happy_path(ir):
+>       ready_to_resolve(ir)
+
+tests\integration\rules\test_incident.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\rules\test_incident.py:78: in ready_to_resolve
+    ir.alert()
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094A4E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________________________ test_resolve_guards _____________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4F9B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_resolve_guards(ir):
+>       ready_to_resolve(ir)
+
+tests\integration\rules\test_incident.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\rules\test_incident.py:78: in ready_to_resolve
+    ir.alert()
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4F9B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________________ test_resolve_needs_every_task_done ______________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009867A10>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_resolve_needs_every_task_done(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009867A10>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+___________________ test_resolve_needs_a_current_root_cause ___________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B6A780>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_resolve_needs_a_current_root_cause(ir):
+>       ir.alert()
+
+tests\integration\rules\test_incident.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B6A780>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________ test_incident_state_machine[R4-open] _____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094A4E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+steps = [], expected = 'open'
+
+    @pytest.mark.parametrize(
+        ("steps", "expected"),
+        [
+            ([], "open"),
+            (["resolve"], "resolved"),
+        ],
+        ids=["R4-open", "R11-resolved"],
+    )
+    def test_incident_state_machine(ir, steps, expected):
+>       ready_to_resolve(ir)
+
+tests\integration\rules\test_incident.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\rules\test_incident.py:78: in ready_to_resolve
+    ir.alert()
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000094A4E00>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ test_incident_state_machine[R11-resolved] __________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B86240>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+steps = ['resolve'], expected = 'resolved'
+
+    @pytest.mark.parametrize(
+        ("steps", "expected"),
+        [
+            ([], "open"),
+            (["resolve"], "resolved"),
+        ],
+        ids=["R4-open", "R11-resolved"],
+    )
+    def test_incident_state_machine(ir, steps, expected):
+>       ready_to_resolve(ir)
+
+tests\integration\rules\test_incident.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\rules\test_incident.py:78: in ready_to_resolve
+    ir.alert()
+tests\support\ir_world.py:68: in alert
+    return self.ok("Observe.alert", {"source_id": source_id, "service": service, "signature": signature,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B86240>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-1', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________________ test_alert_happy_path ____________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008BA9160>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(14))
+
+    def test_alert_happy_path(ir):
+        out, delta = ir.delta("Observe.alert", alert_p(ir), "ing-1", pid="obs-a")
+>       assert out.code == "APPLIED"
+E       AssertionError: assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\rules\test_observe.py:25: AssertionError
+______________________________ test_alert_guards ______________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009946A80>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_alert_guards(ir):
+>       ir.ok("Observe.alert", alert_p(ir), "ing-1")
+
+tests\integration\rules\test_observe.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009946A80>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.alert'
+p = {'source_id': 'al-9', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.alert', {'source_id': 'al-9', 'service': 'a', 'signature': 'cpu', 'severity': 'high', ...}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.alert'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_____________________________ test_alert_callers ______________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008BA9160>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+
+    def test_alert_callers(ir):
+>       assert ir.submit("Observe.alert", alert_p(ir), "triage-1").code == "CALLER_DENIED"
+E       AssertionError: assert <Code.SCHEMA_...EMA_REJECTED'> == 'CALLER_DENIED'
+E         
+E         - CALLER_DENIED
+E         + SCHEMA_REJECTED
+
+tests\integration\rules\test_observe.py:41: AssertionError
+___________________________ test_health_happy_path ____________________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4E210>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(14))
+
+    def test_health_happy_path(ir):
+        out, delta = ir.delta("Observe.health", health_p(), "ing-1", pid="obs-h")
+>       assert out.code == "APPLIED"
+E       AssertionError: assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\rules\test_observe.py:46: AssertionError
+___________________ test_health_guards[over0-G1:new_event] ____________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C06FC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'source_id': 'h-1'}, guard = 'G1:new_event'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"source_id": "h-1"}, "G1:new_event"), ({"source_id": "h-2", "service": "zz"}, "G2:service_exists"),
+         ({"source_id": "h-3", "health": "melting"}, "G3:valid_health"),
+         ({"source_id": "h-4", "observed_pt": 1_791_000_000_400}, "G4:newer_observation")],
+    )
+    def test_health_guards(ir, over, guard):
+>       ir.ok("Observe.health", health_p(), "ing-1")
+
+tests\integration\rules\test_observe.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C06FC0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.health'
+p = {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.health', {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.health'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_________________ test_health_guards[over1-G2:service_exists] _________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C74E60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'source_id': 'h-2', 'service': 'zz'}, guard = 'G2:service_exists'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"source_id": "h-1"}, "G1:new_event"), ({"source_id": "h-2", "service": "zz"}, "G2:service_exists"),
+         ({"source_id": "h-3", "health": "melting"}, "G3:valid_health"),
+         ({"source_id": "h-4", "observed_pt": 1_791_000_000_400}, "G4:newer_observation")],
+    )
+    def test_health_guards(ir, over, guard):
+>       ir.ok("Observe.health", health_p(), "ing-1")
+
+tests\integration\rules\test_observe.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009C74E60>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.health'
+p = {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.health', {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.health'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+__________________ test_health_guards[over2-G3:valid_health] __________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F8110>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'source_id': 'h-3', 'health': 'melting'}, guard = 'G3:valid_health'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"source_id": "h-1"}, "G1:new_event"), ({"source_id": "h-2", "service": "zz"}, "G2:service_exists"),
+         ({"source_id": "h-3", "health": "melting"}, "G3:valid_health"),
+         ({"source_id": "h-4", "observed_pt": 1_791_000_000_400}, "G4:newer_observation")],
+    )
+    def test_health_guards(ir, over, guard):
+>       ir.ok("Observe.health", health_p(), "ing-1")
+
+tests\integration\rules\test_observe.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x00000000098F8110>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.health'
+p = {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.health', {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.health'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+_______________ test_health_guards[over3-G4:newer_observation] ________________
+
+ir = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4E1B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+over = {'source_id': 'h-4', 'observed_pt': 1791000000400}
+guard = 'G4:newer_observation'
+
+    @pytest.mark.parametrize(
+        ("over", "guard"),
+        [({"source_id": "h-1"}, "G1:new_event"), ({"source_id": "h-2", "service": "zz"}, "G2:service_exists"),
+         ({"source_id": "h-3", "health": "melting"}, "G3:valid_health"),
+         ({"source_id": "h-4", "observed_pt": 1_791_000_000_400}, "G4:newer_observation")],
+    )
+    def test_health_guards(ir, over, guard):
+>       ir.ok("Observe.health", health_p(), "ing-1")
+
+tests\integration\rules\test_observe.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = IR(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4E1B0>, client=<redis.client.Redis(<redis.connection.C..._host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, clock=1791000001140, pids=count(15))
+rule = 'Observe.health'
+p = {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}
+agent = 'ing-1', kw = {}
+
+    def ok(self, rule, p, agent, **kw):
+        out = self.submit(rule, p, agent, **kw)
+>       assert out.code == "APPLIED", (rule, p, out)
+E       AssertionError: ('Observe.health', {'source_id': 'h-1', 'service': 'a', 'health': 'degraded', 'observed_pt': 1791000000500}, Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'Observe.health'"}))
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\support\ir_world.py:37: AssertionError
+____________________ test_generated_probe_names[ClaimTask] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ClaimTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_generated_probe_names[CompleteTask] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'CompleteTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_generated_probe_names[ExpireLease] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ExpireLease'"
+
+gnomon\kernel\registry.py:118: KeyError
+_____________________ test_generated_probe_names[Handoff] _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Handoff'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_generated_probe_names[Observe.alert] __________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.alert'"
+
+gnomon\kernel\registry.py:118: KeyError
+_________________ test_generated_probe_names[Observe.health] __________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.health'"
+
+gnomon\kernel\registry.py:118: KeyError
+_________________ test_generated_probe_names[Observe.receipt] _________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.receipt'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_generated_probe_names[OpenIncident] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'OpenIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_generated_probe_names[PostUpdate] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'PostUpdate'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_generated_probe_names[ProposeCause] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ProposeCause'"
+
+gnomon\kernel\registry.py:118: KeyError
+_________________ test_generated_probe_names[ResolveIncident] _________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_generated_probe_names(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ResolveIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+_____ test_probes_are_read_only_prefixes_of_the_guard_section[ClaimTask] ______
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ClaimTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+____ test_probes_are_read_only_prefixes_of_the_guard_section[CompleteTask] ____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'CompleteTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+____ test_probes_are_read_only_prefixes_of_the_guard_section[ExpireLease] _____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ExpireLease'"
+
+gnomon\kernel\registry.py:118: KeyError
+______ test_probes_are_read_only_prefixes_of_the_guard_section[Handoff] _______
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Handoff'"
+
+gnomon\kernel\registry.py:118: KeyError
+___ test_probes_are_read_only_prefixes_of_the_guard_section[Observe.alert] ____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.alert'"
+
+gnomon\kernel\registry.py:118: KeyError
+___ test_probes_are_read_only_prefixes_of_the_guard_section[Observe.health] ___
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.health'"
+
+gnomon\kernel\registry.py:118: KeyError
+__ test_probes_are_read_only_prefixes_of_the_guard_section[Observe.receipt] ___
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.receipt'"
+
+gnomon\kernel\registry.py:118: KeyError
+____ test_probes_are_read_only_prefixes_of_the_guard_section[OpenIncident] ____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'OpenIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+_____ test_probes_are_read_only_prefixes_of_the_guard_section[PostUpdate] _____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'PostUpdate'"
+
+gnomon\kernel\registry.py:118: KeyError
+____ test_probes_are_read_only_prefixes_of_the_guard_section[ProposeCause] ____
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ProposeCause'"
+
+gnomon\kernel\registry.py:118: KeyError
+__ test_probes_are_read_only_prefixes_of_the_guard_section[ResolveIncident] ___
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    @pytest.mark.parametrize("name", sorted(PROBES))
+    def test_probes_are_read_only_prefixes_of_the_guard_section(registry, name):
+        from gnomon.footprint.parser import extract
+    
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ResolveIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________ test_probe_generation_counts_conjuncts_and_plain_matches ___________
+
+    def test_probe_generation_counts_conjuncts_and_plain_matches():
+>       from gnomon.kernel.registry import generate_probes
+E       ImportError: cannot import name 'generate_probes' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\rules\test_probes_and_matrix.py:60: ImportError
+_____________________ test_callers_and_classes[ClaimTask] _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ClaimTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ClaimTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_callers_and_classes[CompleteTask] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'CompleteTask'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'CompleteTask'"
+
+gnomon\kernel\registry.py:118: KeyError
+____________________ test_callers_and_classes[ExpireLease] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ExpireLease'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ExpireLease'"
+
+gnomon\kernel\registry.py:118: KeyError
+______________________ test_callers_and_classes[Handoff] ______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Handoff'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Handoff'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_callers_and_classes[Observe.alert] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.alert'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_callers_and_classes[Observe.health] ___________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.health'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.health'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_callers_and_classes[Observe.receipt] __________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.receipt'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.receipt'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_callers_and_classes[OpenIncident] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'OpenIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'OpenIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+____________________ test_callers_and_classes[PostUpdate] _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'PostUpdate'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'PostUpdate'"
+
+gnomon\kernel\registry.py:118: KeyError
+___________________ test_callers_and_classes[ProposeCause] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ProposeCause'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ProposeCause'"
+
+gnomon\kernel\registry.py:118: KeyError
+__________________ test_callers_and_classes[ResolveIncident] __________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    @pytest.mark.parametrize("name", sorted(CALLERS))
+    def test_callers_and_classes(registry, name):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'ResolveIncident'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'ResolveIncident'"
+
+gnomon\kernel\registry.py:118: KeyError
+____________________ test_every_new_rule_passes_the_lints _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+
+    def test_every_new_rule_passes_the_lints(registry):
+        from gnomon.footprint.lints import lint
+    
+        for name in PROBES:
+>           report = lint(registry.get(name))
+                          ^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C77020>
+name = 'Observe.alert'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'Observe.alert'"
+
+gnomon\kernel\registry.py:118: KeyError
+________ test_section_7_6_pairs_are_guarded[ClaimTask-ClaimTask-HOLDS] ________
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ClaimTask', element = 'HOLDS'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ClaimTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ClaimTask', 'ClaimTask')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_____ test_section_7_6_pairs_are_guarded[ClaimTask-ClaimTask-Task.state] ______
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ClaimTask', element = 'Task.state'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ClaimTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ClaimTask', 'ClaimTask')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_______ test_section_7_6_pairs_are_guarded[ClaimTask-ExpireLease-HOLDS] _______
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ExpireLease', element = 'HOLDS'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ExpireLease'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ExpireLease', 'ClaimTask')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+____ test_section_7_6_pairs_are_guarded[ClaimTask-ExpireLease-Task.state] _____
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ExpireLease', element = 'Task.state'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ClaimTask', b = 'ExpireLease'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ExpireLease', 'ClaimTask')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_______ test_section_7_6_pairs_are_guarded[CompleteTask-Handoff-HOLDS] ________
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'CompleteTask', b = 'Handoff', element = 'HOLDS'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'CompleteTask', b = 'Handoff'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('Handoff', 'CompleteTask')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_ test_section_7_6_pairs_are_guarded[AssertFact.OWNED_BY-PostUpdate-OWNED_BY] _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'AssertFact.OWNED_BY', b = 'PostUpdate', element = 'OWNED_BY'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'AssertFact.OWNED_BY', b = 'PostUpdate'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('PostUpdate', 'AssertFact.OWNED_BY')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_ test_section_7_6_pairs_are_guarded[RetractFact.OWNED_BY-ProposeCause-OWNED_BY.te] _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'RetractFact.OWNED_BY', b = 'ProposeCause', element = 'OWNED_BY.te'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'RetractFact.OWNED_BY', b = 'ProposeCause'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ProposeCause', 'RetractFact.OWNED_BY')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_ test_section_7_6_pairs_are_guarded[RetractFact.DEPENDS_ON-ProposeCause-DEPENDS_ON.te] _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'RetractFact.DEPENDS_ON', b = 'ProposeCause', element = 'DEPENDS_ON.te'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'RetractFact.DEPENDS_ON', b = 'ProposeCause'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ProposeCause', 'RetractFact.DEPENDS_ON')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+___ test_section_7_6_pairs_are_guarded[OpenIncident-OpenIncident-Incident] ____
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'OpenIncident', b = 'OpenIncident', element = 'Incident'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'OpenIncident', b = 'OpenIncident'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('OpenIncident', 'OpenIncident')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+__ test_section_7_6_pairs_are_guarded[ResolveIncident-ClaimTask-Task.state] ___
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ResolveIncident', b = 'ClaimTask', element = 'Task.state'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ResolveIncident', b = 'ClaimTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ClaimTask', 'ResolveIncident')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+_ test_section_7_6_pairs_are_guarded[ResolveIncident-CompleteTask-Task.state] _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ResolveIncident', b = 'CompleteTask', element = 'Task.state'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ResolveIncident', b = 'CompleteTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('CompleteTask', 'ResolveIncident')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+____ test_section_7_6_pairs_are_guarded[Observe.receipt-PostUpdate-Outbox] ____
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'Observe.receipt', b = 'PostUpdate', element = 'Outbox'
+
+    @pytest.mark.parametrize(
+        ("a", "b", "element"),
+        [
+            ("ClaimTask", "ClaimTask", "HOLDS"), ("ClaimTask", "ClaimTask", "Task.state"),
+            ("ClaimTask", "ExpireLease", "HOLDS"), ("ClaimTask", "ExpireLease", "Task.state"),
+            ("CompleteTask", "Handoff", "HOLDS"),
+            ("AssertFact.OWNED_BY", "PostUpdate", "OWNED_BY"),
+            ("RetractFact.OWNED_BY", "ProposeCause", "OWNED_BY.te"),
+            ("RetractFact.DEPENDS_ON", "ProposeCause", "DEPENDS_ON.te"),
+            ("OpenIncident", "OpenIncident", "Incident"),
+            ("ResolveIncident", "ClaimTask", "Task.state"), ("ResolveIncident", "CompleteTask", "Task.state"),
+            ("Observe.receipt", "PostUpdate", "Outbox"),
+        ],
+    )
+    def test_section_7_6_pairs_are_guarded(entries, a, b, element):
+>       e = entry(entries, a, b)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'Observe.receipt', b = 'PostUpdate'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('PostUpdate', 'Observe.receipt')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+___________ test_section_7_6_pairs_commute[Observe.alert-ClaimTask] ___________
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'Observe.alert', b = 'ClaimTask'
+
+    @pytest.mark.parametrize(("a", "b"), [("Observe.alert", "ClaimTask"), ("ProposeCause", "ClaimTask")])
+    def test_section_7_6_pairs_commute(entries, a, b):
+>       assert entry(entries, a, b).cls == "commutes"
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'Observe.alert', b = 'ClaimTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ClaimTask', 'Observe.alert')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+___________ test_section_7_6_pairs_commute[ProposeCause-ClaimTask] ____________
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ProposeCause', b = 'ClaimTask'
+
+    @pytest.mark.parametrize(("a", "b"), [("Observe.alert", "ClaimTask"), ("ProposeCause", "ClaimTask")])
+    def test_section_7_6_pairs_commute(entries, a, b):
+>       assert entry(entries, a, b).cls == "commutes"
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\rules\test_probes_and_matrix.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+entries = {('AssertFact.DEPENDS_ON', 'AssertFact.DEPENDS_ON'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.DEPENDS_ON', overl...t.OWNED_BY'): Entry(a='AssertFact.DEPENDS_ON', b='AssertFact.OWNED_BY', overlap=(), cls='commutes', unguarded=()), ...}
+a = 'ProposeCause', b = 'ClaimTask'
+
+    def entry(entries, a, b):
+>       return entries.get((a, b)) or entries[(b, a)]
+                                      ^^^^^^^^^^^^^^^
+E       KeyError: ('ClaimTask', 'ProposeCause')
+
+tests\integration\rules\test_probes_and_matrix.py:99: KeyError
+=========================== short test summary info ===========================
+ERROR tests/concurrency/test_claims.py::test_50_parallel_claims_one_winner - ...
+ERROR tests/integration/rules/test_citations.py::test_post_update_with_a_live_cite
+ERROR tests/integration/rules/test_citations.py::test_post_update_rejects_a_retracted_cite
+ERROR tests/integration/rules/test_citations.py::test_post_update_guards - As...
+ERROR tests/integration/rules/test_citations.py::test_post_update_is_comms_only
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_happy_path
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_with_live_cites
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over0-G1:incident_and_cause_exist]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over1-G1:incident_and_cause_exist]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over2-G3:cause_typed]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over3-G4:confidence_min]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over4-G5:confidence_max]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_guards[over5-G7:cites_live]
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_bounds_are_inclusive
+ERROR tests/integration/rules/test_citations.py::test_duplicate_current_root_cause_rejected
+ERROR tests/integration/rules/test_citations.py::test_propose_cause_needs_an_open_incident
+ERROR tests/integration/rules/test_observe.py::test_receipt_delivered - Asser...
+ERROR tests/integration/rules/test_observe.py::test_receipt_attempts_and_dead
+ERROR tests/integration/rules/test_observe.py::test_receipt_guards[r-1-delivered-None-G1:new_event]
+ERROR tests/integration/rules/test_observe.py::test_receipt_guards[r-2-lost-None-G2:valid_outcome]
+ERROR tests/integration/rules/test_observe.py::test_receipt_guards[r-3-delivered-nope-G3:outbox_exists]
+ERROR tests/integration/rules/test_observe.py::test_receipt_of_delivered_outbox_is_refused
+ERROR tests/integration/rules/test_tasks.py::test_claim_happy_path - Assertio...
+ERROR tests/integration/rules/test_tasks.py::test_claim_guards - AssertionErr...
+ERROR tests/integration/rules/test_tasks.py::test_claim_refused_while_a_live_lease_exists
+ERROR tests/integration/rules/test_tasks.py::test_claim_callers - AssertionEr...
+ERROR tests/integration/rules/test_tasks.py::test_complete_happy_path - Asser...
+ERROR tests/integration/rules/test_tasks.py::test_complete_guards - Assertion...
+ERROR tests/integration/rules/test_tasks.py::test_complete_requires_claimed_task
+ERROR tests/integration/rules/test_tasks.py::test_handoff_happy_path - Assert...
+ERROR tests/integration/rules/test_tasks.py::test_handoff_guards - AssertionE...
+ERROR tests/integration/rules/test_tasks.py::test_handoff_requires_claimed_task
+ERROR tests/integration/rules/test_tasks.py::test_expire_happy_path - Asserti...
+ERROR tests/integration/rules/test_tasks.py::test_expire_uses_the_rewrites_own_now
+ERROR tests/integration/rules/test_tasks.py::test_expire_guards - AssertionEr...
+ERROR tests/integration/rules/test_tasks.py::test_expire_requires_claimed_task
+ERROR tests/integration/rules/test_tasks.py::test_expire_is_scheduler_only - ...
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R4]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5-R6]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5-R7]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5-R8]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5-R8-R5]
+ERROR tests/integration/rules/test_tasks.py::test_task_and_lease_state_machines[R5-R7-R6]
+ERROR tests/property/test_lifecycle_props.py::test_random_lifecycles_keep_i6
+FAILED tests/integration/rules/test_incident.py::test_open_incident_happy_path
+FAILED tests/integration/rules/test_incident.py::test_open_incident_alert_guards[over0-G1:alert_on_service]
+FAILED tests/integration/rules/test_incident.py::test_open_incident_alert_guards[over1-G2:service_matches]
+FAILED tests/integration/rules/test_incident.py::test_open_incident_alert_guards[over2-G3:signature_matches]
+FAILED tests/integration/rules/test_incident.py::test_open_incident_alert_guards[over3-G4:has_tasks]
+FAILED tests/integration/rules/test_incident.py::test_open_incident_identity_and_duplicate_guards
+FAILED tests/integration/rules/test_incident.py::test_open_incident_skill_guard
+FAILED tests/integration/rules/test_incident.py::test_open_incident_caller - ...
+FAILED tests/integration/rules/test_incident.py::test_resolve_happy_path - As...
+FAILED tests/integration/rules/test_incident.py::test_resolve_guards - Assert...
+FAILED tests/integration/rules/test_incident.py::test_resolve_needs_every_task_done
+FAILED tests/integration/rules/test_incident.py::test_resolve_needs_a_current_root_cause
+FAILED tests/integration/rules/test_incident.py::test_incident_state_machine[R4-open]
+FAILED tests/integration/rules/test_incident.py::test_incident_state_machine[R11-resolved]
+FAILED tests/integration/rules/test_observe.py::test_alert_happy_path - Asser...
+FAILED tests/integration/rules/test_observe.py::test_alert_guards - Assertion...
+FAILED tests/integration/rules/test_observe.py::test_alert_callers - Assertio...
+FAILED tests/integration/rules/test_observe.py::test_health_happy_path - Asse...
+FAILED tests/integration/rules/test_observe.py::test_health_guards[over0-G1:new_event]
+FAILED tests/integration/rules/test_observe.py::test_health_guards[over1-G2:service_exists]
+FAILED tests/integration/rules/test_observe.py::test_health_guards[over2-G3:valid_health]
+FAILED tests/integration/rules/test_observe.py::test_health_guards[over3-G4:newer_observation]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[ClaimTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[CompleteTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[ExpireLease]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[Handoff]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[Observe.alert]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[Observe.health]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[Observe.receipt]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[OpenIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[PostUpdate]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[ProposeCause]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_generated_probe_names[ResolveIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[ClaimTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[CompleteTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[ExpireLease]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[Handoff]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[Observe.alert]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[Observe.health]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[Observe.receipt]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[OpenIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[PostUpdate]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[ProposeCause]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probes_are_read_only_prefixes_of_the_guard_section[ResolveIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_probe_generation_counts_conjuncts_and_plain_matches
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[ClaimTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[CompleteTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[ExpireLease]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[Handoff]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[Observe.alert]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[Observe.health]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[Observe.receipt]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[OpenIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[PostUpdate]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[ProposeCause]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_callers_and_classes[ResolveIncident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_every_new_rule_passes_the_lints
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ClaimTask-ClaimTask-HOLDS]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ClaimTask-ClaimTask-Task.state]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ClaimTask-ExpireLease-HOLDS]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ClaimTask-ExpireLease-Task.state]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[CompleteTask-Handoff-HOLDS]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[AssertFact.OWNED_BY-PostUpdate-OWNED_BY]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[RetractFact.OWNED_BY-ProposeCause-OWNED_BY.te]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[RetractFact.DEPENDS_ON-ProposeCause-DEPENDS_ON.te]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[OpenIncident-OpenIncident-Incident]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ResolveIncident-ClaimTask-Task.state]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[ResolveIncident-CompleteTask-Task.state]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_are_guarded[Observe.receipt-PostUpdate-Outbox]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_commute[Observe.alert-ClaimTask]
+FAILED tests/integration/rules/test_probes_and_matrix.py::test_section_7_6_pairs_commute[ProposeCause-ClaimTask]
+========== 71 failed, 1 passed, 644 deselected, 45 errors in 16.04s ===========

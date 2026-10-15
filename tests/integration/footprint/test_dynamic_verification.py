@@ -77,7 +77,59 @@ def strategy(name, seed):
                                       "id": st.sampled_from(["inv-9", "triage-1", "kernel"]),
                                       "role": st.sampled_from(["investigator", "kernel", "wizard"]),
                                       "skills": st.sampled_from([[], ["triage"], ["juggling"]])})
+    # A06 rules (D-23)
+    live_cite = [{"s": "svc:a", "fid": seed.fids["OWNED_BY"]}]
+    pick = st.sampled_from
+    if name == "Observe.alert":
+        return st.fixed_dictionaries({"source_id": pick(["al-1", "al-x"]), "service": pick(["a", "zz"]),
+                                      "signature": pick(["cpu", "mem"]), "severity": st.just("high"),
+                                      "observed_pt": st.just(1), "payload_sha": st.just("f" * 64)})
+    if name == "Observe.health":
+        return st.fixed_dictionaries({"source_id": pick(["al-1", "h-x"]), "service": pick(["a", "zz"]),
+                                      "health": pick(["ok", "down", "melting"]), "observed_pt": pick([0, FUTURE])})
+    if name == "Observe.receipt":
+        return st.fixed_dictionaries({"source_id": pick(["al-1", "r-x"]), "outbox": pick([seed.outbox, "nope"]),
+                                      "outcome": pick(["delivered", "failed", "lost"]), "observed_pt": st.just(1)})
+    if name == "OpenIncident":
+        tasks = pick([[], [{"id": "t1", "kind": "k", "skill": "ops"}], [{"id": "t9", "kind": "k", "skill": "ops"}],
+                      [{"id": "t8", "kind": "k", "skill": "juggling"}]])
+        return st.fixed_dictionaries({"alert": pick(["al-1", "al-2", "nope"]), "incident": pick(["i1", "i9"]),
+                                      "service": pick(["a", "b"]), "signature": pick(["cpu", "disk"]), "tasks": tasks})
+    if name == "ClaimTask":
+        return st.fixed_dictionaries({"agent": pick(["inv-1", "com-1", "tri-9"]), "task": pick(["t1", "t2", "t3", "x"]),
+                                      "ttl_ms": pick([0, 1_000, 10**9])})
+    if name == "CompleteTask":
+        return st.fixed_dictionaries({"task": pick(["t1", "t2", "t3"]), "result": st.just("r")})
+    if name == "Handoff":
+        return st.fixed_dictionaries({"task": pick(["t1", "t2"]), "to": pick(["tri-9", "com-1", "inv-1"]),
+                                      "ttl_ms": pick([0, 1_000])})
+    if name == "ExpireLease":
+        return st.fixed_dictionaries({"task": pick(["t1", "t2", "t3"])})
+    if name == "PostUpdate":
+        return st.fixed_dictionaries({"incident": pick(["i1", "nope"]), "message_id": pick(["m1", "m2"]),
+                                      "body": st.just("b"),
+                                      "cites": pick([[], live_cite, [{"s": "svc:a", "fid": "bogus#0"}]])})
+    if name == "ProposeCause":
+        return st.fixed_dictionaries({"incident": pick(["i1", "i3", "nope"]), "cause": pick(["dep:d1", "svc:a",
+                                                                                              "team:t1"]),
+                                      "confidence": pick([-1, 50, 101]), "cites": pick([[], live_cite])})
+    if name == "ResolveIncident":
+        return st.fixed_dictionaries({"incident": pick(["i1", "i3", "nope"])})
     raise AssertionError(f"no params strategy for {name}")
+
+
+AGENT_FOR = {
+    "Observe.alert": "ing-1", "Observe.health": "ing-1", "Observe.receipt": "dsp-1", "OpenIncident": "triage-1",
+    "ClaimTask": None, "CompleteTask": "inv-1", "Handoff": "inv-1", "ExpireLease": "sch-1", "PostUpdate": "com-1",
+    "ProposeCause": "inv-1", "ResolveIncident": "inv-1",
+}
+
+
+def agent_for(name, p):
+    """The proposing agent: the rule's caller role in the seed (ClaimTask proposes for itself)."""
+    if name == "ClaimTask":
+        return p["agent"]
+    return AGENT_FOR.get(name, "ops-1")
 
 
 def _rule_names():
@@ -90,7 +142,7 @@ def _verify(db, redis_raw, seed, name, p, n):
     from gnomon.footprint.verify import verify
 
     return verify(db, redis_raw, seed.key, seed.scratch(), seed.registry, rule=name, p=p, pid=f"fpv-{n}",
-                  agent="ops-1")
+                  agent=agent_for(name, p))
 
 
 @pytest.mark.property
@@ -126,6 +178,20 @@ KNOWN_GOOD = {
     "RegisterEntity.Deploy": {"id": "d9", "service": "b", "version": "9", "verified": True, "expected_health": "ok"},
     "DeactivateRule": {"name": "AssertFact.MEMBER_OF", "version": 1},
     "RegisterAgent": {"op": "register", "id": "inv-9", "role": "investigator", "skills": ["triage", "ops"]},
+    # A06 rules (D-23)
+    "Observe.alert": {"source_id": "al-9", "service": "a", "signature": "mem", "severity": "low", "observed_pt": 1,
+                      "payload_sha": "f" * 64},
+    "Observe.health": {"source_id": "h-9", "service": "b", "health": "down", "observed_pt": EPOCH + 999},
+    "Observe.receipt": {"source_id": "r-9", "outbox": "OUTBOX", "outcome": "failed", "observed_pt": 1},
+    "OpenIncident": {"alert": "al-2", "incident": "i2", "service": "b", "signature": "disk",
+                     "tasks": [{"id": "t9", "kind": "k", "skill": "ops"}]},
+    "ClaimTask": {"agent": "inv-1", "task": "t1", "ttl_ms": 1_000},
+    "CompleteTask": {"task": "t2", "result": "r"},
+    "Handoff": {"task": "t2", "to": "tri-9", "ttl_ms": 1_000},
+    "ExpireLease": {"task": "t3"},
+    "PostUpdate": {"incident": "i1", "message_id": "m9", "body": "b", "cites": [{"s": "svc:a", "fid": "OWNED_BY"}]},
+    "ProposeCause": {"incident": "i1", "cause": "dep:d1", "confidence": 50, "cites": []},
+    "ResolveIncident": {"incident": "i3"},
 }
 
 
@@ -141,6 +207,10 @@ def test_each_rule_applies_and_verifies(db, redis_raw, fpv_seed, name):
         p = dict(KNOWN_GOOD[name])
         if "fid" in p:
             p["fid"] = fpv_seed.fids[p["fid"]]
+        if p.get("outbox") == "OUTBOX":
+            p["outbox"] = fpv_seed.outbox
+        if "cites" in p:
+            p["cites"] = [{"s": c["s"], "fid": fpv_seed.fids.get(c["fid"], c["fid"])} for c in p["cites"]]
     result = _verify(db, redis_raw, fpv_seed, name, p, 1)
     assert result.outcome.code == "APPLIED", (name, result.outcome)
     assert result.changes, name
