@@ -1,6 +1,7 @@
-// GNOMON Kernel UDF library (master §8.1-§8.5), loaded as `Kernel` by gnomon/udf/loader.py.
+// GNOMON Kernel UDF library (master §8.1-§8.6), loaded as `Kernel` by gnomon/udf/loader.py.
 //
-// Pure functions only: no graph reads, no wall clock, no crypto module. Every word operation is
+// Pure functions only: no wall clock, no crypto module, and no graph reads except invariantProbe's
+// neighbour reads of the node it is given (UDFs cannot write: platform fact F7). Every word operation is
 // unsigned 32-bit. Errors are thrown with a leading NAME so callers can match them; a throw aborts
 // the enclosing query and nothing is written (platform fact S4).
 //
@@ -230,8 +231,117 @@ function chain(prev, id, seq, pt, lc, rule_sha, agent, params, read_seq, vk_dige
   return digest(['rw/1', prev, id, seq, pt, lc, rule_sha, agent, params, read_seq, vk_digest]);
 }
 
+// ── invariantProbe (§8.6): violations of I6, I7, I9 and I10 around one node ─────────────
+var INF = 9007199254740991;
+
+function attr(x, key) {
+  var v = x.attributes[key];
+  return v === undefined ? null : v;
+}
+
+// A self-loop is returned once per endpoint, so edges are de-duplicated by id.
+function edgesOf(node, direction, type) {
+  var seen = {};
+  return node.getNeighbors({ direction: direction, types: [type], returnType: 'edges' }).filter(function (e) {
+    if (seen[e.id]) return false;
+    seen[e.id] = true;
+    return true;
+  });
+}
+
+function subjectOf(node) {
+  var uid = attr(node, 'uid');
+  return uid === null ? attr(node, 'id') : uid;
+}
+
+function violation(kind, node, detail) {
+  return { kind: kind, subject: subjectOf(node), detail: detail };
+}
+
+function byVfThenFid(a, b) {
+  var d = Number(attr(a, 'vf')) - Number(attr(b, 'vf'));
+  if (d !== 0) return d;
+  return String(attr(a, 'fid')) < String(attr(b, 'fid')) ? -1 : 1;
+}
+
+function requireRel(name, v) {
+  if (typeof v !== 'string' || !/^[A-Z][A-Z0-9_]*$/.test(v)) fail('BAD_PROBE', name + ' must be a relationship type, got ' + describe(v));
+}
+
+// I6: at most one unclosed HOLDS lease per task.
+function probeLease(task) {
+  var open = edgesOf(task, 'incoming', 'HOLDS').filter(function (l) { return attr(l, 'closed_seq') === null; });
+  return open.length > 1 ? [violation('lease', task, { count: open.length })] : [];
+}
+
+// I7: no two current versions overlap in valid time, per subject (functional) or per (subject, object) (set).
+function probeOverlap(subject, args) {
+  requireRel('rel', args.rel);
+  var groups = {};
+  edgesOf(subject, 'outgoing', args.rel).forEach(function (e) {
+    if (Number(attr(e, 'te')) !== INF) return;
+    var g = args.functional ? '' : String(e.target.id);
+    (groups[g] = groups[g] || []).push(e);
+  });
+  var out = [];
+  Object.keys(groups).sort().forEach(function (g) {
+    var versions = groups[g].sort(byVfThenFid);
+    var reach = versions[0];
+    for (var i = 1; i < versions.length; i++) {
+      var next = versions[i];
+      if (Number(attr(reach, 'vt')) > Number(attr(next, 'vf'))) {
+        out.push(violation('overlap', subject, { rel: args.rel, a: attr(reach, 'fid'), b: attr(next, 'fid') }));
+      }
+      if (Number(attr(next, 'vt')) > Number(attr(reach, 'vt'))) reach = next;
+    }
+  });
+  return out;
+}
+
+// I9: projection edges are exactly the current, open-ended facts.
+function probeProjection(subject, args) {
+  requireRel('rel', args.rel);
+  requireRel('proj', args.proj);
+  var facts = {};
+  var proj = {};
+  edgesOf(subject, 'outgoing', args.rel).forEach(function (e) {
+    if (Number(attr(e, 'te')) === INF && Number(attr(e, 'vt')) === INF) facts[attr(e, 'fid')] = true;
+  });
+  edgesOf(subject, 'outgoing', args.proj).forEach(function (e) { proj[attr(e, 'fid')] = true; });
+  var missing = Object.keys(facts).filter(function (f) { return !proj[f]; }).sort();
+  var orphan = Object.keys(proj).filter(function (f) { return !facts[f]; }).sort();
+  if (missing.length === 0 && orphan.length === 0) return [];
+  return [violation('projection', subject, { rel: args.rel, proj: args.proj, missing: missing, orphan: orphan })];
+}
+
+// I10: CAUSED_BY points strictly backwards in seq.
+function probeCausal(rewrite) {
+  var seq = attr(rewrite, 'seq');
+  var out = [];
+  edgesOf(rewrite, 'outgoing', 'CAUSED_BY').forEach(function (e) {
+    var cseq = attr(e.target, 'seq');
+    if (cseq === null || seq === null || Number(cseq) >= Number(seq)) {
+      out.push(violation('causal', rewrite, { cause: attr(e.target, 'id'), cause_seq: cseq }));
+    }
+  });
+  return out;
+}
+
+function invariantProbe(kind, node, args) {
+  if (node === null || node === undefined || typeof node.getNeighbors !== 'function') {
+    fail('BAD_PROBE', 'invariantProbe needs a node, got ' + describe(node));
+  }
+  args = args || {};
+  if (kind === 'lease') return probeLease(node);
+  if (kind === 'overlap') return probeOverlap(node, args);
+  if (kind === 'projection') return probeProjection(node, args);
+  if (kind === 'causal') return probeCausal(node);
+  return fail('BAD_PROBE', "kind must be 'lease', 'overlap', 'projection' or 'causal', got " + describe(kind));
+}
+
 falkor.register('sha256', sha256);
 falkor.register('digest', digest);
 falkor.register('tick', tick);
 falkor.register('recv', recv);
 falkor.register('chain', chain);
+falkor.register('invariantProbe', invariantProbe);

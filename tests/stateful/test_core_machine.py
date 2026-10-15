@@ -81,13 +81,22 @@ class CoreMachine(RuleBasedStateMachine):
     def claim(self, incident, agent, ttl):
         self.go("ClaimTask", {"agent": agent, "task": f"{incident}-t", "ttl_ms": ttl}, agent)
 
-    @rule(incident=st.sampled_from(INCIDENTS), agent=st.sampled_from(WORKERS))
-    def complete(self, incident, agent):
-        self.go("CompleteTask", {"task": f"{incident}-t", "result": "done"}, agent)
+    def holder(self, task, fallback):
+        """The agent holding the task's open lease (so completion and handoff can apply), else `fallback`."""
+        rows = self.ir.k.read("MATCH (a:Agent)-[l:HOLDS]->(:Task {id: $t}) WHERE l.closed_seq IS NULL "
+                              "RETURN a.id ORDER BY a.id LIMIT 1", {"t": task})
+        return rows[0][0] if rows else fallback
 
-    @rule(incident=st.sampled_from(INCIDENTS), agent=st.sampled_from(WORKERS), to=st.sampled_from(WORKERS))
-    def handoff(self, incident, agent, to):
-        self.go("Handoff", {"task": f"{incident}-t", "to": to, "ttl_ms": 50_000}, agent)
+    @rule(incident=st.sampled_from(INCIDENTS), agent=st.sampled_from(WORKERS), as_holder=st.booleans())
+    def complete(self, incident, agent, as_holder):
+        task = f"{incident}-t"
+        self.go("CompleteTask", {"task": task, "result": "done"}, self.holder(task, agent) if as_holder else agent)
+
+    @rule(incident=st.sampled_from(INCIDENTS), agent=st.sampled_from(WORKERS), to=st.sampled_from(WORKERS),
+          as_holder=st.booleans())
+    def handoff(self, incident, agent, to, as_holder):
+        task = f"{incident}-t"
+        self.go("Handoff", {"task": task, "to": to, "ttl_ms": 50_000}, self.holder(task, agent) if as_holder else agent)
 
     @rule(incident=st.sampled_from(INCIDENTS))
     def expire(self, incident):
@@ -152,5 +161,5 @@ class CoreMachine(RuleBasedStateMachine):
 def test_core_machine(db, redis_raw, golden_genesis, genesis_config):
     machine = type("Machine", (CoreMachine,), {"env": (db, redis_raw, golden_genesis, genesis_config["registry"])})
     run_state_machine_as_test(machine, settings=settings(
-        max_examples=6, stateful_step_count=14, deadline=None,
+        max_examples=10, stateful_step_count=30, deadline=None,
         suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture]))
