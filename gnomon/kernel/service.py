@@ -46,6 +46,40 @@ class Proposal:
     rec_lc: int | None = None
 
 
+def wire_text(query: str) -> str:
+    """The query text sent to the server: comments removed, so the text is plain ASCII (DECISIONS D-20).
+
+    FalkorDB truncates a slow write's text at byte 2048 for its slow log and aborts the server when that byte
+    falls inside a multi-byte UTF-8 character (FACTS S24). Kernel segments and rule bodies carry non-ASCII only
+    in comments; parameters travel in the CYPHER header, which the slow log does not record.
+    """
+    out, i, n, quote = [], 0, len(query), ""
+    while i < n:
+        c = query[i]
+        if quote:
+            out.append(c)
+            if c == "\\" and i + 1 < n:
+                out.append(query[i + 1])
+                i += 1
+            elif c == quote:
+                quote = ""
+        elif c in "'\"`":
+            quote = c
+            out.append(c)
+        elif query.startswith("//", i):
+            j = query.find("\n", i)
+            i = n if j < 0 else j
+            continue
+        elif query.startswith("/*", i):
+            j = query.find("*/", i + 2)
+            i = n if j < 0 else j + 2
+            continue
+        else:
+            out.append(c)
+        i += 1
+    return "\n".join(line.rstrip() for line in "".join(out).splitlines() if line.strip()) + "\n"
+
+
 def instantiate_keys(templates: Sequence[str], p: Mapping, pid: str) -> list[str]:
     """Write keys from the pinned key templates and $p only (§7.3); see gnomon.footprint.keys (D-18)."""
     try:
@@ -148,7 +182,7 @@ class KernelService:
             return Outcome(Code.SCHEMA_REJECTED, detail={"reason": str(exc)})
         query = self._queries.get(rule.sha)
         if query is None:
-            query = self._queries[rule.sha] = composer.compose(rule)
+            query = self._queries[rule.sha] = wire_text(composer.compose(rule))
         try:
             rows = self.graph.query(query, params).result_set
         except redis.ResponseError as exc:

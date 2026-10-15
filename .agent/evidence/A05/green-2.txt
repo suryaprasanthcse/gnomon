@@ -1,0 +1,27 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 644 items / 438 deselected / 206 selected
+
+tests\integration\footprint\test_dynamic_verification.py ............... [  7%]
+.........................                                                [ 19%]
+tests\integration\footprint\test_registration_runs_lints.py ............ [ 25%]
+                                                                         [ 25%]
+tests\unit\footprint\test_key_templates.py ............................. [ 39%]
+......                                                                   [ 42%]
+tests\unit\footprint\test_lints.py ..................................... [ 60%]
+..                                                                       [ 61%]
+tests\unit\footprint\test_matrix.py .......................              [ 72%]
+tests\unit\footprint\test_parser.py .....................                [ 82%]
+tests\unit\footprint\test_parser_read_write_sets.py .................... [ 92%]
+....                                                                     [ 94%]
+tests\unit\footprint\test_verify_check.py .......                        [ 97%]
+tests\unit\kernel\test_wire_text.py .....                                [100%]
+
+==================== 206 passed, 438 deselected in 19.58s =====================
