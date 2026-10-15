@@ -1,0 +1,8 @@
+Sort
+    Project
+        Cartesian Product
+            Node By Label Scan | (h:Head)
+            Filter
+                Filter
+                    Edge By Index Scan | (s)-[f:OWNED_BY]->(t:Team)
+                        Node By Label Scan | (s:Service)

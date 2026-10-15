@@ -1,0 +1,42 @@
+# A01 batch 1 RED evidence
+# utc: 2026-10-15T06:08:38Z
+# image: falkordb_image: falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+# command: uv run pytest tests/spikes -n 4 -p no:randomly
+# expected reason: every probe runs against the pinned image; the verdict is not yet recorded in .agent/FACTS.md
+
+FAILED tests/spikes/test_s22_copy_during_udf_load.py::test_s22_copies_stay_complete_while_libraries_reload
+FAILED tests/spikes/test_s14_memory_usage.py::test_s14_memory_usage_of_a_graph_key
+29 failed, 2 passed in 16.11s
+
+## per-test outcome (from JUnit)
+test_every_fail_has_a_fallback_decision: PASSED
+test_every_spike_and_fact_has_a_test_and_a_record: AssertionError: not recorded in .agent/FACTS.md: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19', 'S20', 'S21', 'S22', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7']
+test_f01_copy_is_an_isolated_snapshot_with_its_schema: AssertionError: F1 is not recorded in .agent/FACTS.md (observed PASS)
+test_f02_foreach_clauses_and_outer_variables: AssertionError: F2 is not recorded in .agent/FACTS.md (observed PASS)
+test_f03_relationship_index_create_explain_and_drop: AssertionError: F3 is not recorded in .agent/FACTS.md (observed FAIL)
+test_f04_constraint_creation_is_asynchronous: AssertionError: F4 is not recorded in .agent/FACTS.md (observed PASS)
+test_f05_profile_lines_follow_the_documented_grammar: AssertionError: F5 is not recorded in .agent/FACTS.md (observed PASS)
+test_f06_algorithm_signatures_used_by_the_tool_plane: AssertionError: F6 is not recorded in .agent/FACTS.md (observed PASS)
+test_f07_udf_graph_api_is_read_only: AssertionError: F7 is not recorded in .agent/FACTS.md (observed PASS)
+test_image_digest_is_pinned_everywhere: PASSED
+test_s01_udfs_in_where_and_set_of_write_queries: AssertionError: S1 is not recorded in .agent/FACTS.md (observed PASS)
+test_s02_conditional_nested_and_deleting_foreach: AssertionError: S2 is not recorded in .agent/FACTS.md (observed PASS)
+test_s03_concurrent_writes_to_one_graph_are_serialized: AssertionError: S3 is not recorded in .agent/FACTS.md (observed PASS)
+test_s04_errors_after_writes_roll_the_whole_query_back: AssertionError: S4 is not recorded in .agent/FACTS.md (observed PASS)
+test_s05_copy_duration_at_demo_size: AssertionError: S5 is not recorded in .agent/FACTS.md (observed PASS)
+test_s06_index_build_is_polled_until_operational: AssertionError: S6 is not recorded in .agent/FACTS.md (observed PASS)
+test_s07_explain_is_stable_and_matches_recorded_plans: AssertionError: S7 is not recorded in .agent/FACTS.md (observed PASS)
+test_s08_udf_support_on_falkordb_cloud: AssertionError: S8 is not recorded in .agent/FACTS.md (observed FAIL)
+test_s10_copy_cost_grows_linearly_with_the_log: AssertionError: S10 is not recorded in .agent/FACTS.md (observed PASS)
+test_s11_edges_carry_full_endpoint_nodes: AssertionError: S11 is not recorded in .agent/FACTS.md (observed PASS)
+test_s12_tool_call_round_trip_is_schema_checked_and_logged: AssertionError: S12 is not recorded in .agent/FACTS.md (observed PASS)
+test_s13_memory_returns_after_deleting_scratch_copies: AssertionError: S13 is not recorded in .agent/FACTS.md (observed PASS)
+test_s14_memory_usage_of_a_graph_key: AssertionError: S14 is not recorded in .agent/FACTS.md (observed FAIL)
+test_s15_cypher_constructs_used_by_the_templates: AssertionError: S15 is not recorded in .agent/FACTS.md (observed PASS)
+test_s16_query_statistics_carry_internal_execution_time: AssertionError: S16 is not recorded in .agent/FACTS.md (observed PASS)
+test_s17_sppaths_counts_hops_and_bfs_direction: AssertionError: S17 is not recorded in .agent/FACTS.md (observed FAIL)
+test_s18_db_indexes_yields_named_columns: AssertionError: S18 is not recorded in .agent/FACTS.md (observed PASS)
+test_s19_q5_switches_to_edge_by_index_scan: AssertionError: S19 is not recorded in .agent/FACTS.md (observed PASS)
+test_s20_in_list_predicates_use_node_index_scan: AssertionError: S20 is not recorded in .agent/FACTS.md (observed PASS)
+test_s21_timeouts_for_reads_and_writes: AssertionError: S21 is not recorded in .agent/FACTS.md (observed PASS)
+test_s22_copies_stay_complete_while_libraries_reload: AssertionError: S22 is not recorded in .agent/FACTS.md (observed PASS)

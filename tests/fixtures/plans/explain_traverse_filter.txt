@@ -1,0 +1,5 @@
+Sort
+    Project
+        Conditional Traverse | (a)->(b:B)
+            Filter
+                Node By Label Scan | (a:A)
