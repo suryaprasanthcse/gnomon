@@ -115,7 +115,7 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
     except JcsError as exc:
         raise SchemaRejected(f"params are not canonical JSON: {exc}") from exc
     decision = None
-    if rule.requires_decision:
+    if rule.requires_decision and proposal.mode != "sim":  # sim mode composes without P1/E0 (master §15.4)
         if not isinstance(proposal.attach, str) or not proposal.attach:
             raise SchemaRejected("a decision rule needs its decision envelope in attach")
         try:
@@ -182,7 +182,7 @@ def _lint_registration(proposal: Proposal) -> Proposal:
 class KernelService:
     graph: object
     registry: Registry
-    _queries: dict[str, str] = field(default_factory=dict, repr=False)
+    _queries: dict[tuple, str] = field(default_factory=dict, repr=False)
 
     def _prepare(self, proposal: Proposal) -> tuple[RuleDef, dict]:
         try:
@@ -200,9 +200,10 @@ class KernelService:
             return Outcome(Code.SCHEMA_REJECTED, detail={"reason": "lint failed", "lints": exc.results})
         except SchemaRejected as exc:
             return Outcome(Code.SCHEMA_REJECTED, detail={"reason": str(exc)})
-        query = self._queries.get(rule.sha)
+        sim = proposal.mode == "sim"
+        query = self._queries.get((rule.sha, sim))
         if query is None:
-            query = self._queries[rule.sha] = wire_text(composer.compose(rule))
+            query = self._queries[(rule.sha, sim)] = wire_text(composer.compose(rule, sim))
         try:
             rows = self.graph.query(query, params).result_set
         except redis.ResponseError as exc:

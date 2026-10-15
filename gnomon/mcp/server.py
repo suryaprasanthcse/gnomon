@@ -14,10 +14,10 @@ from gnomon.mcp.tools import Tools
 from gnomon.query.service import QueryError, QueryService, dumps
 
 
-def create_server(qs: QueryService, agent: str) -> MCPServer:
+def create_server(qs: QueryService, agent: str, executive=None) -> MCPServer:
     if qs.agent_info(agent) is None:
         raise QueryError(f"agent {agent!r} is not registered")
-    tools = Tools(qs, qs.session(agent))
+    tools = Tools(qs, qs.session(agent), executive)
     server = MCPServer("gnomon")
 
     @server.tool()
@@ -96,5 +96,23 @@ def create_server(qs: QueryService, agent: str) -> MCPServer:
     def why(uid: str | None = None, pid: str | None = None) -> str:
         """Provenance: the rewrite that last wrote an entity (uid) or one proposal's rewrite (pid), with its causes."""
         return dumps(tools.why(uid, pid))
+
+    if executive is not None:
+        @server.tool()
+        def simulate(incident: str, nominations: list[dict[str, Any]] | None = None) -> str:
+            """Dry run of the Counterfactual Executive: the futures of every candidate action with their integer scores.
+            nominations are {read_id, tuple_index} of list_actions reads of action rules. Writes nothing. Responders only."""
+            return dumps(tools.simulate(incident, nominations))
+
+        @server.tool()
+        def decide(incident: str, nominations: list[dict[str, Any]] | None, rationale: str, request_id: str) -> str:
+            """Ask the Executive to simulate the candidate actions, pick the best by score and commit it (a gated action
+            waits for a human). request_id makes a repeated request return DUPLICATE. Responders only."""
+            return dumps(tools.decide(incident, nominations, rationale, request_id))
+
+        @server.tool()
+        def decision(did: str) -> str:
+            """A committed decision: its candidates with scores, its evidence and the rewrite that committed it."""
+            return dumps(tools.decision(did))
 
     return server

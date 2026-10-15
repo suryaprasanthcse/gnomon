@@ -155,11 +155,13 @@ def db(falkordb_container: FalkorEndpoint):
 @pytest.fixture(scope="session")
 def udf_loaded(redis_raw: redis.Redis) -> dict[str, str]:
     """Loads every library in udf/ (kernel.js → Kernel) with LOAD REPLACE; returns library → source sha256."""
+    from gnomon.udf import loader
+
     shas: dict[str, str] = {}
     for path in sorted(UDF_DIR.glob("*.js")):
         source = path.read_text(encoding="utf-8")
         library = path.stem[:1].upper() + path.stem[1:]
-        redis_raw.execute_command("GRAPH.UDF", "LOAD", "REPLACE", library, source)
+        loader.load(redis_raw, library, source)  # only sent when the server holds other code: never replace under traffic (S22)
         shas[library] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return shas
 

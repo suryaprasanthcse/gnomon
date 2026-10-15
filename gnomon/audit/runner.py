@@ -52,7 +52,7 @@ def audit(db, client: redis.Redis, key: str, checks: Iterable[str] | None = None
         "K4": lambda: [k4.check(db, client, key)],
         "K5": lambda: k5.check(graph),
         "K6": lambda: [k6.check(graph)],
-        "K7": lambda: [k7.check(graph)],
+        "K7": lambda: [k7.check(graph, db=db, client=client)],
     }
     results: dict[str, CheckResult] = {}
     for name in (*CHECKS, *OPTIONAL_CHECKS):

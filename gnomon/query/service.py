@@ -59,6 +59,7 @@ class Enablement:
     knobs: frozenset[str] = frozenset()  # numeric choices an agent may still make with a tuple
     text_field: str | None = None  # the rule parameter that carries the free text
     tupled: bool = True  # False: open-parameter rule (the read lists citeable facts, §10.2 last paragraph)
+    proposable: bool = True  # False: readable through list_actions, but only the Executive may propose it (§15)
 
 
 ENABLEMENT = {
@@ -69,7 +70,14 @@ ENABLEMENT = {
     "PostUpdate": Enablement("en_r9", args=("incident",), text_field="body", tupled=False),
     "ProposeCause": Enablement("en_r10", args=("incident",), knobs=frozenset({"confidence", "cites"})),
     "ResolveIncident": Enablement("en_r11"),
+    # §15.12 action enablement: read by agents to nominate, run by the Executive on its base snapshot; never proposed by agents
+    "IsolateService": Enablement("en_r12", args=("incident",), tupled=False, proposable=False),
+    "FailoverService": Enablement("en_r13", args=("incident",), tupled=False, proposable=False),
+    "RollbackDeploy": Enablement("en_r14", args=("incident",), tupled=False, proposable=False),
+    "EscalateIncident": Enablement("en_r15", args=("incident",), tupled=False, proposable=False),
+    "RestoreService": Enablement("en_r18", args=("incident",), tupled=False, proposable=False),
 }
+ACTION_RULES = frozenset(r for r, spec in ENABLEMENT.items() if not spec.proposable)
 OPEN_PARAMETER = {"PostUpdate"}
 OPEN_FAMILIES = ("AssertFact.", "RetractFact.")
 REFERENCE_FIELDS = ("s", "o", "old_o", "fid")  # entity ids and fids an open-parameter proposal may name
@@ -234,7 +242,10 @@ class QueryService:
         seq, rows = self._rows("enablement", spec.file, params)
         if rule == "PostUpdate":
             rows.sort(key=lambda r: (r["rel"], r["fid"]))
-        view = self.kernel.registry.get(rule).view_templates
+        try:
+            view = self.kernel.registry.get(rule).view_templates
+        except KeyError:
+            raise QueryError(f"rule {rule!r} is not registered in this tenant") from None
         base = key_templates.instantiate(view, dict(args), "")  # literal (phantom) keys and the args' own keys
         tuples, tuple_keys, ids = [], [], set(args.values()) | {f"inc:{v}" for v in args.values()}
         for i, row in enumerate(rows):
@@ -326,7 +337,8 @@ class QueryService:
                                   mode=self.mode, rec_pt=rec_pt, rec_lc=0 if rec_pt is not None else None)
 
     def _assemble(self, session, rule, pid, tuple_index, params, text, cite_reads):
-        if not isinstance(rule, str) or not (rule in ENABLEMENT or rule.startswith(OPEN_FAMILIES)):
+        if not isinstance(rule, str) or not ((rule in ENABLEMENT and ENABLEMENT[rule].proposable)
+                                             or rule.startswith(OPEN_FAMILIES)):
             raise Reject(f"rule {rule!r} is not proposable by agents")
         if not isinstance(pid, str) or not pid:
             raise Reject("pid must be a non-empty string")
@@ -406,6 +418,8 @@ class QueryService:
             return {"incident": t["incident"]}
         if rule == "ProposeCause":
             return {"incident": t["incident"], "cause": t["cause"], "confidence": 50, "cites": []}
+        if rule in ACTION_RULES:
+            return {**args, **{k: v for k, v in t.items() if k != "index"}}
         return dict(args)
 
     @staticmethod

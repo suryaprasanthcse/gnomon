@@ -100,9 +100,9 @@ def test_r14_is_gated_and_rolls_back_once_approved(xw_rollback):
 ], ids=["incident-closed", "not-the-root-cause", "service-healthy", "previous-unverified"])
 def test_r14_guards(xw_rollback, setup, params, expected):
     xw = xw_rollback
+    d = xw.dw.approved("D-1")  # the approval is asked for while the incident is still open
     if setup:
         xw.ir.poke(setup)
-    d = xw.dw.approved("D-1")
     out = xw.dw.commit(d, rule="RollbackDeploy", params=xw.dw.params(d, {"incident": "i1", **params}))
     assert guard(out) == expected
 

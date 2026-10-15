@@ -10,14 +10,21 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 
 from gnomon.mcp.schemas import public_read
-from gnomon.query.service import QueryError, QueryService
+from gnomon.query.service import ACTION_RULES, QueryError, QueryService
 from gnomon.query.session import Session
+
+
+def candidate_view(c: Mapping) -> dict:
+    """What an agent sees of a candidate: its rule, outcome and integer scores, never keys or shas of the kernel."""
+    keep = ("k", "rule", "params", "outcome", "reason", "benefit", "harm", "teams_new", "score_num", "won")
+    return {k: c.get(k) for k in keep}
 
 
 @dataclass
 class Tools:
     qs: QueryService
     session: Session
+    executive: object | None = None
 
     def whoami(self) -> dict:
         info = self.qs.agent_info(self.session.agent)
@@ -66,3 +73,47 @@ class Tools:
 
     def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
         return self.qs.why(uid=uid, pid=pid)
+
+    # ── T-B (master §20): present only when the server was given an Executive
+    def _executive(self):
+        info = self.qs.agent_info(self.session.agent)
+        if self.executive is None or info is None or info["role"] != "responder":
+            raise QueryError("only a responder may use the Executive")
+        return self.executive
+
+    def _nominations(self, nominations: list | None) -> list[dict]:
+        resolved = []
+        for n in nominations or []:
+            try:
+                read = self.session.get(n["read_id"])
+            except (KeyError, TypeError) as exc:
+                raise QueryError(f"unknown read in nomination: {n!r}") from exc
+            index = n.get("tuple_index")
+            if read.rule not in ACTION_RULES or not isinstance(index, int) or not 0 <= index < len(read.tuples):
+                raise QueryError(f"a nomination names a tuple of a list_actions read of an action rule: {n!r}")
+            resolved.append({"rule": read.rule, "params": {k: v for k, v in read.tuples[index].items() if k != "index"}})
+        return resolved
+
+    def simulate(self, incident: str, nominations: list | None = None) -> dict:
+        res = self._executive().simulate(incident, self._nominations(nominations), request_id="simulate",
+                                         proposer=f"agent:{self.session.agent}")
+        return {"state": res.state, "did": res.did, "mode": res.mode, "error": res.error,
+                "candidates": [candidate_view(c) for c in res.candidates]}
+
+    def decide(self, incident: str, nominations: list | None, rationale: str, request_id: str) -> dict:
+        res = self._executive().decide(incident, self._nominations(nominations), rationale, request_id,
+                                       proposer=f"agent:{self.session.agent}")
+        out = res.outcome
+        return {"state": res.state, "did": res.did, "pid": res.pid, "attempt": res.attempt, "error": res.error,
+                "outcome": out.code.value if out else None, "seq": out.seq if out else None,
+                "candidates": [candidate_view(c) for c in res.candidates]}
+
+    def decision(self, did: str) -> dict | None:
+        from gnomon.executive.executive import read_decision
+
+        self._executive()
+        found = read_decision(self.qs.kernel.graph, did)
+        if found is None:
+            return None
+        found["candidates"] = [candidate_view(c) for c in found["candidates"]]
+        return found

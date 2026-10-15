@@ -11,7 +11,8 @@ import json
 from dataclasses import dataclass, field
 
 AGENT_STALE_RETRIES = 3  # Appendix C
-INCIDENT_RULES = ("ProposeCause", "PostUpdate")  # enablement reads scoped to one incident
+ACTION_RULES = ("RollbackDeploy", "FailoverService", "IsolateService", "RestoreService", "EscalateIncident")
+INCIDENT_RULES = ("ProposeCause", "PostUpdate", *ACTION_RULES)  # enablement reads scoped to one incident
 
 
 class AgentBug(RuntimeError):
@@ -23,6 +24,7 @@ class Role:
     name: str
     rules: tuple[str, ...]
     instruction: str = ""
+    tools: tuple[str, ...] = ()  # tools beyond the proposable rules, such as `decide`
 
 
 @dataclass
@@ -40,8 +42,9 @@ def canonical(value: object) -> str:
 
 
 class AgentLoop:
-    def __init__(self, agent: str, role: Role, qs, llm) -> None:
+    def __init__(self, agent: str, role: Role, qs, llm, executive=None) -> None:
         self.agent, self.role, self.qs, self.llm = agent, role, qs, llm
+        self.executive = executive
         self.session = qs.session(agent)
         self.steps = 0
         self.done: list[str] = []
@@ -77,6 +80,29 @@ class AgentLoop:
                    "incidents": incidents}
         return context, reads
 
+    def _decide(self, decision: dict, reads: dict, pid: str, attempts: int) -> StepResult:
+        """`decide(incident, nominations, rationale)`: hand tuples the agent read to the Executive (master §15.1)."""
+        incident = decision.get("incident")
+        if self.executive is None or "decide" not in self.role.tools:
+            self.surfaced.append({"pid": pid, "rule": "decide", "error": "this agent has no decide tool"})
+            return StepResult("idle", attempts, "decide", pid)
+        nominations = []
+        for n in decision.get("nominations", []):
+            read = reads.get((n.get("rule"), incident))
+            if read is None or not isinstance(n.get("tuple_index"), int) or not 0 <= n["tuple_index"] < len(read.tuples):
+                self.surfaced.append({"pid": pid, "rule": "decide", "error": f"unknown nomination {n}"})
+                continue
+            params = {k: v for k, v in read.tuples[n["tuple_index"]].items() if k != "index"}
+            nominations.append({"rule": n["rule"], "params": params})
+        result = self.executive.decide(incident, nominations, decision.get("rationale", ""), pid,
+                                       proposer=f"agent:{self.agent}")
+        self.last_request = {"rule": "decide", "pid": pid, "incident": incident}
+        if result.state == "FAILED":
+            self.surfaced.append({"pid": pid, "rule": "decide", "error": result.error})
+            return StepResult("surfaced", attempts + 1, "decide", pid, getattr(result, "outcome", None))
+        self.done.append(f"decide:{incident}")
+        return StepResult("applied", attempts + 1, "decide", pid, getattr(result, "outcome", None))
+
     # ── one step
     def step(self) -> StepResult:
         self.steps += 1
@@ -89,6 +115,8 @@ class AgentLoop:
             if rule is None:
                 return StepResult("idle", attempts, None, pid)
             incident = decision.get("incident")
+            if rule == "decide":
+                return self._decide(decision, reads, pid, attempts)
             read = reads.get((rule, incident if rule in INCIDENT_RULES else None))
             if rule not in self.role.rules or read is None:
                 self.surfaced.append({"pid": pid, "rule": rule, "error": "the model chose a rule outside its role"})

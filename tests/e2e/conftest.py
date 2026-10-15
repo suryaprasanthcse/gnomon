@@ -22,4 +22,4 @@ def core_run(db, redis_raw, golden_genesis):
         result = run_core(kernel, seed=CORE_SEED, llm=RecordingLLM(PolicyLLM(), store), crash=True)
         result.store = store
         yield result
-from tests.support.exec_world import xw, xw_rollback  # noqa: E402,F401
+from tests.support.exec_world import xw, xw_private, xw_rollback  # noqa: E402,F401

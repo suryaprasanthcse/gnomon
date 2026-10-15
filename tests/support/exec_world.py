@@ -59,22 +59,30 @@ class XW:
         return [g for g in self.redis.execute_command("GRAPH.LIST") if ":sim:" in g and g.startswith(self.k.graph.name)]
 
 
-def exec_library(redis_raw) -> str:
-    """A private copy of udf/exec.js under a fresh library name; returns the name."""
+_SHARED: dict[str, str] = {}
+
+
+def exec_library(redis_raw, fresh: bool = False) -> str:
+    """A copy of udf/exec.js under a library name private to this process; `fresh` makes a new one for a test that
+    replaces its library. Loading a library is rare and global to the server, so the common case reuses one (FACTS S22)."""
     from gnomon.udf import loader
 
+    if not fresh and "name" in _SHARED:
+        return _SHARED["name"]
     name = f"Exec{uuid.uuid4().hex[:8]}"
     loader.load(redis_raw, name, EXEC_SOURCE.read_text(encoding="utf-8"))
+    if not fresh:
+        _SHARED["name"] = name
     return name
 
 
-def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), soft=True) -> XW:
+def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), soft=True, fresh=False) -> XW:
     from gnomon.kernel.registry import layer_rules, register_rule_params
     from gnomon.kernel.service import KernelService
     from gnomon.udf import loader
 
     dw = activate(ir)
-    library = exec_library(redis_raw)
+    library = exec_library(redis_raw, fresh)
     rules = layer_rules("TB")
     ir.k.registry = ir.k.registry.with_rules(*rules)
     ir.k.service = KernelService(ir.k.graph, ir.k.registry)
@@ -123,3 +131,9 @@ def xw(opened, db, redis_raw) -> XW:
 def xw_rollback(opened, db, redis_raw) -> XW:
     """No healthy replica to fail over to and a root cause on c, so a gated rollback is the best action."""
     return build(opened, db, redis_raw, root_cause=True, replicas=("degraded", "down"))
+
+
+@pytest.fixture
+def xw_private(opened, db, redis_raw) -> XW:
+    """Like `xw`, with a scorer library of its own, for tests that replace the library."""
+    return build(opened, db, redis_raw, fresh=True)

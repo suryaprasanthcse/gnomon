@@ -221,8 +221,37 @@ LAYER_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
 )}
 
 
+def _executive_decision(graph) -> str:
+    return _row(graph, "MATCH (x:Decision) WHERE x.scorer ENDS WITH '.blastRadius' RETURN x.scorer ORDER BY x.id LIMIT 1",
+                what="Executive decision")[0]
+
+
+def mu22(graph, client, key):
+    """Load a different library under the scorer's name (the library is global to the server, not to the graph)."""
+    from gnomon.udf import loader
+
+    library = _executive_decision(graph).rsplit(".", 1)[0]
+    code = loader.listed_code(client, library)
+    loader.load(client, library, code + "\n// a different library under the same name\n")
+
+
+def mu23(graph, client, key):
+    """Change lambda in the Executive's configuration (in-process: the caller restores it)."""
+    from gnomon.executive import scoring
+
+    _executive_decision(graph)
+    scoring.LAMBDA_D += 1
+
+
+# T-B rows (§21.2): configuration and library mutations, so the graph hash does not change.
+TB_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
+    Mutation("MU22", "Load a different Exec library under the same name", ("K7",), mu22),
+    Mutation("MU23", "Change lambda in the Executive's configuration", ("K7",), mu23),
+)}
+
+
 def apply_mutation(db, client: redis.Redis, key: str, mu: str) -> Mutation:
     """Applies mutation `mu` to graph `key` (a scratch copy) and returns it."""
-    mutation = {**MUTATIONS, **LAYER_MUTATIONS}[mu]
+    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS}[mu]
     mutation.apply(db.select_graph(key), client, key)
     return mutation

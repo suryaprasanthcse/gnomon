@@ -98,7 +98,7 @@ def diagnose(graph, rule: RuleDef, params: dict) -> Outcome:
         stale = rows(D5)
         if stale:
             return Outcome(Code.REJECTED_STALE, detail={"stale": [dict(zip(STALE_FIELDS, row)) for row in stale]})
-        if rule.requires_decision:
+        if rule.requires_decision and params["mode"] != "sim":
             reason = decision_reason(graph, rule, params)
             if reason is not None:
                 return Outcome(Code.REJECTED_DECISION, detail={"reason": reason})

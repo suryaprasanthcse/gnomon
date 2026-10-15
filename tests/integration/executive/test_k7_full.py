@@ -49,10 +49,11 @@ def test_a_tampered_candidate_is_named_by_the_node_check(decided, db, redis_raw)
     assert "node_mismatch" in problems(report)
 
 
-def test_a_changed_scorer_library_is_named(decided, db, redis_raw):
+def test_a_changed_scorer_library_is_named(xw_private, db, redis_raw):
     from gnomon.udf import loader
 
-    xw, res = decided
+    xw = xw_private
+    assert xw.executive().decide("i1", [], "fail over", "r1").outcome.code == "APPLIED"
     code = loader.listed_code(redis_raw, xw.library)
     loader.load(redis_raw, xw.library, code + "\n// a different library under the same name\n")
     report = audit(db, redis_raw, xw.k.graph.name, ["K7"])
@@ -63,7 +64,7 @@ def test_a_changed_lambda_is_a_config_and_resimulation_mismatch(decided, db, red
     from gnomon.executive import scoring
 
     xw, res = decided
-    monkeypatch.setattr(scoring, "LAMBDA_N", 4)
+    monkeypatch.setattr(scoring, "LAMBDA_D", 3)
     found = problems(audit(db, redis_raw, xw.k.graph.name, ["K7"]))
     assert "config_mismatch" in found and "resim_mismatch" in found
 

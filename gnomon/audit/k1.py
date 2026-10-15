@@ -16,6 +16,10 @@ RETURN r.seq AS seq, r.prev AS prev, r.hash AS hash,
        Kernel.chain(r.prev, r.id, r.seq, r.pt, r.lc, r.rule_sha, r.agent, r.params,
                     r.read_seq, Kernel.digest(r.view_keys)) AS recomputed
 ORDER BY seq"""
+# The server gives a read query 1 s unless it is told otherwise (GRAPH.CONFIG TIMEOUT 1000). Re-hashing a long log, with
+# Genesis and every RegisterRule carrying whole rule definitions, can take longer than that under load, and a timeout
+# would be reported as an unhashable rewrite. Audits are allowed to take their time.
+TIMEOUT_MS = 120_000
 
 
 def check(graph, batch: int = 500) -> CheckResult:
@@ -25,7 +29,7 @@ def check(graph, batch: int = 500) -> CheckResult:
     expected_seq, last = 1, ZERO64
     for lo in range(0, top, batch):
         try:
-            rows = graph.ro_query(QUERY, {"from": lo, "to": lo + batch}).result_set
+            rows = graph.ro_query(QUERY, {"from": lo, "to": lo + batch}, timeout=TIMEOUT_MS).result_set
         except redis.ResponseError as exc:
             findings.append({"seq": lo + 1, "problem": "unhashable", "detail": str(exc)})
             continue

@@ -1,0 +1,48 @@
+{
+  "gate": "TB",
+  "module": "A11",
+  "status": "red",
+  "commit": "b20cdda2742cdbd849fdcf69b72e428da407074e",
+  "utc": "2026-10-15T21:23:10Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a",
+    "gate_g1b",
+    "gate_g1c",
+    "gate_g2a",
+    "gate_g2b",
+    "gate_g3",
+    "gate_g4a",
+    "gate_g4b",
+    "gate_ta",
+    "gate_tb"
+  ],
+  "tests": {
+    "passed": 1216,
+    "failed": 10,
+    "skipped": 0,
+    "duration_s": 434.903
+  },
+  "coverage": {
+    "gnomon/executive": 0.9329,
+    "gnomon/query": 0.8816,
+    "gnomon/agents": 0.9422,
+    "gnomon/mcp": 0.9524,
+    "gnomon/audit": 0.9333
+  },
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [
+    "pytest exited with 1 (10 failed or errored)"
+  ],
+  "forbidden": []
+}

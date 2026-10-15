@@ -40,14 +40,18 @@ def segment(name: str) -> str:
     return (SEGMENT_DIR / f"{name.lower()}.cypher").read_text(encoding="utf-8")
 
 
-def plan(rule: RuleDef) -> list[str]:
-    """Segment names in query order; "BODY" stands for the rule's own body."""
+def plan(rule: RuleDef, sim: bool = False) -> list[str]:
+    """Segment names in query order; "BODY" stands for the rule's own body.
+
+    Sim mode (master §15.4) never emits P1 or E0: there is no decision yet and the branch is disposable."""
     if rule.prelude == "PG":
         if rule.name != "Genesis":
             raise ValueError(f"prelude PG is reserved for Genesis, not {rule.name!r}")
         return ["PG", "BODY", "Q0", "RET"]
     if rule.prelude not in ("P0", "P2", "P3"):
         raise ValueError(f"rule {rule.name!r} has unknown prelude {rule.prelude!r}")
+    if sim and rule.prelude == "P0":
+        return ["P0", "BODY", "Q0", "RET"]
     order = ["P0"]
     if rule.requires_decision:
         order.append("P1")
@@ -57,9 +61,9 @@ def plan(rule: RuleDef) -> list[str]:
     return order
 
 
-def compose(rule: RuleDef) -> str:
+def compose(rule: RuleDef, sim: bool = False) -> str:
     parts = []
-    names = plan(rule)
+    names = plan(rule, sim)
     for name in names:
         if name == "BODY":
             parts.append(rule.body)

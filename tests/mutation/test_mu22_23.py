@@ -2,7 +2,7 @@
 
 import pytest
 
-from tests.support.exec_world import xw  # noqa: F401
+from tests.support.exec_world import xw, xw_private  # noqa: F401
 from tests.support.ir_world import ir, opened  # noqa: F401
 
 pytestmark = [pytest.mark.integration, pytest.mark.mutation, pytest.mark.gate_tb]
@@ -11,7 +11,8 @@ EXPECTED = {"MU22": {"K7"}, "MU23": {"K7"}}
 
 
 @pytest.fixture
-def decided_copy(xw, redis_raw):
+def decided_copy(xw_private, redis_raw):
+    xw = xw_private
     res = xw.executive().decide("i1", [], "fail over", "r1")
     assert res.outcome.code == "APPLIED"
     name = f"{xw.k.graph.name}:replay:mut-tb"
@@ -23,9 +24,9 @@ def decided_copy(xw, redis_raw):
 def restore_lambda():
     from gnomon.executive import scoring
 
-    before = scoring.LAMBDA_N
+    before = scoring.LAMBDA_D
     yield
-    scoring.LAMBDA_N = before
+    scoring.LAMBDA_D = before
 
 
 def test_catalogue_adds_the_executive_mutations():

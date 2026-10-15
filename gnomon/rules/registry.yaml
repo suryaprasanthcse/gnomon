@@ -506,3 +506,89 @@ layers:
       guard_probes: generate
       guard_labels: [approval_exists, pending, sha_matches, unexpired, verdict_valid]
       body_file: titan/approve_decision.cypher
+  TB:
+    - name: IsolateService
+      version: 1
+      class: action
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      requires_decision: true
+      gated: false
+      evidence: true
+      reads: ["AFFECTS", "DEP_NOW", "Incident", "Incident.id", "Incident.state", "Service", "Service.health", "Service.id", "Service.mode"]
+      writes: ["Outbox", "Service.health", "Service.health_basis", "Service.mode", "Service.mode_seq"]
+      key_templates: ["Service:{p.svc}:state", "Outbox:{pid}"]
+      view_templates: ["Incident:{p.incident}:state", "Service:{p.svc}:state"]
+      guard_probes: generate
+      guard_labels: [incident_affects, incident_open, in_region, normal, unhealthy]
+      body_file: titan/isolate_service.cypher
+    - name: FailoverService
+      version: 1
+      class: action
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      requires_decision: true
+      gated: false
+      evidence: true
+      reads: ["AFFECTS", "DEP_NOW", "Incident", "Incident.id", "Incident.state", "REPLICA_OF", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt", "Service", "Service.health", "Service.id", "Service.mode"]
+      writes: ["Outbox", "Service.active_replica", "Service.health", "Service.health_basis", "Service.mode", "Service.mode_seq"]
+      key_templates: ["Service:{p.svc}:state", "Outbox:{pid}"]
+      view_templates: ["Incident:{p.incident}:state", "Service:{p.svc}:state", "Service:{p.replica}:state", "REPLICA_OF:svc:{p.replica}:*"]
+      guard_probes: generate
+      guard_labels: [incident_affects, incident_open, in_region, normal, unhealthy, replica_of, replica_live, replica_healthy, replica_normal]
+      body_file: titan/failover_service.cypher
+    - name: RollbackDeploy
+      version: 1
+      class: action
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      requires_decision: true
+      gated: true
+      evidence: true
+      reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Deploy", "Deploy.expected_health", "Deploy.id", "Deploy.service", "Deploy.verified", "Incident", "Incident.id", "Incident.state", "ROOT_CAUSE", "ROOT_CAUSE.te", "ROOT_CAUSE.vf", "ROOT_CAUSE.vt", "Service", "Service.health", "Service.id"]
+      writes: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.tt", "Outbox", "Service.health", "Service.health_basis", "Service.mode_seq"]
+      key_templates: ["DEPLOYED:svc:{p.svc}:*", "DEPLOYED:*:dep:{p.bad}", "DEPLOYED:*:dep:{p.prev}", "DEPLOYED:*", "Service:{p.svc}:state", "Outbox:{pid}"]
+      view_templates: ["Incident:{p.incident}:state", "ROOT_CAUSE:inc:{p.incident}:*", "DEPLOYED:svc:{p.svc}:*", "Service:{p.svc}:state"]
+      guard_probes: generate
+      guard_labels: [cause_exists, incident_open, cause_live, bad_deployed, bad_of_svc, cur_te, cur_vt, unhealthy, prev_exists, prev_of_svc, prev_verified, prev_distinct]
+      body_file: titan/rollback_deploy.cypher
+    - name: EscalateIncident
+      version: 1
+      class: action
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      requires_decision: true
+      gated: false
+      evidence: true
+      reads: ["AFFECTS", "Incident", "Incident.holds", "Incident.id", "Incident.state", "OWNER_NOW", "Service", "Team", "Team.id"]
+      writes: ["Incident.escalated", "Incident.escalated_seq", "Incident.holds", "Outbox"]
+      key_templates: ["Incident:{p.incident}:state", "Outbox:{pid}"]
+      view_templates: ["Incident:{p.incident}:state"]
+      guard_probes: generate
+      guard_labels: [incident_affects, incident_open]
+      body_file: titan/escalate_incident.cypher
+    - name: RestoreService
+      version: 1
+      class: action
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      requires_decision: true
+      gated: false
+      evidence: true
+      reads: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.vt", "Deploy", "Deploy.expected_health", "Deploy.verified", "Incident", "Incident.id", "Incident.state", "Service", "Service.id", "Service.mode"]
+      writes: ["Outbox", "Service.active_replica", "Service.health", "Service.health_basis", "Service.mode", "Service.mode_seq"]
+      key_templates: ["Service:{p.svc}:state", "Outbox:{pid}"]
+      view_templates: ["Incident:{p.incident}:state", "Service:{p.svc}:state", "DEPLOYED:svc:{p.svc}:*"]
+      guard_probes: generate
+      guard_labels: [has_deploy, mode_diverted, cur_te, cur_vt, verified, incident_exists, incident_open]
+      body_file: titan/restore_service.cypher

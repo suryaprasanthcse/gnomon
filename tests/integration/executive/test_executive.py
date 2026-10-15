@@ -153,7 +153,7 @@ def test_evidence_paths_and_cites_are_live_and_inside_d_cites(xw):
     res = xw.executive().decide("i1", [], "r", "r3")
     d = res.envelope
     rescued = [e for e in d["evidence"] if e["role"] == "rescued"]
-    assert [e["path"][-1] for e in rescued] == ["svc:c", "svc:b", "svc:f"]  # top EVIDENCE_N rescued by difference
+    assert [e["path"][-1] for e in rescued] == ["svc:c", "svc:b", "svc:a"]  # top EVIDENCE_N rescued, then by uid
     assert rescued[1]["path"] == ["svc:c", "svc:b"]
     cited = {(c["s"], c["fid"]) for c in d["cites"]}
     assert {(c["s"], c["fid"]) for e in d["evidence"] for c in e["cites"]} <= cited

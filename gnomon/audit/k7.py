@@ -1,9 +1,9 @@
-"""K7 skeleton · decisions are what they say (master §15.13 steps 1 and 8, invariant I11).
+"""K7 · decisions are what they say (master §15.13 steps 1 and 8, invariant I11).
 
 Step 1: for every `(Decision)-[:COMMITTED_AS]->(Rewrite)`, the envelope in `attach` hashes to its own sha and to the
 `decision_sha` in the rewrite's params, and the Decision, Candidate and Evidence nodes equal the parts of the envelope.
 Step 8 (I11): every rewrite of an action-class rule has exactly one Decision and every Decision exactly one
-`COMMITTED_AS`. Re-simulation (steps 2-7) belongs to the Executive and arrives with A11.
+`COMMITTED_AS`. Steps 2-7 (re-simulation of an Executive decision, k7_resim.py) run when `db` and `client` are given.
 """
 
 from __future__ import annotations
@@ -46,7 +46,7 @@ def _differs(props: dict, expected: dict, fields) -> list[str]:
     return [name for name, key in fields if props.get(name) != expected.get(key)]
 
 
-def check(graph) -> CheckResult:
+def check(graph, *, db=None, client=None) -> CheckResult:
     findings: list[dict] = []
     for did, node, rewrite, attach, params, read_seq in graph.ro_query(DECISIONS).result_set:
         try:
@@ -75,7 +75,7 @@ def check(graph) -> CheckResult:
             bad = [f for f in CANDIDATE_FIELDS if props.get(f) != want.get(f)]
             if bad:
                 findings.append({"problem": "node_mismatch", "node": "Candidate", "id": cid, "props": bad})
-        evidence = {eid: (props, sorted(map(tuple, cites))) for eid, props, cites in
+        evidence = {eid: (props, sorted(tuple(c) for c in cites if c[0] is not None)) for eid, props, cites in
                     graph.ro_query(EVIDENCE, {"id": did}).result_set}
         wanted = {f"{d['did']}:{e['ord']}": e for e in d.get("evidence", [])}
         for eid in sorted(set(evidence) | set(wanted)):
@@ -89,6 +89,10 @@ def check(graph) -> CheckResult:
                 bad.append("cites")
             if bad:
                 findings.append({"problem": "node_mismatch", "node": "Evidence", "id": eid, "props": bad})
+    if db is not None and client is not None:  # steps 2-7 need the log's replay and the scorer library
+        from gnomon.audit.k7_resim import resimulate
+
+        findings += resimulate(graph, db, client)
     shas = [sha for (sha,) in graph.ro_query(ACTION_SHAS).result_set]
     if shas:
         for rewrite, n in graph.ro_query(ACTION_REWRITES, {"shas": shas}).result_set:

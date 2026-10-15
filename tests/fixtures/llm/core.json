@@ -4,7 +4,7 @@
   "prompts": 28,
   "recorded_from": "gnomon.agents.recorded.PolicyLLM (deterministic stand-in, not a language model)",
   "seed": 7,
-  "state_hash": "7cf0bce254c43317550174f07d206d035da6aa43a77727d4c5da0720ac7db599"
+  "state_hash": "015a9c8264f3645e8fc520d54c95632ba296d2d6e176c129bd528c1fa79aebc4"
  },
  "responses": {
   "0547d4b57cd8d3972846f656cf0517cbb5e4ada03a1bc1fd4a27838816411da3": "{\"rule\": \"ClaimTask\", \"tuple_index\": 0}",
