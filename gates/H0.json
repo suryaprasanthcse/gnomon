@@ -1,9 +1,9 @@
 {
   "gate": "H0",
   "module": "A00",
-  "status": "provisional",
-  "commit": "66168292655826471873cd86be7476d4fd8a4508",
-  "utc": "2026-10-15T05:46:43Z",
+  "status": "green",
+  "commit": "934ed0acc134c2e2645b56efea5a1d9567fd74a8",
+  "utc": "2026-10-15T05:50:32Z",
   "image_digest": "unpinned",
   "markers": [
     "gate_h0"
@@ -12,7 +12,7 @@
     "passed": 18,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 16.907
+    "duration_s": 19.065
   },
   "coverage": {},
   "tdd": {
@@ -23,7 +23,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
+  "human_signed": true,
   "failures": [],
   "forbidden": []
 }
