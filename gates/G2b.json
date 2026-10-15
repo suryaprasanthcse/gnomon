@@ -1,9 +1,9 @@
 {
   "gate": "G2b",
   "module": "A06",
-  "status": "provisional",
-  "commit": "50ef43616b4d60ee53c5de2d50dbc0005230f04e",
-  "utc": "2026-10-15T15:52:47Z",
+  "status": "green",
+  "commit": "c51db96e2be2bb3c2bcbdb6ec68b01e893206377",
+  "utc": "2026-10-15T16:24:57Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -18,7 +18,7 @@
     "passed": 794,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 84.36
+    "duration_s": 82.687
   },
   "coverage": {
     "gnomon/kernel": 0.9742
@@ -31,7 +31,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
+  "human_signed": true,
   "failures": [],
   "forbidden": []
 }
