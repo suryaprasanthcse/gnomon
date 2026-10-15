@@ -127,6 +127,7 @@ def rule_from_mapping(spec: Mapping, base_dir: Path) -> RuleDef:
     body = spec["body"] if "body" in spec else (base_dir / spec["body_file"]).read_text(encoding="utf-8")
     requires_decision = bool(spec.get("requires_decision", False))
     lists = {f: tuple(spec.get(f) or ()) for f in _LIST_FIELDS}
+    lists["caller"] = tuple(sorted(lists["caller"]))  # §5.1: caller roles are sorted
     return RuleDef(
         name=spec["name"],
         version=int(spec["version"]),
