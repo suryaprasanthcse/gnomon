@@ -1,9 +1,9 @@
 {
   "gate": "TA",
   "module": "A10",
-  "status": "provisional",
-  "commit": "f6f365f456a9ef1c38b4b3cd5c1f678efe99cfa7",
-  "utc": "2026-10-15T18:55:04Z",
+  "status": "green",
+  "commit": "1f57189b93317e3cb96c207e6f80ca3e983b5990",
+  "utc": "2026-10-15T19:10:03Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -22,7 +22,7 @@
     "passed": 1124,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 163.273
+    "duration_s": 166.132
   },
   "coverage": {
     "gnomon/kernel": 0.9692,
@@ -37,7 +37,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
+  "human_signed": true,
   "failures": [],
   "forbidden": []
 }
