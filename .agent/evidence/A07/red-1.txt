@@ -1,0 +1,1324 @@
+FFFFFFFFFFF.FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF          [100%]
+================================== FAILURES ===================================
+____________________________ test_k1_chain_intact _____________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k1_chain_intact(db, scenario):
+>       from gnomon.audit import k1
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:11: ModuleNotFoundError
+____________________ test_k1_checks_linkage_across_batches ____________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k1_checks_linkage_across_batches(db, scenario):
+>       from gnomon.audit import k1
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:18: ModuleNotFoundError
+________________________ test_k1_names_the_broken_link ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-c4905cce:replay:a07-ed4334'
+
+    def test_k1_names_the_broken_link(db, scratch):
+>       from gnomon.audit import k1
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:24: ModuleNotFoundError
+_______________________________ test_k2_gapless _______________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k2_gapless(db, scenario):
+>       from gnomon.audit import k2
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:35: ModuleNotFoundError
+__________________________ test_k3_rules_and_kernel ___________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k3_rules_and_kernel(db, redis_raw, scenario):
+>       from gnomon.audit import k3
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:43: ModuleNotFoundError
+_________________ test_k3_kernel_sha_reads_the_loaded_library _________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-c4905cce:replay:a07-59305f'
+
+    def test_k3_kernel_sha_reads_the_loaded_library(db, redis_raw, scratch):
+>       from gnomon.audit import k3
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:50: ModuleNotFoundError
+________________ test_k3_flags_a_rule_used_before_registration ________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-c4905cce:replay:a07-96866b'
+
+    def test_k3_flags_a_rule_used_before_registration(db, redis_raw, scratch):
+>       from gnomon.audit import k3
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:59: ModuleNotFoundError
+_________________________ test_k4_replay_equals_live __________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k4_replay_equals_live(db, redis_raw, scenario):
+>       from gnomon.audit import k4
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:68: ModuleNotFoundError
+__________________ test_k4_reports_the_first_differing_line ___________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-c4905cce:replay:a07-374a26'
+
+    def test_k4_reports_the_first_differing_line(db, redis_raw, scratch):
+>       from gnomon.audit import k4
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:76: ModuleNotFoundError
+_________________________ test_k4_reports_divergence __________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-c4905cce:replay:a07-9af3e7'
+
+    def test_k4_reports_divergence(db, redis_raw, scratch):
+>       from gnomon.audit import k4
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:88: ModuleNotFoundError
+_____________________________ test_k5_four_parts ______________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k5_four_parts(db, scenario):
+>       from gnomon.audit import k5
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:97: ModuleNotFoundError
+______________________________ test_k6_causality ______________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_k6_causality(db, scenario):
+>       from gnomon.audit import k6
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:115: ModuleNotFoundError
+____________________ test_audit_runner_on_a_clean_history _____________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_audit_runner_on_a_clean_history(db, redis_raw, scenario):
+>       from gnomon.audit.runner import audit
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:122: ModuleNotFoundError
+______________________ test_audit_runner_selects_checks _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-c4905cce', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_audit_runner_selects_checks(db, redis_raw, scenario):
+>       from gnomon.audit.runner import audit
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_audits.py:132: ModuleNotFoundError
+______________________________ test_line_format _______________________________
+
+    @pytest.mark.unit
+    def test_line_format():
+>       from gnomon.audit.canonical import canonical_lines, hash_lines
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_canonical.py:45: ModuleNotFoundError
+______________ test_unkeyed_labels_fall_back_to_their_properties ______________
+
+    @pytest.mark.unit
+    def test_unkeyed_labels_fall_back_to_their_properties():
+>       from gnomon.audit.canonical import canonical_lines, element_key
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_canonical.py:64: ModuleNotFoundError
+____________ test_first_difference_names_the_element_and_property _____________
+
+    @pytest.mark.unit
+    def test_first_difference_names_the_element_and_property():
+>       from gnomon.audit.canonical import canonical_lines, first_difference
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_canonical.py:72: ModuleNotFoundError
+_________________ test_canonical_hash_order_independent_rows __________________
+
+    @pytest.mark.unit
+>   @settings(max_examples=100)
+                   ^^^
+
+tests\integration\audit\test_canonical.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+node_order = [0, 1, 2, 3, 4, 5, ...], edge_order = [0, 1, 2, 3]
+
+    @pytest.mark.unit
+    @settings(max_examples=100)
+    @given(st.permutations(range(len(NODES))), st.permutations(range(len(EDGES))))
+    def test_canonical_hash_order_independent_rows(node_order, edge_order):
+>       from gnomon.audit.canonical import canonical_lines, hash_lines
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+E       Failing test case: test_canonical_hash_order_independent_rows(
+E           # The test always failed when commented parts were varied together.
+E           node_order=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],  # or any other generated value
+E           edge_order=[0, 1, 2, 3],  # or any other generated value
+E       )
+
+tests\integration\audit\test_canonical.py:89: ModuleNotFoundError
+____________________ test_canonical_hash_order_independent ____________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+tenant = 't:test-9beb5d04'
+
+    @pytest.mark.integration
+>   @pytest.mark.property
+                   ^^^^^^^
+
+tests\integration\audit\test_canonical.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+tenant = 't:test-9beb5d04', node_order = [0, 1, 2, 3, 4, 5, ...]
+edge_order = [0, 1, 2, 3]
+
+    @pytest.mark.integration
+    @pytest.mark.property
+    @settings(max_examples=12, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+    @given(st.permutations(range(len(NODES))), st.permutations(range(len(EDGES))))
+    def test_canonical_hash_order_independent(db, redis_raw, tenant, node_order, edge_order):
+        """Property: inserting the same elements in any order gives the same hash (internal ids excluded)."""
+>       from gnomon.audit.canonical import canonical_lines, hash_lines, state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+E       Failing test case: test_canonical_hash_order_independent(
+E           # The test always failed when commented parts were varied together.
+E           db=<falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>,
+E           redis_raw=<redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<REDACTED>,socket_timeout=5,socket_read_size=32768,encoding=utf-8,encoding_errors=strict,decode_responses=True,retry_on_error=[],retry=<redis.retry.Retry object at 0x0000000005F34F50>,health_check_interval=0,client_name=None,driver_info=DriverInfo(name='redis-py', lib_version='8.1.0', _upstream=[]),redis_connect_func=None,credential_provider=<REDACTED>,protocol=None,legacy_responses=True,host=localhost,port=54118,socket_connect_timeout=5,socket_keepalive=True,socket_keepalive_options=<object object at 0x0000000000F2ADF0>,maint_notifications_pool_handler=<redis.maint_notifications.MaintNotificationsPoolHandler object at 0x0000000005F34F20>,maint_notifications_config=MaintNotificationsConfig(enabled=auto, proactive_reconnect=True, relaxed_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>,
+E           tenant='t:test-9beb5d04',
+E           node_order=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],  # or any other generated value
+E           edge_order=[0, 1, 2, 3],  # or any other generated value
+E       )
+
+tests\integration\audit\test_canonical.py:112: ModuleNotFoundError
+__________________ test_state_hash_ignores_physical_indexes ___________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-a92a1cea:replay:a07-d1491a'
+
+    @pytest.mark.integration
+    def test_state_hash_ignores_physical_indexes(db, redis_raw, scratch):
+>       from gnomon.audit.canonical import graph_lines, state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_canonical.py:125: ModuleNotFoundError
+______________________ test_state_hash_of_an_empty_graph ______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+
+    @pytest.mark.integration
+    def test_state_hash_of_an_empty_graph(db):
+>       from gnomon.audit.canonical import hash_lines, state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_canonical.py:141: ModuleNotFoundError
+______________________ test_invariant_probe_kinds_clean _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-b4bb7ef4', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_invariant_probe_kinds_clean(db, scenario):
+>       assert probe_all(db.select_graph(scenario.key)) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\audit\test_probe_and_why.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+_________________________ test_invariant_probe_lease __________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-b4bb7ef4:replay:a07-8fb9e1'
+
+    def test_invariant_probe_lease(db, scratch):
+        graph = db.select_graph(scratch)
+        graph.query("MATCH (a:Agent {id: 'tri-2'}), (t:Task {id: 't1'}) CREATE (a)-[:HOLDS {from_seq: 1}]->(t)")
+        uid = graph.ro_query("MATCH (t:Task {id: 't1'}) RETURN t.uid").result_set[0][0]
+>       assert probe_all(graph) == [{"kind": "lease", "subject": uid, "detail": {"count": 2}}]
+               ^^^^^^^^^^^^^^^^
+
+tests\integration\audit\test_probe_and_why.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+________________________ test_invariant_probe_overlap _________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-b4bb7ef4:replay:a07-4aff31'
+
+    def test_invariant_probe_overlap(db, scratch):
+        graph = db.select_graph(scratch)
+        fid, vf = graph.ro_query("MATCH (:Service {id: 'a'})-[f:OWNED_BY]->() RETURN f.fid, f.vf").result_set[0]
+        graph.query("MATCH (s:Service {id: 'a'}), (t:Team {id: 't1'}) "
+                    "CREATE (s)-[:OWNED_BY {fid: 'forged#0', vf: $vf + 1, vt: $vf + 5, ts: 1, te: $inf}]->(t)",
+                    {"vf": vf, "inf": INF})
+>       assert probe_all(graph) == [{"kind": "overlap", "subject": "svc:a",
+               ^^^^^^^^^^^^^^^^
+                                     "detail": {"rel": "OWNED_BY", "a": fid, "b": "forged#0"}}]
+
+tests\integration\audit\test_probe_and_why.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+___________ test_invariant_probe_overlap_set_form_groups_by_object ____________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-b4bb7ef4:replay:a07-51b86b'
+
+    def test_invariant_probe_overlap_set_form_groups_by_object(db, scratch):
+        graph = db.select_graph(scratch)
+        vf = graph.ro_query("MATCH (:Service {id: 'a'})-[f:DEPENDS_ON]->() RETURN f.vf").result_set[0][0]
+        # same subject, different object: no overlap for a set fact
+        graph.query("MATCH (s:Service {id: 'a'}), (t:Service {id: 'a'}) "
+                    "CREATE (s)-[:DEPENDS_ON {fid: 'self#0', vf: $vf, vt: $vf + 5, ts: 1, te: $inf}]->(t)",
+                    {"vf": vf, "inf": INF})
+>       assert probe_all(graph) == []
+               ^^^^^^^^^^^^^^^^
+
+tests\integration\audit\test_probe_and_why.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+_______________________ test_invariant_probe_projection _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-b4bb7ef4:replay:a07-54edb1'
+
+    def test_invariant_probe_projection(db, scratch):
+        graph = db.select_graph(scratch)
+        fid = graph.ro_query("MATCH (:Service {id: 'a'})-[p:DEP_NOW]->() RETURN p.fid").result_set[0][0]
+        graph.query("MATCH (:Service {id: 'a'})-[p:DEP_NOW]->() DELETE p")
+        graph.query("MATCH (s:Service {id: 'a'}), (t:Team {id: 't1'}) CREATE (s)-[:OWNER_NOW {fid: 'ghost#0'}]->(t)")
+        owned = graph.ro_query("MATCH (:Service {id: 'a'})-[f:OWNED_BY]->() RETURN f.fid").result_set[0][0]
+>       violations = sorted(probe_all(graph), key=lambda v: v["detail"]["rel"])
+                            ^^^^^^^^^^^^^^^^
+
+tests\integration\audit\test_probe_and_why.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+_________________________ test_invariant_probe_causal _________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scratch = 't:test-b4bb7ef4:replay:a07-8d4591'
+
+    def test_invariant_probe_causal(db, scratch):
+        graph = db.select_graph(scratch)
+        graph.query("MATCH (a:Rewrite {seq: 2}), (b:Rewrite {id: 'pc-1'}) CREATE (a)-[:CAUSED_BY]->(b)")
+        last = graph.ro_query("MATCH (r:Rewrite {id: 'pc-1'}) RETURN r.seq").result_set[0][0]
+        rid = graph.ro_query("MATCH (r:Rewrite {seq: 2}) RETURN r.id").result_set[0][0]
+>       assert probe_all(graph) == [{"kind": "causal", "subject": rid, "detail": {"cause": "pc-1", "cause_seq": last}}]
+               ^^^^^^^^^^^^^^^^
+
+tests\integration\audit\test_probe_and_why.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\integration\audit\test_probe_and_why.py:15: in probe_all
+    for (v,) in graph.ro_query("MATCH (t:Task) RETURN Kernel.invariantProbe('lease', t, {})").result_set:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:147: in ro_query
+    return self._query(q, params=params, timeout=timeout, read_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\falkordb\graph.py:97: in _query
+    response = self.execute_command(*command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:867: in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:889: in _execute_command
+    result = conn.retry.call_with_retry(
+.venv\Lib\site-packages\redis\retry.py:120: in call_with_retry
+    return do()
+           ^^^^
+.venv\Lib\site-packages\redis\client.py:890: in <lambda>
+    lambda: self._send_command_parse_response(
+.venv\Lib\site-packages\redis\client.py:819: in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\redis\client.py:935: in parse_response
+    response = connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <redis.connection.Connection(host=localhost,port=54118,db=0)>
+disable_decoding = False, timeout = <object object at 0x0000000000F2ADF0>
+disconnect_on_error = True, push_request = False
+
+    def read_response(
+        self,
+        disable_decoding=False,
+        *,
+        timeout: Union[float, object] = SENTINEL,
+        disconnect_on_error=True,
+        push_request=False,
+    ):
+        """Read the response from a previously sent command"""
+    
+        host_error = self._host_error()
+    
+        try:
+            if self.protocol in ["3", 3]:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding,
+                    push_request=push_request,
+                    timeout=timeout,
+                )
+            else:
+                response = self._parser.read_response(
+                    disable_decoding=disable_decoding, timeout=timeout
+                )
+        except socket.timeout:
+            if disconnect_on_error:
+                self.disconnect()
+            raise TimeoutError(f"Timeout reading from {host_error}")
+        except OSError as e:
+            if disconnect_on_error:
+                self.disconnect()
+            raise ConnectionError(f"Error while reading from {host_error} : {e.args}")
+        except BaseException:
+            # Also by default close in case of BaseException.  A lot of code
+            # relies on this behaviour when doing Command/Response pairs.
+            # See #1128.
+            if disconnect_on_error:
+                self.disconnect()
+            raise
+    
+        if self.health_check_interval:
+            self.next_health_check = time.monotonic() + self.health_check_interval
+    
+        if isinstance(response, ResponseError):
+            try:
+>               raise response
+E               redis.exceptions.ResponseError: Unknown function 'Kernel.invariantProbe'
+
+.venv\Lib\site-packages\redis\connection.py:1437: ResponseError
+________________ test_invariant_probe_rejects_an_unknown_kind _________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-b4bb7ef4', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_invariant_probe_rejects_an_unknown_kind(db, scenario):
+        import redis
+    
+>       with pytest.raises(redis.ResponseError, match="BAD_PROBE"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'BAD_PROBE'
+E         Actual message: "Unknown function 'Kernel.invariantProbe'"
+
+tests\integration\audit\test_probe_and_why.py:90: AssertionError
+_______________________________ test_why_entity _______________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-b4bb7ef4', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_why_entity(db, scenario):
+>       from gnomon.audit.runner import why_entity
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_probe_and_why.py:95: ModuleNotFoundError
+___________________________ test_why_entity_unknown ___________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+scenario = Scenario(key='t:test-b4bb7ef4', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_why_entity_unknown(db, scenario):
+>       from gnomon.audit.runner import why_entity
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_probe_and_why.py:113: ModuleNotFoundError
+__________________________________ test_cli ___________________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+falkordb_container = FalkorEndpoint(host='localhost', port=54118)
+scenario = Scenario(key='t:test-b4bb7ef4', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+scratch = 't:test-b4bb7ef4:replay:a07-6d34fa'
+capsys = <_pytest.capture.CaptureFixture object at 0x0000000009450E60>
+
+    def test_cli(db, redis_raw, falkordb_container, scenario, scratch, capsys):
+>       from gnomon import cli
+E       ImportError: cannot import name 'cli' from 'gnomon' (C:\myspace\hacckathons\gnomon\gnomon\__init__.py)
+
+tests\integration\audit\test_probe_and_why.py:119: ImportError
+______________________ test_replay_reproduces_each_step _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-6e4dddad', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_replay_reproduces_each_step(db, redis_raw, scenario):
+>       from gnomon.audit.replay import replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:26: ModuleNotFoundError
+_________________________ test_replay_until_a_prefix __________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-6e4dddad', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_replay_until_a_prefix(db, redis_raw, scenario):
+>       from gnomon.audit.replay import replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:44: ModuleNotFoundError
+________________ test_replay_overwrites_a_stale_scratch_graph _________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-6e4dddad', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_replay_overwrites_a_stale_scratch_graph(db, redis_raw, scenario):
+>       from gnomon.audit.replay import replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:59: ModuleNotFoundError
+______________ test_replay_raises_divergence_on_a_tampered_step _______________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6e4dddad:replay:a07-a7911e'
+
+    def test_replay_raises_divergence_on_a_tampered_step(db, redis_raw, scratch):
+>       from gnomon.audit.replay import Divergence, replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:72: ModuleNotFoundError
+_________________ test_replay_revalidates_recorded_view_keys __________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6e4dddad:replay:a07-99c53e'
+
+    def test_replay_revalidates_recorded_view_keys(db, redis_raw, scratch):
+        """A recorded read_seq older than a recorded view key's version is refused by P0 during replay."""
+>       from gnomon.audit.replay import Divergence, replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:87: ModuleNotFoundError
+_____________________ test_replay_reports_a_missing_step ______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6e4dddad:replay:a07-16811d'
+
+    def test_replay_reports_a_missing_step(db, redis_raw, scratch):
+>       from gnomon.audit.replay import Divergence, replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:98: ModuleNotFoundError
+_____________________ test_replay_reports_a_missing_rule ______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6e4dddad:replay:a07-24d2a2'
+
+    def test_replay_reports_a_missing_rule(db, redis_raw, scratch):
+>       from gnomon.audit.replay import Divergence, replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:109: ModuleNotFoundError
+_____________________ test_replay_reports_a_kernel_error ______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6e4dddad:replay:a07-47fb7e'
+
+    def test_replay_reports_a_kernel_error(db, redis_raw, scratch):
+        """A recorded clock that runs backwards makes Kernel.tick throw HLC_REGRESSION during replay."""
+>       from gnomon.audit.replay import Divergence, replay
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:121: ModuleNotFoundError
+____________ test_independent_replays_have_equal_canonical_hashes _____________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scenario = Scenario(key='t:test-6e4dddad', head_seq=24, head_hash='fad1ebed973d8546e9f1b65d104af40c2139f70db2c7e1c7467548c2d15db3ae', message_uid='msg:m1', voided_fid='dep-ba#0', cited_fid='assertfact-13#0')
+
+    def test_independent_replays_have_equal_canonical_hashes(db, redis_raw, scenario):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\integration\audit\test_replay.py:133: ModuleNotFoundError
+_______________________ test_catalogue_matches_the_spec _______________________
+
+    def test_catalogue_matches_the_spec():
+>       from gnomon.audit.mutations import MUTATIONS
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:20: ModuleNotFoundError
+_____________________ test_clean_copy_passes_every_check ______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-c84150'
+
+    def test_clean_copy_passes_every_check(db, redis_raw, scratch):
+>       from gnomon.audit.runner import audit
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:28: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU1] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-e510bb', mu = 'MU1'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU2] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-a2aad6', mu = 'MU2'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU3] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-5b3a7f', mu = 'MU3'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU4] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-e01693', mu = 'MU4'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU5] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-81b5b5', mu = 'MU5'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU6] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-53ce72', mu = 'MU6'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU7] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-c208eb', mu = 'MU7'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU8] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-328d43', mu = 'MU8'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU9] ________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-d5d1c5', mu = 'MU9'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU10] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-85a500', mu = 'MU10'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU11] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-19a859', mu = 'MU11'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU12] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-4804d7', mu = 'MU12'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU13] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-68f73d', mu = 'MU13'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU14] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-b131a6', mu = 'MU14'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU15] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-08f790', mu = 'MU15'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU16] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-823fca', mu = 'MU16'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU17] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-bc4231', mu = 'MU17'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+_______________________ test_mutation_is_detected[MU18] _______________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch = 't:test-6d220816:replay:a07-1f1b9c', mu = 'MU18'
+
+    @pytest.mark.parametrize("mu", list(EXPECTED))
+    def test_mutation_is_detected(db, redis_raw, scratch, mu):
+>       from gnomon.audit.canonical import state_hash
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:36: ModuleNotFoundError
+________________ test_mutations_refuse_a_graph_without_targets ________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+golden_genesis = 't:test-golden-c16211e1', tenant = 't:test-c1174b9b'
+
+    def test_mutations_refuse_a_graph_without_targets(db, redis_raw, golden_genesis, tenant):
+>       from gnomon.audit.mutations import MutationNotApplicable, apply_mutation
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\mutation\test_mutations.py:48: ModuleNotFoundError
+______________________________ test_core_machine ______________________________
+
+self = Machine({})
+
+    @invariant()
+    def k5_holds(self):
+>       from gnomon.audit import k5
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+
+tests\stateful\test_core_machine.py:131: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CB34A0>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+golden_genesis = 't:test-golden-c16211e1'
+genesis_config = {'tenant': 'test', 'agents': [{'id': 'kernel', 'role': 'kernel', 'skills': []}, {'id': 'triage-1', 'role': 'triage', '..., 'triage']}], 'skills': ['ops', 'triage'], 'registry': <gnomon.kernel.registry.Registry object at 0x0000000005CB3FB0>}
+
+    def test_core_machine(db, redis_raw, golden_genesis, genesis_config):
+        machine = type("Machine", (CoreMachine,), {"env": (db, redis_raw, golden_genesis, genesis_config["registry"])})
+>       run_state_machine_as_test(machine, settings=settings(
+            max_examples=6, stateful_step_count=14, deadline=None,
+            suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture]))
+
+tests\stateful\test_core_machine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\hypothesis\stateful.py:271: in run_state_machine_as_test
+    state_machine_test()
+.venv\Lib\site-packages\hypothesis\stateful.py:122: in run_state_machine
+    @given(st.data())
+               ^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Machine({})
+
+    def teardown(self):
+>       from gnomon.audit.runner import audit
+E       ModuleNotFoundError: No module named 'gnomon.audit'
+E       Failing test case:
+E       state = Machine()
+E       state.setup()
+E       state.k5_holds()
+E       state.teardown()
+
+tests\stateful\test_core_machine.py:139: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/integration/audit/test_audits.py::test_k1_chain_intact - ModuleN...
+FAILED tests/integration/audit/test_audits.py::test_k1_checks_linkage_across_batches
+FAILED tests/integration/audit/test_audits.py::test_k1_names_the_broken_link
+FAILED tests/integration/audit/test_audits.py::test_k2_gapless - ModuleNotFou...
+FAILED tests/integration/audit/test_audits.py::test_k3_rules_and_kernel - Mod...
+FAILED tests/integration/audit/test_audits.py::test_k3_kernel_sha_reads_the_loaded_library
+FAILED tests/integration/audit/test_audits.py::test_k3_flags_a_rule_used_before_registration
+FAILED tests/integration/audit/test_audits.py::test_k4_replay_equals_live - M...
+FAILED tests/integration/audit/test_audits.py::test_k4_reports_the_first_differing_line
+FAILED tests/integration/audit/test_audits.py::test_k4_reports_divergence - M...
+FAILED tests/integration/audit/test_audits.py::test_k5_four_parts - ModuleNot...
+FAILED tests/integration/audit/test_audits.py::test_k6_causality - ModuleNotF...
+FAILED tests/integration/audit/test_audits.py::test_audit_runner_on_a_clean_history
+FAILED tests/integration/audit/test_audits.py::test_audit_runner_selects_checks
+FAILED tests/integration/audit/test_canonical.py::test_line_format - ModuleNo...
+FAILED tests/integration/audit/test_canonical.py::test_unkeyed_labels_fall_back_to_their_properties
+FAILED tests/integration/audit/test_canonical.py::test_first_difference_names_the_element_and_property
+FAILED tests/integration/audit/test_canonical.py::test_canonical_hash_order_independent_rows
+FAILED tests/integration/audit/test_canonical.py::test_canonical_hash_order_independent
+FAILED tests/integration/audit/test_canonical.py::test_state_hash_ignores_physical_indexes
+FAILED tests/integration/audit/test_canonical.py::test_state_hash_of_an_empty_graph
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_kinds_clean
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_lease
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_overlap
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_overlap_set_form_groups_by_object
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_projection
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_causal
+FAILED tests/integration/audit/test_probe_and_why.py::test_invariant_probe_rejects_an_unknown_kind
+FAILED tests/integration/audit/test_probe_and_why.py::test_why_entity - Modul...
+FAILED tests/integration/audit/test_probe_and_why.py::test_why_entity_unknown
+FAILED tests/integration/audit/test_probe_and_why.py::test_cli - ImportError:...
+FAILED tests/integration/audit/test_replay.py::test_replay_reproduces_each_step
+FAILED tests/integration/audit/test_replay.py::test_replay_until_a_prefix - M...
+FAILED tests/integration/audit/test_replay.py::test_replay_overwrites_a_stale_scratch_graph
+FAILED tests/integration/audit/test_replay.py::test_replay_raises_divergence_on_a_tampered_step
+FAILED tests/integration/audit/test_replay.py::test_replay_revalidates_recorded_view_keys
+FAILED tests/integration/audit/test_replay.py::test_replay_reports_a_missing_step
+FAILED tests/integration/audit/test_replay.py::test_replay_reports_a_missing_rule
+FAILED tests/integration/audit/test_replay.py::test_replay_reports_a_kernel_error
+FAILED tests/integration/audit/test_replay.py::test_independent_replays_have_equal_canonical_hashes
+FAILED tests/mutation/test_mutations.py::test_catalogue_matches_the_spec - Mo...
+FAILED tests/mutation/test_mutations.py::test_clean_copy_passes_every_check
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU1] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU2] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU3] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU4] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU5] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU6] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU7] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU8] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU9] - Mod...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU10] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU11] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU12] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU13] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU14] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU15] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU16] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU17] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutation_is_detected[MU18] - Mo...
+FAILED tests/mutation/test_mutations.py::test_mutations_refuse_a_graph_without_targets
+FAILED tests/stateful/test_core_machine.py::test_core_machine - ModuleNotFoun...
+62 failed, 1 passed in 8.45s
