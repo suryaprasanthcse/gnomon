@@ -1,0 +1,1487 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 182 items / 49 deselected / 133 selected
+
+tests\integration\udf\test_chain.py EEEEEEEEEEEEEEEEEEEE                 [ 15%]
+tests\integration\udf\test_digest.py EEEEEEEEEEEEEEEEEEEEEE              [ 31%]
+tests\integration\udf\test_loader.py EFFFF                               [ 35%]
+tests\integration\udf\test_recv.py EEEEEEEEEEEEEEEEEEEEE                 [ 51%]
+tests\integration\udf\test_sha256.py EEEEEEEEEEEEEEE                     [ 62%]
+tests\integration\udf\test_tick.py EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE [ 90%]
+EE                                                                       [ 91%]
+tests\integration\udf\test_udf_in_write.py EEEEEE                        [ 96%]
+tests\property\test_hlc_props.py EEEEE                                   [100%]
+
+=================================== ERRORS ====================================
+___________ ERROR at setup of test_chain_is_digest_of_tagged_fields ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_chain_links_successive_rewrites ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_chain_matches_kernel_digest ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_every_field_is_bound[prev] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_every_field_is_bound[id] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_every_field_is_bound[seq] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_every_field_is_bound[pt] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_every_field_is_bound[lc] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_every_field_is_bound[rule_sha] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_every_field_is_bound[agent] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_every_field_is_bound[params] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_every_field_is_bound[read_seq] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_every_field_is_bound[vk_digest] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_rejects_mistyped_fields[seq-1] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_rejects_mistyped_fields[pt-1.5] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_rejects_mistyped_fields[prev-None] __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_rejects_mistyped_fields[params-7] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_rejects_mistyped_fields[read_seq-True] ________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______ ERROR at setup of test_rejects_mistyped_fields[vk_digest-value5] _______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_chain_matches_reference ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_netstring_example ___________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_empty_list_is_sha_of_empty_string ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_byte_length_not_code_units ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_integer_rendering[0-0] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_integer_rendering[-5--5] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_ ERROR at setup of test_integer_rendering[9007199254740991-9007199254740991] _
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_ ERROR at setup of test_integer_rendering[-9007199254740991--9007199254740991] _
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____ ERROR at setup of test_integer_rendering[1791000000000-1791000000000] ____
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_prefix_free_distinguishes_splits ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_matches_reference ___________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_rejects_float_bool_nested[float] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_rejects_float_bool_nested[float-late] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_rejects_float_bool_nested[true] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_rejects_float_bool_nested[false] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_rejects_float_bool_nested[nested] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_rejects_float_bool_nested[nested-late] ________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_rejects_float_bool_nested[map] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_rejects_float_bool_nested[unsafe-int] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_rejects_non_list['abc'] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________________ ERROR at setup of test_rejects_non_list[7] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_rejects_non_list[null] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_rejects_non_list[{a: 1}] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_library_sha_stable __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_receive_table[equal-m-ahead] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_receive_table[equal-local-ahead] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_receive_table[all-equal] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_receive_table[local-pt] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_receive_table[local-pt-wall-tie] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_receive_table[message-pt] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_receive_table[message-pt-wall-tie] __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________________ ERROR at setup of test_receive_table[wall] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______ ERROR at setup of test_recorded_modes_delegate_to_tick[replay] ________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________ ERROR at setup of test_recorded_modes_delegate_to_tick[sim] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________ ERROR at setup of test_recorded_modes_ignore_message_fields _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________ ERROR at setup of test_lc_overflow_throws[three-way-local] __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_lc_overflow_throws[three-way-message] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_lc_overflow_throws[local] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_lc_overflow_throws[message] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________________ ERROR at setup of test_bad_mode_throws ____________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[m-pt-null] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[m-lc-null] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_requires_integers[m-pt-float] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[wall-null] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_requires_integers[pt-null] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________________ ERROR at setup of test_fips_vectors[empty] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_fips_vectors[abc] ___________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_fips_vectors[two-block] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_utf8_and_block_boundaries[2-byte] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_utf8_and_block_boundaries[3-byte] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_utf8_and_block_boundaries[astral] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_utf8_and_block_boundaries[55] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_utf8_and_block_boundaries[56] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_utf8_and_block_boundaries[64] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_utf8_and_block_boundaries[long-mixed] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________________ ERROR at setup of test_matches_hashlib ____________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_rejects_non_string[1] _________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_rejects_non_string[null] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_rejects_non_string[[1]] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_rejects_non_string[true] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_live_rules[pt-advance] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_live_rules[lc-increment-equal] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_live_rules[lc-increment-behind] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_live_rules[origin] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_live_rules[lc-max] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_live_rules[lc-reset-at-max] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_live_ignores_recorded_values _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_replay_returns_recorded[later-pt] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______ ERROR at setup of test_replay_returns_recorded[later-pt-any-lc] _______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______ ERROR at setup of test_replay_returns_recorded[same-pt-next-lc] _______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______ ERROR at setup of test_replay_returns_recorded[same-pt-larger-lc] ______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_sim_returns_recorded[later-pt] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_sim_returns_recorded[same-pt-next-lc] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_recorded_modes_never_read_the_wall __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________ ERROR at setup of test_hlc_regression_throws[equal-replay] __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_hlc_regression_throws[equal-sim] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____ ERROR at setup of test_hlc_regression_throws[same-pt-lower-lc-replay] ____
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____ ERROR at setup of test_hlc_regression_throws[same-pt-lower-lc-sim] ______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______ ERROR at setup of test_hlc_regression_throws[earlier-pt-replay] _______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________ ERROR at setup of test_hlc_regression_throws[earlier-pt-sim] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_________ ERROR at setup of test_hlc_regression_throws[origin-replay] _________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_hlc_regression_throws[origin-sim] ___________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_lc_overflow_throws __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_bad_mode_throws[LIVE] _________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_bad_mode_throws[] ___________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______________ ERROR at setup of test_bad_mode_throws[Replay] ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_bad_mode_throws[simulate] _______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+________________ ERROR at setup of test_bad_mode_throws[None] _________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________________ ERROR at setup of test_bad_mode_throws[1] __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_requires_integers[pt-null] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______________ ERROR at setup of test_requires_integers[lc-null] ______________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[wall-null] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_requires_integers[wall-float] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[lc-string] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_requires_integers[rec-pt-null] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_requires_integers[rec-lc-null] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________ ERROR at setup of test_requires_integers[rec-pt-float] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_requires_integers[lc-negative] ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_____________ ERROR at setup of test_requires_integers[pt-unsafe] _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___________________ ERROR at setup of test_udf_value_in_set ___________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+____________ ERROR at setup of test_tick_fields_stored_separately _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+_______ ERROR at setup of test_chain_written_in_the_same_query_as_tick ________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+______ ERROR at setup of test_throw_rolls_back_the_whole_query[bad-mode] ______
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+___ ERROR at setup of test_throw_rolls_back_the_whole_query[hlc-regression] ___
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__ ERROR at setup of test_throw_rolls_back_the_whole_query[digest-bad-field] __
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="session")
+    def kernel_sha(redis_raw) -> str:
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\conftest.py:43: ModuleNotFoundError
+__________ ERROR at setup of test_live_tick_advances_and_tracks_wall __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="module")
+    def kernel(redis_raw):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\property\test_hlc_props.py:28: ModuleNotFoundError
+_________ ERROR at setup of test_live_recv_exceeds_local_and_message __________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="module")
+    def kernel(redis_raw):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\property\test_hlc_props.py:28: ModuleNotFoundError
+____________ ERROR at setup of test_recorded_modes_return_recorded ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="module")
+    def kernel(redis_raw):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\property\test_hlc_props.py:28: ModuleNotFoundError
+____________ ERROR at setup of test_recorded_regression_is_refused ____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="module")
+    def kernel(redis_raw):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\property\test_hlc_props.py:28: ModuleNotFoundError
+____________ ERROR at setup of test_live_chain_strictly_increases _____________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+
+    @pytest.fixture(scope="module")
+    def kernel(redis_raw):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\property\test_hlc_props.py:28: ModuleNotFoundError
+================================== FAILURES ===================================
+__________________________ test_reload_is_idempotent __________________________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005C24920>
+tenant = 't:test-95851563'
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch_library = 'LoaderTest6bea3b26'
+
+    def test_reload_is_idempotent(db, tenant, redis_raw, scratch_library):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\test_loader.py:48: ModuleNotFoundError
+_________________ test_library_sha_of_missing_library_raises __________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch_library = 'LoaderTest40f77f6d'
+
+    def test_library_sha_of_missing_library_raises(redis_raw, scratch_library):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\test_loader.py:70: ModuleNotFoundError
+________________ test_rejected_source_raises_and_loads_nothing ________________
+
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+scratch_library = 'LoaderTest49c496c7'
+
+    def test_rejected_source_raises_and_loads_nothing(redis_raw, scratch_library):
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\test_loader.py:77: ModuleNotFoundError
+_______________________ test_source_reads_udf_directory _______________________
+
+    def test_source_reads_udf_directory():
+>       from gnomon.udf import loader
+E       ModuleNotFoundError: No module named 'gnomon'
+
+tests\integration\udf\test_loader.py:85: ModuleNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/integration/udf/test_chain.py::test_chain_is_digest_of_tagged_fields
+ERROR tests/integration/udf/test_chain.py::test_chain_links_successive_rewrites
+ERROR tests/integration/udf/test_chain.py::test_chain_matches_kernel_digest
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[prev] - ...
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[id] - Mo...
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[seq] - M...
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[pt] - Mo...
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[lc] - Mo...
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[rule_sha]
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[agent]
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[params]
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[read_seq]
+ERROR tests/integration/udf/test_chain.py::test_every_field_is_bound[vk_digest]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[seq-1]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[pt-1.5]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[prev-None]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[params-7]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[read_seq-True]
+ERROR tests/integration/udf/test_chain.py::test_rejects_mistyped_fields[vk_digest-value5]
+ERROR tests/integration/udf/test_chain.py::test_chain_matches_reference - Mod...
+ERROR tests/integration/udf/test_digest.py::test_netstring_example - ModuleNo...
+ERROR tests/integration/udf/test_digest.py::test_empty_list_is_sha_of_empty_string
+ERROR tests/integration/udf/test_digest.py::test_byte_length_not_code_units
+ERROR tests/integration/udf/test_digest.py::test_integer_rendering[0-0] - Mod...
+ERROR tests/integration/udf/test_digest.py::test_integer_rendering[-5--5] - M...
+ERROR tests/integration/udf/test_digest.py::test_integer_rendering[9007199254740991-9007199254740991]
+ERROR tests/integration/udf/test_digest.py::test_integer_rendering[-9007199254740991--9007199254740991]
+ERROR tests/integration/udf/test_digest.py::test_integer_rendering[1791000000000-1791000000000]
+ERROR tests/integration/udf/test_digest.py::test_prefix_free_distinguishes_splits
+ERROR tests/integration/udf/test_digest.py::test_matches_reference - ModuleNo...
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[float]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[float-late]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[true]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[false]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[nested]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[nested-late]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[map]
+ERROR tests/integration/udf/test_digest.py::test_rejects_float_bool_nested[unsafe-int]
+ERROR tests/integration/udf/test_digest.py::test_rejects_non_list['abc'] - Mo...
+ERROR tests/integration/udf/test_digest.py::test_rejects_non_list[7] - Module...
+ERROR tests/integration/udf/test_digest.py::test_rejects_non_list[null] - Mod...
+ERROR tests/integration/udf/test_digest.py::test_rejects_non_list[{a: 1}] - M...
+ERROR tests/integration/udf/test_loader.py::test_library_sha_stable - ModuleN...
+ERROR tests/integration/udf/test_recv.py::test_receive_table[equal-m-ahead]
+ERROR tests/integration/udf/test_recv.py::test_receive_table[equal-local-ahead]
+ERROR tests/integration/udf/test_recv.py::test_receive_table[all-equal] - Mod...
+ERROR tests/integration/udf/test_recv.py::test_receive_table[local-pt] - Modu...
+ERROR tests/integration/udf/test_recv.py::test_receive_table[local-pt-wall-tie]
+ERROR tests/integration/udf/test_recv.py::test_receive_table[message-pt] - Mo...
+ERROR tests/integration/udf/test_recv.py::test_receive_table[message-pt-wall-tie]
+ERROR tests/integration/udf/test_recv.py::test_receive_table[wall] - ModuleNo...
+ERROR tests/integration/udf/test_recv.py::test_recorded_modes_delegate_to_tick[replay]
+ERROR tests/integration/udf/test_recv.py::test_recorded_modes_delegate_to_tick[sim]
+ERROR tests/integration/udf/test_recv.py::test_recorded_modes_ignore_message_fields
+ERROR tests/integration/udf/test_recv.py::test_lc_overflow_throws[three-way-local]
+ERROR tests/integration/udf/test_recv.py::test_lc_overflow_throws[three-way-message]
+ERROR tests/integration/udf/test_recv.py::test_lc_overflow_throws[local] - Mo...
+ERROR tests/integration/udf/test_recv.py::test_lc_overflow_throws[message] - ...
+ERROR tests/integration/udf/test_recv.py::test_bad_mode_throws - ModuleNotFou...
+ERROR tests/integration/udf/test_recv.py::test_requires_integers[m-pt-null]
+ERROR tests/integration/udf/test_recv.py::test_requires_integers[m-lc-null]
+ERROR tests/integration/udf/test_recv.py::test_requires_integers[m-pt-float]
+ERROR tests/integration/udf/test_recv.py::test_requires_integers[wall-null]
+ERROR tests/integration/udf/test_recv.py::test_requires_integers[pt-null] - M...
+ERROR tests/integration/udf/test_sha256.py::test_fips_vectors[empty] - Module...
+ERROR tests/integration/udf/test_sha256.py::test_fips_vectors[abc] - ModuleNo...
+ERROR tests/integration/udf/test_sha256.py::test_fips_vectors[two-block] - Mo...
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[2-byte]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[3-byte]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[astral]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[55]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[56]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[64]
+ERROR tests/integration/udf/test_sha256.py::test_utf8_and_block_boundaries[long-mixed]
+ERROR tests/integration/udf/test_sha256.py::test_matches_hashlib - ModuleNotF...
+ERROR tests/integration/udf/test_sha256.py::test_rejects_non_string[1] - Modu...
+ERROR tests/integration/udf/test_sha256.py::test_rejects_non_string[null] - M...
+ERROR tests/integration/udf/test_sha256.py::test_rejects_non_string[[1]] - Mo...
+ERROR tests/integration/udf/test_sha256.py::test_rejects_non_string[true] - M...
+ERROR tests/integration/udf/test_tick.py::test_live_rules[pt-advance] - Modul...
+ERROR tests/integration/udf/test_tick.py::test_live_rules[lc-increment-equal]
+ERROR tests/integration/udf/test_tick.py::test_live_rules[lc-increment-behind]
+ERROR tests/integration/udf/test_tick.py::test_live_rules[origin] - ModuleNot...
+ERROR tests/integration/udf/test_tick.py::test_live_rules[lc-max] - ModuleNot...
+ERROR tests/integration/udf/test_tick.py::test_live_rules[lc-reset-at-max] - ...
+ERROR tests/integration/udf/test_tick.py::test_live_ignores_recorded_values
+ERROR tests/integration/udf/test_tick.py::test_replay_returns_recorded[later-pt]
+ERROR tests/integration/udf/test_tick.py::test_replay_returns_recorded[later-pt-any-lc]
+ERROR tests/integration/udf/test_tick.py::test_replay_returns_recorded[same-pt-next-lc]
+ERROR tests/integration/udf/test_tick.py::test_replay_returns_recorded[same-pt-larger-lc]
+ERROR tests/integration/udf/test_tick.py::test_sim_returns_recorded[later-pt]
+ERROR tests/integration/udf/test_tick.py::test_sim_returns_recorded[same-pt-next-lc]
+ERROR tests/integration/udf/test_tick.py::test_recorded_modes_never_read_the_wall
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[equal-replay]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[equal-sim]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[same-pt-lower-lc-replay]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[same-pt-lower-lc-sim]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[earlier-pt-replay]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[earlier-pt-sim]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[origin-replay]
+ERROR tests/integration/udf/test_tick.py::test_hlc_regression_throws[origin-sim]
+ERROR tests/integration/udf/test_tick.py::test_lc_overflow_throws - ModuleNot...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[LIVE] - Module...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[] - ModuleNotF...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[Replay] - Modu...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[simulate] - Mo...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[None] - Module...
+ERROR tests/integration/udf/test_tick.py::test_bad_mode_throws[1] - ModuleNot...
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[pt-null] - M...
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[lc-null] - M...
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[wall-null]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[wall-float]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[lc-string]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[rec-pt-null]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[rec-lc-null]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[rec-pt-float]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[lc-negative]
+ERROR tests/integration/udf/test_tick.py::test_requires_integers[pt-unsafe]
+ERROR tests/integration/udf/test_udf_in_write.py::test_udf_value_in_set - Mod...
+ERROR tests/integration/udf/test_udf_in_write.py::test_tick_fields_stored_separately
+ERROR tests/integration/udf/test_udf_in_write.py::test_chain_written_in_the_same_query_as_tick
+ERROR tests/integration/udf/test_udf_in_write.py::test_throw_rolls_back_the_whole_query[bad-mode]
+ERROR tests/integration/udf/test_udf_in_write.py::test_throw_rolls_back_the_whole_query[hlc-regression]
+ERROR tests/integration/udf/test_udf_in_write.py::test_throw_rolls_back_the_whole_query[digest-bad-field]
+ERROR tests/property/test_hlc_props.py::test_live_tick_advances_and_tracks_wall
+ERROR tests/property/test_hlc_props.py::test_live_recv_exceeds_local_and_message
+ERROR tests/property/test_hlc_props.py::test_recorded_modes_return_recorded
+ERROR tests/property/test_hlc_props.py::test_recorded_regression_is_refused
+ERROR tests/property/test_hlc_props.py::test_live_chain_strictly_increases - ...
+FAILED tests/integration/udf/test_loader.py::test_reload_is_idempotent - Modu...
+FAILED tests/integration/udf/test_loader.py::test_library_sha_of_missing_library_raises
+FAILED tests/integration/udf/test_loader.py::test_rejected_source_raises_and_loads_nothing
+FAILED tests/integration/udf/test_loader.py::test_source_reads_udf_directory
+================ 4 failed, 49 deselected, 129 errors in 4.46s =================
