@@ -1,0 +1,19 @@
+# Test-only rule (A03): writes one :Noop node. Caller "kernel". Never registered outside tests.
+name: Noop
+version: 1
+class: kernel
+layer: core
+family: null
+caller: [kernel]
+prelude: P0
+requires_decision: false
+gated: false
+evidence: false
+reads: [Blocker]
+writes: [Noop]
+key_templates: ["Noop:*", "Noop:{p.key}", "Tag:{p.tags[]}", "Item:{p.items[].id}:state"]
+view_templates: []
+guard_probes:
+  - name: no_blocker
+    cypher: "OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers"
+body_file: noop.cypher

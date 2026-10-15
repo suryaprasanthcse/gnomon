@@ -186,12 +186,66 @@ def tenant(redis_raw: redis.Redis) -> Iterator[str]:
         yield key
 
 
-@pytest.fixture
-def genesis():
-    raise RuntimeError(
-        "the genesis fixture is installed by module A03 (KernelHandle on a GRAPH.COPY of golden_genesis, "
-        "patch P3); it is not available at gate H0"
+NOOP_RULE = ROOT / "tests" / "fixtures" / "rules" / "noop.yaml"
+GENESIS_PID = "genesis"
+GENESIS_TENANT = "test"
+# Test agents: the kernel, a triage agent (not a Noop caller) and an operator.
+TEST_SKILLS = ["ops", "triage"]
+TEST_AGENTS = [
+    {"id": "kernel", "role": "kernel", "skills": []},
+    {"id": "triage-1", "role": "triage", "skills": ["triage"]},
+    {"id": "ops-1", "role": "operator", "skills": ["ops", "triage"]},
+]
+
+
+def kernel_test_registry():
+    """The A03 registry (Genesis) plus the test-only Noop rule."""
+    from gnomon.kernel.registry import Registry, load_registry, load_rule_file
+
+    return Registry([*load_registry().rules(), load_rule_file(NOOP_RULE)])
+
+
+
+def bootstrap_test_tenant(db, client: redis.Redis, key: str):
+    """Bootstrap DDL, then R0 in replay mode on the fixed clock, so every bootstrap is bit-identical."""
+    from gnomon.bootstrap.genesis import bootstrap
+    from gnomon.udf import loader
+
+    loader.load(client)
+    return bootstrap(
+        db.select_graph(key), client, kernel_test_registry(), tenant=GENESIS_TENANT, agents=TEST_AGENTS,
+        skills=TEST_SKILLS, pid=GENESIS_PID, mode="replay", rec_pt=CLOCK_EPOCH_MS, rec_lc=0,
     )
+
+
+@pytest.fixture(scope="session")
+def genesis_config() -> dict:
+    """The parameters every test genesis uses: logical tenant, agents, skills and the A03 test registry."""
+    return {"tenant": GENESIS_TENANT, "agents": TEST_AGENTS, "skills": TEST_SKILLS, "registry": kernel_test_registry()}
+
+
+@pytest.fixture(scope="session")
+def golden_genesis(db, redis_raw: redis.Redis) -> Iterator[str]:
+    """Bootstrap DDL plus R0, built once per session (per xdist worker) into t:test-golden-<uuid8> (patch P3)."""
+    key = f"t:test-golden-{uuid.uuid4().hex[:8]}"
+    try:
+        outcome = bootstrap_test_tenant(db, redis_raw, key)
+        assert outcome.code == "APPLIED", outcome
+        yield key
+    finally:
+        _delete_tenant_graphs(redis_raw, key)
+
+
+@pytest.fixture
+def genesis(db, redis_raw: redis.Redis, golden_genesis: str, tenant: str, request):
+    """A KernelHandle on `tenant`, created by GRAPH.COPY of golden_genesis (copy carries indexes and constraints)."""
+    from gnomon.kernel.service import KernelHandle
+
+    started = time.perf_counter()
+    redis_raw.execute_command("GRAPH.COPY", golden_genesis, tenant)
+    handle = KernelHandle(db.select_graph(tenant), kernel_test_registry())
+    request.node.user_properties.append(("genesis_setup_ms", round((time.perf_counter() - started) * 1000, 2)))
+    return handle
 
 
 class SteppableClock:

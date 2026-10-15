@@ -10,6 +10,7 @@ dependencies = [
     "pydantic",
     "antlr4-python3-runtime",
     "mcp",
+    "pyyaml>=6.0.3",
 ]
 
 [dependency-groups]
