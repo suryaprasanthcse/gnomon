@@ -1,6 +1,6 @@
 # STATE
-current_module:        A01          status: provisional (awaiting HUMAN-SIGNED in docs/explain/A01.md)
-last_green_gate:       H0 (G0 provisional at 15bd2c1)
+current_module:        A01          status: green
+last_green_gate:       G0
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -38,4 +38,4 @@ open_questions:        0 (see QUESTIONS.md)
 resume_point:          none; next module A02 (gate G1a) needs gates/G0.json green
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
-                       | A01    | G0   | provisional | 15bd2c1 |
+                       | A01    | G0   | green  | 15bd2c1 |
