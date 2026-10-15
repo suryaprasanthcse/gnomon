@@ -1,0 +1,19 @@
+# FalkorDB only. The image is a placeholder until A01 pins falkordb/falkordb by digest.
+# AOF with appendfsync always: a commit is acknowledged only once fsynced (master §25.2).
+services:
+  falkordb:
+    image: falkordb/falkordb:latest
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_ARGS: "--appendonly yes --appendfsync always"
+    volumes:
+      - falkordb-data:/var/lib/falkordb/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  falkordb-data:

@@ -1,0 +1,67 @@
+[project]
+name = "gnomon"
+version = "0.0.0"
+description = "GNOMON: an event-sourced, multi-agent operating system on FalkorDB"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "falkordb",
+    "redis",
+    "pydantic",
+    "antlr4-python3-runtime",
+    "mcp",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-timeout",
+    "pytest-xdist",
+    "pytest-cov",
+    "hypothesis",
+    "testcontainers",
+]
+
+[tool.uv]
+# The gnomon package is added module by module from A02 on; until then the project is not installed.
+package = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+# The cumulative gate adds `-n 4` (pytest-xdist, patch P3); the inner loop runs single-process.
+addopts = "--strict-markers --strict-config --import-mode=importlib -p no:randomly -p no:cacheprovider -ra"
+timeout = 300
+markers = [
+    "unit: pure Python, no database",
+    "integration: runs against the pinned FalkorDB container",
+    "property: hypothesis property tests",
+    "stateful: hypothesis.stateful machines",
+    "concurrency: parallel proposals against one graph",
+    "mutation: audit mutation suite (MU1-MU32)",
+    "e2e: end-to-end scenarios and proofs",
+    "chaos: fault-injection suites",
+    "spike: platform spikes (A01)",
+    "gate_h0: gate H0 (A00 bootstrap)",
+    "gate_g0: gate G0 (A01 platform spikes)",
+    "gate_g1a: gate G1a (A02 Kernel UDFs)",
+    "gate_g1b: gate G1b (A03 composer and genesis)",
+    "gate_g1c: gate G1c (A04 facts and registry)",
+    "gate_g2a: gate G2a (A05 footprints and lints)",
+    "gate_g2b: gate G2b (A06 core rules)",
+    "gate_g3: gate G3 (A07 replay and audit)",
+    "gate_g4a: gate G4a (A08 query and MCP)",
+    "gate_g4b: gate G4b (A09 ops, agents, E2E)",
+    "gate_ta: gate TA (A10 decision framework)",
+    "gate_tb: gate TB (A11 executive)",
+    "gate_tc: gate TC (A12 optimizer)",
+    "gate_td: gate TD (A13 federation)",
+    "gate_te: gate TE (A14 federated blast radius)",
+    "gate_tf: gate TF (A15 temporal projections)",
+    "gate_assure: gate ASSURE (A16 assurance sweep)",
+    "gate_ship: gate SHIP (A17 ship)",
+]
+
+[tool.coverage.run]
+branch = true

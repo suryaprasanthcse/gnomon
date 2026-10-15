@@ -1,0 +1,53 @@
+# RUNBOOK_A §4.6: every push re-runs every recorded gate, so a regression in any earlier gate fails
+# the build. The nightly job runs the stateful, chaos and mutation suites under the "nightly" profile.
+name: ci
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 21 * * *"
+  workflow_dispatch:
+
+jobs:
+  gates:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # check_tdd.py walks the full history
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - name: Re-run every recorded gate
+        run: |
+          shopt -s nullglob
+          reports=(gates/*.json)
+          if [ ${#reports[@]} -eq 0 ]; then echo "no gate recorded yet"; exit 0; fi
+          for report in "${reports[@]}"; do
+            gate=$(jq -r .gate "$report")
+            status=$(jq -r .status "$report")
+            case "$status" in
+              green) uv run python scripts/gate.py "$gate" ;;
+              provisional) uv run python scripts/gate.py "$gate" --provisional ;;
+              *) echo "::error::gates/$gate.json is recorded as $status"; exit 1 ;;
+            esac
+          done
+
+  nightly:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      HYPOTHESIS_PROFILE: nightly
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - name: Stateful, chaos and mutation suites
+        run: |
+          rc=0
+          uv run pytest -n 4 -m "stateful or chaos or mutation" || rc=$?
+          if [ "$rc" -eq 5 ]; then echo "no nightly tests collected yet"; exit 0; fi
+          exit "$rc"
