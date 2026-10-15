@@ -1,9 +1,9 @@
 {
   "gate": "G4a",
   "module": "A08",
-  "status": "provisional",
-  "commit": "4e74d22ec7b0e227d59751c1b4620783190c9b57",
-  "utc": "2026-10-15T17:50:14Z",
+  "status": "green",
+  "commit": "8833a6811568ce2eef05ff9d2dc6dbfc41cea513",
+  "utc": "2026-10-15T18:03:28Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -20,7 +20,7 @@
     "passed": 995,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 115.007
+    "duration_s": 114.96
   },
   "coverage": {
     "gnomon/query": 0.8689,
@@ -34,7 +34,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
+  "human_signed": true,
   "failures": [],
   "forbidden": []
 }
