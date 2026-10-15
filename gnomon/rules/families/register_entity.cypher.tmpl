@@ -1,0 +1,6 @@
+// ── BODY · RegisterEntity.<Label>@1 ────────────────────────────────────────
+OPTIONAL MATCH (ex:Entity {uid: '<KIND>:' + $p.id})
+WITH KCTX, count(ex) AS n
+WHERE n = 0 AND $p.id IS NOT NULL <VALID>
+CREATE (:<Label>:Entity {uid: '<KIND>:' + $p.id, id: $p.id <PROPS>, rw: $pid})
+WITH KCTX

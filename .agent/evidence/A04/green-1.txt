@@ -1,0 +1,21 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 438 items / 329 deselected / 109 selected
+
+tests\integration\facts\test_fact_concurrency.py ..                      [  1%]
+tests\integration\facts\test_facts.py .................................. [ 33%]
+...............                                                          [ 46%]
+tests\integration\registry\test_meta_rules.py .......................... [ 70%]
+........                                                                 [ 77%]
+tests\integration\registry\test_registry_members.py .................... [ 96%]
+...                                                                      [ 99%]
+tests\property\test_bitemporal_props.py .                                [100%]
+
+==================== 109 passed, 329 deselected in 13.93s =====================

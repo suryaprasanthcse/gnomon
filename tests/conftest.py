@@ -202,7 +202,8 @@ def kernel_test_registry():
     """The A03 registry (Genesis) plus the test-only Noop rule."""
     from gnomon.kernel.registry import Registry, load_registry, load_rule_file
 
-    return Registry([*load_registry().rules(), load_rule_file(NOOP_RULE)])
+    core = load_registry()
+    return Registry([*core.rules(), load_rule_file(NOOP_RULE)], core.fact_types())  # fact types: D-13
 
 
 

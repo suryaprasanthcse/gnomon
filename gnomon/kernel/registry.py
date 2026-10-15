@@ -4,6 +4,10 @@ A rule's identity is `sha = SHA-256(JCS(def_json))` over the fields of §5.1, wi
 macro-expanded and family placeholders substituted. Loading reads YAML: either a single rule file
 (`load_rule_file`) or the registry (`load_registry`, gnomon/rules/registry.yaml). A body comes from
 `body_file` (relative to the YAML file) or an inline `body`.
+
+The registry file also holds the §3.3 fact types and the family tables (§5.2): each family names a
+template file (sections marked `//## <NAME>`), shared defaults and substitutions, guard-probe lists,
+and one entry per member. `probe_macros` (such as <NOW>) are substituted into guard probes only.
 """
 
 from __future__ import annotations
@@ -91,10 +95,11 @@ class RuleDef:
 
 
 class Registry:
-    """Rules by name, in registration order."""
+    """Rules by name, in registration order, and the fact types (§3.3) genesis records."""
 
-    def __init__(self, rules: Iterable[RuleDef]) -> None:
+    def __init__(self, rules: Iterable[RuleDef], fact_types: Iterable[Mapping] = ()) -> None:
         self._rules: dict[str, RuleDef] = {}
+        self._fact_types = [dict(ft) for ft in fact_types]
         for rule in rules:
             if rule.name in self._rules:
                 raise ValueError(f"rule {rule.name!r} is registered twice")
@@ -102,6 +107,9 @@ class Registry:
 
     def rules(self) -> list[RuleDef]:
         return list(self._rules.values())
+
+    def fact_types(self) -> list[dict]:
+        return [dict(ft) for ft in self._fact_types]
 
     def get(self, name: str) -> RuleDef:
         try:
@@ -141,19 +149,69 @@ def load_rule_file(path: Path) -> RuleDef:
     return rule_from_mapping(yaml.safe_load(path.read_text(encoding="utf-8")), path.parent)
 
 
+def _substitute(text: str, substitutions: Mapping[str, str]) -> str:
+    for placeholder, value in substitutions.items():
+        text = text.replace(placeholder, value)
+    return text
+
+
+def _sections(text: str) -> dict[str, str]:
+    """Template sections, each starting at a line `//## <NAME>`; a file without markers is one section ""."""
+    sections: dict[str, list[str]] = {}
+    current = ""
+    for line in text.splitlines(keepends=True):
+        if line.startswith("//## "):
+            current = line[5:].strip()
+            sections[current] = []
+        else:
+            sections.setdefault(current, []).append(line)
+    return {name: "".join(lines) for name, lines in sections.items()}
+
+
+def family_members(family: Mapping, base_dir: Path) -> list[RuleDef]:
+    """Expand one family table into its member rules (§5.2)."""
+    sections = _sections((base_dir / family["template"]).read_text(encoding="utf-8"))
+    out = []
+    for entry in family["members"]:
+        member = entry["member"]
+        spec = {**family["defaults"], "name": family["family"], "family": family["family"],
+                "body": sections[entry.get("section", "")],
+                "guard_probes": family["guard_probes"][entry["probes"]]}
+        spec.update({k: v for k, v in entry.items() if k in _KNOWN_KEYS})
+        template = rule_from_mapping(spec, base_dir)
+        substitutions = {family["member_placeholder"]: member, **family.get("substitutions", {}),
+                         **entry.get("substitutions", {})}
+        out.append(expand_family(template, member, substitutions))
+    return out
+
+
+def _with_probe_macros(rule: RuleDef, probe_macros: Mapping[str, str]) -> RuleDef:
+    if not probe_macros:
+        return rule
+    probes = tuple({"name": g["name"], "cypher": _substitute(g["cypher"], probe_macros)} for g in rule.guard_probes)
+    return dataclasses.replace(rule, guard_probes=probes)
+
+
 def load_registry(path: Path = REGISTRY_FILE) -> Registry:
     path = Path(path)
     document = yaml.safe_load(path.read_text(encoding="utf-8"))
-    return Registry(rule_from_mapping(spec, path.parent) for spec in document["rules"])
+    rules = [rule_from_mapping(spec, path.parent) for spec in document.get("rules", [])]
+    for family in document.get("families", []):
+        rules.extend(family_members(family, path.parent))
+    probe_macros = document.get("probe_macros") or {}
+    return Registry((_with_probe_macros(r, probe_macros) for r in rules), document.get("fact_types", []))
+
+
+def register_rule_params(rule: RuleDef) -> dict:
+    """`$p` for M3 RegisterRule (§9.13): the definition, its def_json and its sha."""
+    return {"def": rule.to_param(), "def_json": rule.def_json, "sha": rule.sha}
 
 
 def expand_family(template: RuleDef, member: str, substitutions: Mapping[str, str]) -> RuleDef:
     """A family member (§5.2): placeholders such as <REL>, <S>, <O>, <PROJ> substituted, then macros expanded."""
 
     def sub(text: str) -> str:
-        for placeholder, value in substitutions.items():
-            text = text.replace(placeholder, value)
-        return text
+        return _substitute(text, substitutions)
 
     return dataclasses.replace(
         template,

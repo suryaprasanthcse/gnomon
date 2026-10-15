@@ -22,10 +22,13 @@ from gnomon.kernel.registry import Registry, RuleDef
 INF = 9007199254740991
 ZERO64 = "0" * 64
 MODES = ("live", "replay", "sim")
+# Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
+ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
+         "dispatcher", "executive", "optimizer", "reconciler", "relay")
 
 _PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
 _FIELD = r"[A-Za-z_]\w*"
-_SCALAR = re.compile(rf"p\.({_FIELD})")
+_SCALAR = re.compile(rf"p\.({_FIELD}(?:\.{_FIELD})*)")
 _LIST = re.compile(rf"p\.({_FIELD})\[\](?:\.({_FIELD}))?")
 
 
@@ -54,7 +57,7 @@ def _render(value: object) -> str:
 
 
 def instantiate_keys(templates: Sequence[str], p: Mapping, pid: str) -> list[str]:
-    """Key templates (§5.4) → keys. Segments: literal, `*`, {pid}, {p.f}, {p.list[]}, {p.list[].f}.
+    """Key templates (§5.4) → keys. Segments: literal, `*`, {pid}, {p.f}, {p.f.g}, {p.list[]}, {p.list[].f}.
 
     A missing or null value yields no key; list placeholders yield one key per non-null element.
     Keys keep template order, then list order, without duplicates.
@@ -90,7 +93,9 @@ def _values(template: str, placeholder: str, p: Mapping, pid: str) -> list[str]:
     if placeholder == "pid":
         return [pid]
     if scalar := _SCALAR.fullmatch(placeholder):
-        value = p.get(scalar.group(1))
+        value: object = p
+        for part in scalar.group(1).split("."):  # nested paths such as {p.def.name} (D-12)
+            value = value.get(part) if isinstance(value, Mapping) else None
         return [] if value is None else [_render(value)]
     if listed := _LIST.fullmatch(placeholder):
         items = p.get(listed.group(1)) or []
@@ -141,6 +146,7 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "rec_lc": proposal.rec_lc,
         "INF": INF,
         "ZERO64": ZERO64,
+        "ROLES": list(ROLES),
     }
 
 

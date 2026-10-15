@@ -1,7 +1,7 @@
 """R0 Genesis (master §9.1): the params that seed a tenant's kernel graph, and the bootstrap sequence.
 
 All validation happens in PG, inside the apply query, before the first write (§6.3). The params carry
-the kernel source and its sha, every rule with its def_json and sha, the fact types (§3.3), skills,
+the kernel source and its sha, every rule with its def_json and sha, the registry's fact types (§3.3), skills,
 agents and the base index/constraint catalogue (§3.5).
 """
 
@@ -19,26 +19,10 @@ from gnomon.kernel.service import KernelService, Proposal
 
 KERNEL_AGENT = "kernel"
 
-FACT_TYPES: tuple[dict, ...] = (
-    {"rel": "OWNED_BY", "s_labels": ["Service"], "o_labels": ["Team"], "cardinality": "functional",
-     "projection": "OWNER_NOW", "attrs": []},
-    {"rel": "DEPENDS_ON", "s_labels": ["Service"], "o_labels": ["Service", "ExternalService"], "cardinality": "set",
-     "projection": "DEP_NOW", "attrs": ["hard"]},
-    {"rel": "DEPLOYED", "s_labels": ["Service"], "o_labels": ["Deploy"], "cardinality": "functional",
-     "projection": None, "attrs": []},
-    {"rel": "REPLICA_OF", "s_labels": ["Service"], "o_labels": ["Service"], "cardinality": "functional",
-     "projection": None, "attrs": []},
-    {"rel": "MEMBER_OF", "s_labels": ["Agent"], "o_labels": ["Team"], "cardinality": "set", "projection": None,
-     "attrs": []},
-    {"rel": "ROOT_CAUSE", "s_labels": ["Incident"], "o_labels": ["Deploy", "Service"], "cardinality": "set",
-     "projection": None, "attrs": ["by", "confidence"]},
-    {"rel": "CONSUMES", "s_labels": ["Consumer"], "o_labels": ["Service"], "cardinality": "set",
-     "projection": "CONSUMES_NOW", "attrs": ["hard"]},
-)
-
 
 def build_params(registry: Registry, *, tenant: str, agents: Sequence[Mapping], skills: Sequence[str],
-                 fact_types: Sequence[Mapping] = FACT_TYPES, sys_anchor: str | None = None) -> dict:
+                 fact_types: Sequence[Mapping] | None = None, sys_anchor: str | None = None) -> dict:
+    """R0 params. Fact types default to the registry's §3.3 table (DECISIONS D-13)."""
     source = composer.kernel_source()
     return {
         "tenant": tenant,
@@ -46,7 +30,7 @@ def build_params(registry: Registry, *, tenant: str, agents: Sequence[Mapping], 
         "kernel_src": source,
         "sys_anchor": sys_anchor,
         "rules": [rule.to_param() for rule in registry.rules()],
-        "fact_types": [dict(ft) for ft in fact_types],
+        "fact_types": [dict(ft) for ft in (registry.fact_types() if fact_types is None else fact_types)],
         "skills": list(skills),
         "agents": [{"id": a["id"], "role": a["role"], "skills": list(a.get("skills", []))} for a in agents],
         "base_indexes": [i.as_param() for i in ddl.BASE_INDEXES],

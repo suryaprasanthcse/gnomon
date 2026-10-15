@@ -1,0 +1,71 @@
+//## FP
+// ── BODY · AssertFact.<REL>@1 · functional · projection <PROJ> ─────────────
+// Guards: typed entities, vf not in the future, member extras, then cardinality: no open version
+// (or, to supersede, exactly the open version to $p.old_o) and no closed current version ending
+// after $p.vf (DECISIONS D-15, keeps I7).
+MATCH (s:Entity {uid: $p.s}), (o:Entity {uid: $p.o})
+WHERE <SPRED> AND <OPRED> AND $p.vf <= now <EXTRA>
+OPTIONAL MATCH (s)-[cur:<REL>]->(oo:Entity)
+WHERE cur.te = $INF AND cur.vt = $INF
+WITH KCTX, s, o, count(cur) AS n, head(collect(cur)) AS old, head(collect(oo)) AS old_o
+OPTIONAL MATCH (s)-[cl:<REL>]->(:Entity)
+WHERE cl.te = $INF AND cl.vt <> $INF AND cl.vt > $p.vf
+WITH KCTX, s, o, n, old, old_o, count(cl) AS overlaps
+WHERE overlaps = 0
+  AND ((n = 0 AND $p.supersede = false)
+    OR ($p.supersede = true AND n = 1 AND old.vf < $p.vf AND old_o <> o AND old_o.uid = $p.old_o))
+OPTIONAL MATCH (s)-[pn:<PROJ>]->()
+WITH KCTX, s, o, old, old_o, head(collect(pn)) AS old_pn
+FOREACH (_ IN CASE WHEN old IS NULL THEN [] ELSE [1] END |
+  SET old.te = nseq, old.tt = now
+  CREATE (s)-[:<REL> {fid: $pid + '#e', prev_fid: old.fid, vf: old.vf, vt: $p.vf,
+                      tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid}]->(old_o))
+CREATE (s)-[:<REL> {fid: $pid + '#0', vf: $p.vf, vt: $INF,
+                    tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTRS>}]->(o)
+FOREACH (x IN CASE WHEN old_pn IS NULL THEN [] ELSE [old_pn] END | DELETE x)
+CREATE (s)-[:<PROJ> {fid: $pid + '#0' <ATTRS>}]->(o)
+WITH KCTX
+//## F
+// ── BODY · AssertFact.<REL>@1 · functional ──────────────────────────────────
+MATCH (s:Entity {uid: $p.s}), (o:Entity {uid: $p.o})
+WHERE <SPRED> AND <OPRED> AND $p.vf <= now <EXTRA>
+OPTIONAL MATCH (s)-[cur:<REL>]->(oo:Entity)
+WHERE cur.te = $INF AND cur.vt = $INF
+WITH KCTX, s, o, count(cur) AS n, head(collect(cur)) AS old, head(collect(oo)) AS old_o
+OPTIONAL MATCH (s)-[cl:<REL>]->(:Entity)
+WHERE cl.te = $INF AND cl.vt <> $INF AND cl.vt > $p.vf
+WITH KCTX, s, o, n, old, old_o, count(cl) AS overlaps
+WHERE overlaps = 0
+  AND ((n = 0 AND $p.supersede = false)
+    OR ($p.supersede = true AND n = 1 AND old.vf < $p.vf AND old_o <> o AND old_o.uid = $p.old_o))
+FOREACH (_ IN CASE WHEN old IS NULL THEN [] ELSE [1] END |
+  SET old.te = nseq, old.tt = now
+  CREATE (s)-[:<REL> {fid: $pid + '#e', prev_fid: old.fid, vf: old.vf, vt: $p.vf,
+                      tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid}]->(old_o))
+CREATE (s)-[:<REL> {fid: $pid + '#0', vf: $p.vf, vt: $INF,
+                    tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTRS>}]->(o)
+WITH KCTX
+//## SP
+// ── BODY · AssertFact.<REL>@1 · set · projection <PROJ> ─────────────────────
+// Cardinality per (s, o): no open version, and no closed current version ending after $p.vf (D-15).
+MATCH (s:Entity {uid: $p.s}), (o:Entity {uid: $p.o})
+WHERE <SPRED> AND <OPRED> AND s <> o AND $p.vf <= now <EXTRA>
+OPTIONAL MATCH (s)-[cur:<REL>]->(o)
+WHERE cur.te = $INF AND (cur.vt = $INF OR cur.vt > $p.vf)
+WITH KCTX, s, o, count(cur) AS n
+WHERE n = 0
+CREATE (s)-[:<REL> {fid: $pid + '#0', vf: $p.vf, vt: $INF,
+                    tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTRS>}]->(o)
+CREATE (s)-[:<PROJ> {fid: $pid + '#0' <ATTRS>}]->(o)
+WITH KCTX
+//## S
+// ── BODY · AssertFact.<REL>@1 · set ─────────────────────────────────────────
+MATCH (s:Entity {uid: $p.s}), (o:Entity {uid: $p.o})
+WHERE <SPRED> AND <OPRED> AND s <> o AND $p.vf <= now <EXTRA>
+OPTIONAL MATCH (s)-[cur:<REL>]->(o)
+WHERE cur.te = $INF AND (cur.vt = $INF OR cur.vt > $p.vf)
+WITH KCTX, s, o, count(cur) AS n
+WHERE n = 0
+CREATE (s)-[:<REL> {fid: $pid + '#0', vf: $p.vf, vt: $INF,
+                    tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTRS>}]->(o)
+WITH KCTX

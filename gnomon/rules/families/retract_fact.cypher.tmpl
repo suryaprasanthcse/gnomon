@@ -1,0 +1,27 @@
+//## PROJECTED
+// ── BODY · RetractFact.<REL>@1 · projection <PROJ> ──────────────────────────
+// end: the version closes and a current copy [vf, vt_end) replaces it; void: it closes, nothing replaces it.
+MATCH (s:Entity {uid: $p.s})-[cur:<REL> {fid: $p.fid}]->(o:Entity)
+WHERE cur.te = $INF AND o.uid = $p.o
+  AND ($p.mode = 'void'
+    OR ($p.mode = 'end' AND cur.vt = $INF AND cur.vf < $p.vt_end AND $p.vt_end <= now))
+OPTIONAL MATCH (s)-[pn:<PROJ> {fid: $p.fid}]->(o)
+WITH KCTX, s, o, cur, head(collect(pn)) AS old_pn
+SET cur.te = nseq, cur.tt = now
+FOREACH (_ IN CASE WHEN $p.mode = 'end' THEN [1] ELSE [] END |
+  CREATE (s)-[:<REL> {fid: $pid + '#0', prev_fid: cur.fid, vf: cur.vf, vt: $p.vt_end,
+                      tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTR_COPY>}]->(o))
+FOREACH (x IN CASE WHEN old_pn IS NULL THEN [] ELSE [old_pn] END | DELETE x)
+WITH KCTX
+//## PLAIN
+// ── BODY · RetractFact.<REL>@1 ──────────────────────────────────────────────
+MATCH (s:Entity {uid: $p.s})-[cur:<REL> {fid: $p.fid}]->(o:Entity)
+WHERE cur.te = $INF AND o.uid = $p.o
+  AND ($p.mode = 'void'
+    OR ($p.mode = 'end' AND cur.vt = $INF AND cur.vf < $p.vt_end AND $p.vt_end <= now))
+WITH KCTX, s, o, cur
+SET cur.te = nseq, cur.tt = now
+FOREACH (_ IN CASE WHEN $p.mode = 'end' THEN [1] ELSE [] END |
+  CREATE (s)-[:<REL> {fid: $pid + '#0', prev_fid: cur.fid, vf: cur.vf, vt: $p.vt_end,
+                      tf: now, tt: $INF, ts: nseq, te: $INF, rw: $pid <ATTR_COPY>}]->(o))
+WITH KCTX
