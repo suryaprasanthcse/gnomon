@@ -1,0 +1,18 @@
+# Test-only action rule (A10): requires a decision, writes one :ActionMark. The gated variant: needs an approving Approval. Registered by M3 in tests only.
+name: NoopActionGated
+version: 1
+class: action
+layer: titan
+family: null
+caller: [executive]
+prelude: P0
+requires_decision: true
+gated: true
+evidence: true
+reads: [ActionMark, ActionMark.id]
+writes: [ActionMark]
+key_templates: ["ActionMark:*", "ActionMark:{p.mark}"]
+view_templates: []
+guard_probes: generate
+guard_labels: [mark_new]
+body_file: noop_action.cypher

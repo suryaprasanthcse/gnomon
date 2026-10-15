@@ -1,4 +1,4 @@
-"""Segment composition (master §6.1): segment order by rule kind, T0 substitution, add-ons not yet installed."""
+"""Segment composition (master §6.1): segment order by rule kind, T0 substitution; P1/E0 installed by A10, P2/P3 not yet."""
 
 import dataclasses
 from pathlib import Path
@@ -67,8 +67,8 @@ def test_every_composed_query_ticks_exactly_once(genesis, noop):
 
 @pytest.mark.parametrize(
     ("change", "segment"),
-    [({"requires_decision": True, "evidence": True}, "P1"), ({"prelude": "P2"}, "P2"), ({"prelude": "P3"}, "P3")],
-    ids=["decision", "federation-receive", "federation-ack"],
+    [({"prelude": "P2"}, "P2"), ({"prelude": "P3"}, "P3")],
+    ids=["federation-receive", "federation-ack"],
 )
 def test_add_on_segments_are_not_installed(noop, change, segment):
     from gnomon.kernel import composer
@@ -78,11 +78,48 @@ def test_add_on_segments_are_not_installed(noop, change, segment):
         composer.compose(rule)
 
 
-def test_e0_is_not_installed_either():
+def test_decision_is_p0_p1_body_q0_e0(noop):
     from gnomon.kernel import composer
 
-    with pytest.raises(composer.SegmentNotInstalled, match="segment not installed: E0"):
-        composer.segment("E0")
+    rule = dataclasses.replace(noop, requires_decision=True, evidence=True, cls="action")
+    assert composer.plan(rule) == ["P0", "P1", "BODY", "Q0", "E0"]
+    text = composer.compose(rule)
+    p0 = composer.segment("P0")
+    head, tail = p0.split(composer.ADD_ON_MARK)
+    assert _in_order(text, [head.split("<TICK>")[0], T0, head.split("<TICK>")[1], composer.segment("P1"), tail, rule.body,
+                            composer.segment("Q0"), composer.segment("E0")])
+    assert text.count("Kernel.tick(") == 1 and "<TICK>" not in text
+    assert not text.rstrip().endswith("RETURN r.seq AS seq, r.hash AS hash")  # E0 returns the decision as well
+
+
+def test_p1_runs_between_the_tick_and_the_apply_variables(noop):
+    from gnomon.kernel import composer
+
+    p0 = composer.segment("P0")
+    head, tail = p0.split(composer.ADD_ON_MARK)
+    assert "rule" in head.split("<TICK> AS c")[0].splitlines()[-1]  # `rule` stays in scope for P1 (rule.gated)
+    assert "nseq" in tail and "nseq" not in head
+
+
+def test_e0_contains_no_where():
+    import re
+
+    from gnomon.kernel import composer
+
+    code = "\n".join(line.split("//")[0] for line in composer.segment("E0").splitlines())
+    assert not re.search(r"\bWHERE\b", code)  # a filter after the writes could silently drop the evidence rows
+
+
+def test_p1_checks_the_decision_before_anything_is_written():
+    import re
+
+    from gnomon.kernel import composer
+
+    code = "\n".join(line.split("//")[0] for line in composer.segment("P1").splitlines())
+    assert not re.search(r"\b(CREATE|MERGE|SET|DELETE|REMOVE)\b", code)
+    for needle in ("$d.scorer_sha", "$d.read_seq = $read_seq", "Kernel.sha256($attach) = $p.attach_sha",
+                   "$p.decision_sha = $d.sha", "rule.gated", "$d.cites"):
+        assert needle in code, needle
 
 
 def test_unknown_prelude_is_refused(noop):
@@ -107,7 +144,7 @@ def test_kernel_source_pins_udfs_and_segments():
 
     src = composer.kernel_source()
     assert loader.source() in src
-    for name in ("PG", "P0", "Q0", "RET"):
+    for name in ("PG", "P0", "P1", "Q0", "E0", "RET"):
         assert composer.segment(name) in src
     assert (ROOT / "gnomon" / "kernel" / "composer.py").read_text(encoding="utf-8") in src
     assert composer.kernel_sha() == hashlib.sha256(src.encode("utf-8")).hexdigest()

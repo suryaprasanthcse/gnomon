@@ -1,0 +1,12 @@
+     19 E       ImportError: cannot import name 'layer_rules' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+      3 E   ModuleNotFoundError: No module named 'gnomon.executive'
+      3 E           gnomon.kernel.composer.SegmentNotInstalled: segment not installed: P1
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_p1_runs_between_the_tick_and_the_apply_variables
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_p1_checks_the_decision_before_anything_is_written
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_kernel_source_pins_udfs_and_segments
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_e0_contains_no_where - g...
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_decision_is_p0_p1_body_q0_e0
+      1 FAILED tests/mutation/test_mu19_21.py::test_mutations_refuse_a_graph_without_decisions
+      1 FAILED tests/mutation/test_mu19_21.py::test_catalogue_adds_the_decision_mutations_after_the_core_ones
+      1 ERROR tests/mutation/test_mu19_21.py::test_mutation_is_detected[MU21] - Impor...
+      1 ERROR tests/mutation/test_mu19_21.py::test_mutation_is_detected[MU20] - Impor...
