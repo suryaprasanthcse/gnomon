@@ -1,0 +1,723 @@
+# A00 batch 1 RED evidence
+# utc: 2026-10-15T05:37:18Z
+# command: uv run --no-project --python 3.12 --with pytest --with hypothesis python -m pytest -p pytester -p no:cacheprovider -rA tests
+# expected reason: harness missing (no pyproject markers, no hypothesis profiles, no conftest fixtures, no scripts/)
+
+Installed 8 packages in 775ms
+EEEEEEEEEEEEFEFFEF                                                       [100%]
+=================================== ERRORS ====================================
+_________________________ ERROR at setup of test_ping _________________________
+file C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py, line 15
+  def test_ping(falkordb_container, redis_raw):
+E       fixture 'falkordb_container' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:15
+___________________ ERROR at setup of test_graph_roundtrip ____________________
+file C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py, line 21
+  def test_graph_roundtrip(db, tenant):
+E       fixture 'db' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:21
+____________________ ERROR at setup of test_tenant_cleanup ____________________
+file C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py, line 28
+  def test_tenant_cleanup(falkordb_container, redis_raw, pytester, monkeypatch):
+E       fixture 'falkordb_container' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:28
+__________________ ERROR at setup of test_udf_load_roundtrip __________________
+file C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py, line 62
+  def test_udf_load_roundtrip(redis_raw, tenant):
+E       fixture 'redis_raw' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:62
+___________ ERROR at setup of test_gate_green_on_clean_signed_repo ____________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_green_on_clean_signe0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_green_on_clean_signe0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+__________________ ERROR at setup of test_gate_fails_on_skip __________________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_skip0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_skip0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+_____________ ERROR at setup of test_gate_fails_on_todo_in_scope ______________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_todo_in_sco0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_todo_in_sco0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+___________ ERROR at setup of test_gate_fails_on_bare_pass_in_scope ___________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_bare_pass_i0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_fails_on_bare_pass_i0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+_________ ERROR at setup of test_gate_ignores_patterns_outside_scope __________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_ignores_patterns_out0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_ignores_patterns_out0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+______________ ERROR at setup of test_gate_requires_human_signed ______________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_requires_human_signe0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_requires_human_signe0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+_______ ERROR at setup of test_gate_provisional_skips_only_human_signed _______
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_provisional_skips_on0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_gate_provisional_skips_on0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+______ ERROR at setup of test_check_tdd_requires_test_commit_before_feat ______
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_check_tdd_requires_test_c0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_check_tdd_requires_test_c0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+___________________ ERROR at setup of test_explain_scaffold ___________________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_explain_scaffold0')
+
+    @pytest.fixture
+    def fake_repo(tmp_path):
+        """A repository that passes gate H0 except for the human signature."""
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        _git(repo, "config", "core.autocrlf", "false")
+        for name in ("gate.py", "check_tdd.py", "explain.py"):
+            target = repo / "scripts" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+>           shutil.copyfile(ROOT / "scripts" / name, target)
+
+tests\unit\test_gate_runner.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/gate.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_explain_scaffold0/app/scripts/gate.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\gate.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+_________ ERROR at setup of test_clock_is_deterministic_and_steppable _________
+file C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py, line 71
+  def test_clock_is_deterministic_and_steppable(clock):
+E       fixture 'clock' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py:71
+================================== FAILURES ===================================
+_____________ test_check_tdd_requires_red_evidence_in_test_commit _____________
+
+tmp_path = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_check_tdd_requires_red_ev0')
+
+    def test_check_tdd_requires_red_evidence_in_test_commit(tmp_path):
+        repo = tmp_path / "app"
+        repo.mkdir()
+        _git(repo, "init", "-q", "-b", "main")
+        _git(repo, "config", "user.name", "Gate Test")
+        _git(repo, "config", "user.email", "gate@test.invalid")
+        target = repo / "scripts" / "check_tdd.py"
+        target.parent.mkdir(parents=True)
+>       shutil.copyfile(ROOT / "scripts" / "check_tdd.py", target)
+
+tests\unit\test_gate_runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+src = WindowsPath('C:/myspace/hacckathons/gnomon/scripts/check_tdd.py')
+dst = WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_check_tdd_requires_red_ev0/app/scripts/check_tdd.py')
+follow_symlinks = True
+
+    def copyfile(src, dst, *, follow_symlinks=True):
+        """Copy data from src to dst in the most efficient way possible.
+    
+        If follow_symlinks is not set and src is a symbolic link, a new
+        symlink will be created instead of copying the file it points to.
+    
+        """
+        sys.audit("shutil.copyfile", src, dst)
+    
+        if _samefile(src, dst):
+            raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+    
+        file_size = 0
+        for i, fn in enumerate([src, dst]):
+            try:
+                st = _stat(fn)
+            except OSError:
+                # File most likely does not exist
+                pass
+            else:
+                # XXX What about other special files? (sockets, devices...)
+                if stat.S_ISFIFO(st.st_mode):
+                    fn = fn.path if isinstance(fn, os.DirEntry) else fn
+                    raise SpecialFileError("`%s` is a named pipe" % fn)
+                if _WINDOWS and i == 0:
+                    file_size = st.st_size
+    
+        if not follow_symlinks and _islink(src):
+            os.symlink(os.readlink(src), dst)
+        else:
+>           with open(src, 'rb') as fsrc:
+                 ^^^^^^^^^^^^^^^
+E           FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\scripts\\check_tdd.py'
+
+C:\Users\surya\.local\share\uv\python\cpython-3.12-windows-x86_64-none\Lib\shutil.py:260: FileNotFoundError
+___________________________ test_markers_registered ___________________________
+
+pytestconfig = <_pytest.config.Config object at 0x0000000001C7A0C0>
+pytester = <Pytester WindowsPath('C:/Users/surya/AppData/Local/Temp/pytest-of-surya/pytest-330/test_markers_registered0')>
+
+    def test_markers_registered(pytestconfig, pytester):
+        registered = _registered(pytestconfig)
+        missing = [m for m in LAYER_MARKERS + GATE_MARKERS if m not in registered]
+>       assert missing == []
+E       AssertionError: assert ['unit', 'int...utation', ...] == []
+E         
+E         Left contains 27 more items, first extra item: 'unit'
+E         Use -v to get more diff
+
+C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py:31: AssertionError
+__________________________ test_hypothesis_profiles ___________________________
+
+    def test_hypothesis_profiles():
+        ci = settings.get_profile("ci")
+>       assert ci.max_examples == 200
+E       AssertionError: assert 100 == 200
+E        +  where 100 = settings(backend='hypothesis', database=None, deadline=None, derandomize=True, max_examples=100, phases=(Phase.explici..._multiple_bugs=True, stateful_step_count=50, suppress_health_check=(HealthCheck.too_slow,), verbosity=Verbosity.normal).max_examples
+
+tests\unit\test_harness_smoke.py:61: AssertionError
+________________ test_deferred_fixtures_fail_with_module_name _________________
+file C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py, line 80
+  def test_deferred_fixtures_fail_with_module_name(request):
+E       fixture 'genesis' not found
+>       available fixtures: LineMatcher, _config_for_test, _pytest, _sys_snapshot, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, doctest_namespace, linecomp, monkeypatch, pytestconfig, pytester, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, testdir, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py:80
+============================== warnings summary ===============================
+tests\integration\test_container_smoke.py:9
+  C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.integration, pytest.mark.gate_h0]
+
+tests\integration\test_container_smoke.py:9
+  C:\myspace\hacckathons\gnomon\tests\integration\test_container_smoke.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.gate_h0 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.integration, pytest.mark.gate_h0]
+
+tests\unit\test_gate_runner.py:12
+  C:\myspace\hacckathons\gnomon\tests\unit\test_gate_runner.py:12: PytestUnknownMarkWarning: Unknown pytest.mark.unit - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.unit, pytest.mark.gate_h0]
+
+tests\unit\test_gate_runner.py:12
+  C:\myspace\hacckathons\gnomon\tests\unit\test_gate_runner.py:12: PytestUnknownMarkWarning: Unknown pytest.mark.gate_h0 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.unit, pytest.mark.gate_h0]
+
+tests\unit\test_harness_smoke.py:9
+  C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.unit - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.unit, pytest.mark.gate_h0]
+
+tests\unit\test_harness_smoke.py:9
+  C:\myspace\hacckathons\gnomon\tests\unit\test_harness_smoke.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.gate_h0 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = [pytest.mark.unit, pytest.mark.gate_h0]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_gate_runner.py::test_check_tdd_requires_red_evidence_in_test_commit
+FAILED tests/unit/test_harness_smoke.py::test_markers_registered - AssertionE...
+FAILED tests/unit/test_harness_smoke.py::test_hypothesis_profiles - Assertion...
+FAILED tests/unit/test_harness_smoke.py::test_deferred_fixtures_fail_with_module_name
+ERROR tests/integration/test_container_smoke.py::test_ping
+ERROR tests/integration/test_container_smoke.py::test_graph_roundtrip
+ERROR tests/integration/test_container_smoke.py::test_tenant_cleanup
+ERROR tests/integration/test_container_smoke.py::test_udf_load_roundtrip
+ERROR tests/unit/test_gate_runner.py::test_gate_green_on_clean_signed_repo - ...
+ERROR tests/unit/test_gate_runner.py::test_gate_fails_on_skip - FileNotFoundE...
+ERROR tests/unit/test_gate_runner.py::test_gate_fails_on_todo_in_scope - File...
+ERROR tests/unit/test_gate_runner.py::test_gate_fails_on_bare_pass_in_scope
+ERROR tests/unit/test_gate_runner.py::test_gate_ignores_patterns_outside_scope
+ERROR tests/unit/test_gate_runner.py::test_gate_requires_human_signed - FileN...
+ERROR tests/unit/test_gate_runner.py::test_gate_provisional_skips_only_human_signed
+ERROR tests/unit/test_gate_runner.py::test_check_tdd_requires_test_commit_before_feat
+ERROR tests/unit/test_gate_runner.py::test_explain_scaffold - FileNotFoundErr...
+ERROR tests/unit/test_harness_smoke.py::test_clock_is_deterministic_and_steppable
+4 failed, 6 warnings, 14 errors in 3.88s
