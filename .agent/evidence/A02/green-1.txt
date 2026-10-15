@@ -1,0 +1,21 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 133 items
+
+tests\integration\udf\test_chain.py ....................                 [ 15%]
+tests\integration\udf\test_digest.py ......................              [ 31%]
+tests\integration\udf\test_loader.py .....                               [ 35%]
+tests\integration\udf\test_recv.py .....................                 [ 51%]
+tests\integration\udf\test_sha256.py ...............                     [ 62%]
+tests\integration\udf\test_tick.py ..................................... [ 90%]
+..                                                                       [ 91%]
+tests\integration\udf\test_udf_in_write.py ......                        [ 96%]
+tests\property\test_hlc_props.py .....                                   [100%]
+
+============================ 133 passed in 13.61s =============================

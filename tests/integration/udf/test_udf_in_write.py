@@ -58,4 +58,6 @@ def test_throw_rolls_back_the_whole_query(kq, throwing_call):
             f"WITH h SET h.x = {throwing_call} RETURN h.seq",
             wall=W,
         )
-    assert kq("MATCH (h:Head) OPTIONAL MATCH (r:Rewrite) RETURN h.seq, count(r), h.x") == [7, 0, None]
+    # Two plain reads: a property projected after an aggregate panics the server (FACTS S23, DECISIONS D-8).
+    assert kq("MATCH (h:Head) RETURN h.seq, h.x") == [7, None]
+    assert kq("MATCH (r:Rewrite) RETURN count(r)") == [0]
