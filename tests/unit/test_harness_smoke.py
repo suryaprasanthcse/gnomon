@@ -78,7 +78,8 @@ def test_clock_is_deterministic_and_steppable(clock):
 
 
 def test_deferred_fixtures_fail_with_module_name(request):
-    with pytest.raises(RuntimeError, match="A03"):
-        request.getfixturevalue("genesis")
+    # A03 installed `genesis` (a KernelHandle on a GRAPH.COPY of golden_genesis); DECISIONS D-11.
+    handle = request.getfixturevalue("genesis")
+    assert handle.head()["seq"] == 1
     with pytest.raises(RuntimeError, match="A09"):
         request.getfixturevalue("recorded_llm")
