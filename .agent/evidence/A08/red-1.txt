@@ -1,0 +1,80 @@
+# A08 RED 1 — collection (missing gnomon.query.service / session, gnomon.mcp.server)
+
+=================================== ERRORS ====================================
+_______ ERROR collecting tests/integration/query/test_id_provenance.py ________
+ImportError while importing test module 'C:\myspace\hacckathons\gnomon\tests\integration\query\test_id_provenance.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\integration\query\test_id_provenance.py:5: in <module>
+    from gnomon.query.service import TEXT_MAX
+E   ModuleNotFoundError: No module named 'gnomon.query.service'
+________ ERROR collecting tests/integration/query/test_view_algebra.py ________
+ImportError while importing test module 'C:\myspace\hacckathons\gnomon\tests\integration\query\test_view_algebra.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\integration\query\test_view_algebra.py:5: in <module>
+    from gnomon.query.session import Combined, Read, combine
+E   ModuleNotFoundError: No module named 'gnomon.query.session'
+_______ ERROR collecting tests/integration/mcp/test_mcp_never_writes.py _______
+ImportError while importing test module 'C:\myspace\hacckathons\gnomon\tests\integration\mcp\test_mcp_never_writes.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\integration\mcp\test_mcp_never_writes.py:9: in <module>
+    from gnomon.mcp.server import create_server
+E   ModuleNotFoundError: No module named 'gnomon.mcp.server'
+_________ ERROR collecting tests/integration/mcp/test_mcp_schemas.py __________
+ImportError while importing test module 'C:\myspace\hacckathons\gnomon\tests\integration\mcp\test_mcp_schemas.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\integration\mcp\test_mcp_schemas.py:9: in <module>
+    from gnomon.mcp.server import create_server
+E   ModuleNotFoundError: No module named 'gnomon.mcp.server'
+=========================== short test summary info ===========================
+ERROR tests/integration/query/test_id_provenance.py
+ERROR tests/integration/query/test_view_algebra.py
+ERROR tests/integration/mcp/test_mcp_never_writes.py
+ERROR tests/integration/mcp/test_mcp_schemas.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!
+4 errors in 1.88s
+
+# with --continue-on-collection-errors (failure reasons, counted)
+     33 E       ModuleNotFoundError: No module named 'gnomon.query.service'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\rd_facts.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\rd_entity.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q7.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q6.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q5.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q4.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q3.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q2.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\reads\\q1.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r9.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r7.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r6.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r5.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r4.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r11.cypher'
+      3 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\enablement\\en_r10.cypher'
+      2 E   ModuleNotFoundError: No module named 'gnomon.mcp.server'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_rank_critical.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_path.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_neighborhood_up.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_neighborhood.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_domains.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_communities.cypher'
+      2 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\query\\algorithms\\al_brokers.cypher'
+      2 E       )
+      2 E           redis_raw=<redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<REDACTED>,socket_timeout=5,socket_read_size=32768,encoding=utf-8,encoding_errors=strict,decode_responses=True,retry_on_error=[],retry=<redis.retry.Retry object at 0x00000000096DB3E0>,health_check_interval=0,client_name=None,driver_info=DriverInfo(name='redis-py', lib_version='8.1.0', _upstream=[]),redis_connect_func=None,credential_provider=<REDACTED>,protocol=None,legacy_responses=True,host=localhost,port=56170,socket_connect_timeout=5,socket_keepalive=True,socket_keepalive_options=<object object at 0x0000000000F3ADE0>,maint_notifications_pool_handler=<redis.maint_notifications.MaintNotificationsPoolHandler object at 0x00000000096DB3B0>,maint_notifications_config=MaintNotificationsConfig(enabled=auto, proactive_reconnect=True, relaxed_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>,
+      2 E           golden_genesis='t:test-golden-062cfac7',
+      2 E           db=<falkordb.falkordb.FalkorDB object at 0x0000000008C72840>,
+      1 FAILED tests/property/test_enablement_soundness.py::test_enablement_soundness
+      1 FAILED tests/property/test_enablement_soundness.py::test_a_rival_write_makes_the_tuple_stale_not_applied
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/rd_facts]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/rd_entity]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q7]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q6]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q5]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q4]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q3]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q2]
+      1 FAILED tests/integration/query/test_query_files.py::test_s23_no_property_projection_after_an_aggregate_in_one_clause[reads/q1]
