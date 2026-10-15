@@ -1,0 +1,35 @@
+# GNOMON rule registry (master §5.1, §9). A03 registers Genesis only; A04 onward add the Core rules.
+# Each entry is a §5.1 definition; `body_file` is relative to this file. The sha of a rule is
+# SHA-256(JCS(def_json)) over these fields with the body macro-expanded.
+rules:
+  - name: Genesis
+    version: 1
+    class: kernel
+    layer: core
+    family: null
+    caller: [kernel]
+    prelude: PG
+    requires_decision: false
+    gated: false
+    evidence: false
+    reads: []
+    writes: [Rule, FactType, Skill, Agent, HAS_SKILL, IndexEntry, ConstraintEntry]
+    key_templates: ["Head", "Rule:*", "Rule:{p.rules[].name}", "Agent:*", "Skill:*", "FactType:*", "Index:*"]
+    view_templates: []
+    # The PG checks, in PG order, as read-only probes (diagnosis D8 names the first that fails).
+    guard_probes:
+      - name: no_head
+        cypher: "OPTIONAL MATCH (h:Head) WITH count(h) AS heads WHERE heads = 0 RETURN heads"
+      - name: genesis_rule_pinned
+        cypher: "WITH $rule AS rule WHERE rule = 'Genesis' AND any(r IN $p.rules WHERE r.name = 'Genesis' AND r.sha = $rule_sha) RETURN rule"
+      - name: kernel_sha_matches
+        cypher: "WITH $p.kernel_src AS src WHERE CASE WHEN src IS NULL THEN false ELSE Kernel.sha256(src) = $p.kernel_sha END RETURN size(src)"
+      - name: has_agents
+        cypher: "WITH $p.agents AS agents WHERE size(agents) >= 1 RETURN size(agents)"
+      - name: kernel_agent
+        cypher: "WITH $p.agents AS agents WHERE any(a IN agents WHERE a.role = 'kernel') RETURN size(agents)"
+      - name: agent_skills_known
+        cypher: "WITH $p.agents AS agents WHERE all(a IN agents WHERE all(s IN a.skills WHERE s IN $p.skills)) RETURN size(agents)"
+      - name: rule_shas_match
+        cypher: "WITH $p.rules AS rules WHERE all(r IN rules WHERE CASE WHEN r.def_json IS NULL THEN false ELSE Kernel.sha256(r.def_json) = r.sha END) RETURN size(rules)"
+    body_file: core/genesis.cypher

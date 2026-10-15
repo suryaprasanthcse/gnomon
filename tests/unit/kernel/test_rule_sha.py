@@ -65,7 +65,7 @@ def test_unknown_rule_raises(registry):
     [
         {"version": 2}, {"cls": "memory"}, {"layer": "T-A"}, {"family": "Fam"}, {"caller": ("kernel", "operator")},
         {"prelude": "P2"}, {"requires_decision": True}, {"gated": True}, {"evidence": True},
-        {"reads": ("Task.state",)}, {"writes": ("Noop",)}, {"key_templates": ("Noop:x",)},
+        {"reads": ("Task.state",)}, {"writes": ("Noop", "Blocker")}, {"key_templates": ("Noop:x",)},
         {"view_templates": ("Noop:*",)}, {"guard_probes": ({"name": "g", "cypher": "RETURN 1"},)},
         {"body": "WITH h, causes, nseq, now, now_lc\n"}, {"name": "Noop2"},
     ],

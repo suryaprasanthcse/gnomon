@@ -1,0 +1,25 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 329 items / 182 deselected / 147 selected
+
+tests\integration\kernel\test_apply.py .......                           [  4%]
+tests\integration\kernel\test_bootstrap_ddl.py ....                      [  7%]
+tests\integration\kernel\test_concurrency.py .                           [  8%]
+tests\integration\kernel\test_genesis.py ..........                      [ 14%]
+tests\integration\kernel\test_genesis_copy.py .                          [ 15%]
+tests\integration\kernel\test_outcomes.py ..............                 [ 25%]
+tests\unit\kernel\test_compose_order.py ..........                       [ 31%]
+tests\unit\kernel\test_jcs_rfc8785.py .................................. [ 55%]
+.......                                                                  [ 59%]
+tests\unit\kernel\test_macros.py ...........                             [ 67%]
+tests\unit\kernel\test_parameter_binding.py .........................    [ 84%]
+tests\unit\kernel\test_rule_sha.py .......................               [100%]
+
+===================== 147 passed, 182 deselected in 5.57s =====================
