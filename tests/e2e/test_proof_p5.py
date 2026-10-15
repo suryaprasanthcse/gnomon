@@ -14,7 +14,8 @@ pytestmark = [pytest.mark.e2e, pytest.mark.gate_g4b]
 def test_replay_into_a_fresh_graph_gives_an_equal_state_hash(core_run, db, redis_raw):
     out = replay(db, redis_raw, core_run.kernel.graph.name)
     try:
-        assert out.hash == state_hash(core_run.kernel.graph) == core_run.state_hash
+        assert out.hash == core_run.kernel.head()["hash"]  # the chain hash of the last rewrite
+        assert state_hash(db.select_graph(out.key)) == state_hash(core_run.kernel.graph) == core_run.state_hash
     finally:
         redis_raw.execute_command("GRAPH.DELETE", out.key)
 

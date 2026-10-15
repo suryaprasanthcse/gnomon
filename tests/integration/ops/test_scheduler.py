@@ -22,7 +22,7 @@ def test_scheduler_deterministic_pids(opened):
     assert pid == f"exp:t1:{from_seq}" and out.code == "APPLIED"
     assert ir.one("MATCH (t:Task {id: 't1'}) RETURN t.state") == ["open"]
     assert sched.tick() == []  # nothing left to expire
-    ir.claim("t1", agent="rsp-1", ttl=1_000)
+    ir.claim("t1", agent="rsp-1", ttl=1_000, at=until + 1_000)
     from_seq2, until2 = lease(ir)
     assert from_seq2 != from_seq
     ((pid2, out2),) = Scheduler(ir.k, Clock(until2 + 5), agent="sch-1").tick()

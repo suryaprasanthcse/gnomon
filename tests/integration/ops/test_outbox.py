@@ -44,7 +44,7 @@ def test_failures_retry_until_delivered_or_dead(post):
         assert outbox(ir) == expected
 
     ir.ok("PostUpdate", {"incident": "i1", "message_id": "m2", "body": "again",
-                         "cites": [{"s": "svc:a", "fid": ir.owned_by_fid()}]}, "com-1", pid="pu-2")
+                         "cites": [{"s": "svc:a", "fid": ir.owned_by_fid()}]}, "com-1", pid="pu-2", at=clock.now + 1_000)
     infra.drop_next(5)
     for n in range(1, 6):
         disp.tick()

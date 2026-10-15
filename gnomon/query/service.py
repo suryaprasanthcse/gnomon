@@ -394,7 +394,8 @@ class QueryService:
         if rule == "OpenIncident":
             incident = f"i-{t['alert']}"
             return {"alert": t["alert"], "incident": incident, "service": t["service"], "signature": t["signature"],
-                    "tasks": [{"id": f"{incident}-t1", "kind": "investigate", "skill": "ops"}]}
+                    "tasks": [{"id": f"{incident}-t1", "kind": "investigate", "skill": "ops"},
+                              {"id": f"{incident}-t2", "kind": "communicate", "skill": "triage"}]}
         if rule == "ClaimTask":
             return {"agent": agent, "task": t["task"], "ttl_ms": DEFAULT_TTL_MS}
         if rule == "CompleteTask":

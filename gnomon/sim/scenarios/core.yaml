@@ -1,0 +1,15 @@
+# The Core scenario (master 11.4, 13, 26): one tenant, one seeded bad deploy, four LLM roles.
+seed: 7
+n_services: 40
+n_teams: 8
+round_ms: 60000        # simulated time between rounds
+max_rounds: 60
+crash: true            # inv-a is killed right after its first claim (proof P3)
+agents:                # registered through RegisterAgent by the operator, in this order
+  - {id: ing-1, role: ingest, skills: []}
+  - {id: sch-1, role: scheduler, skills: []}
+  - {id: dsp-1, role: dispatcher, skills: []}
+  - {id: inv-a, role: investigator, skills: [ops]}
+  - {id: inv-b, role: investigator, skills: [ops]}
+  - {id: com-1, role: comms, skills: [triage]}
+order: [triage-1, inv-a, inv-b, com-1]   # who acts first in a round

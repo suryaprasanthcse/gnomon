@@ -1,0 +1,39 @@
+{
+ "meta": {
+  "crash": true,
+  "prompts": 28,
+  "recorded_from": "gnomon.agents.recorded.PolicyLLM (deterministic stand-in, not a language model)",
+  "seed": 7,
+  "state_hash": "68fcf1dda8415ab9aff3f1e63fcf4287d5bbafc4138e706f08c2ecda8617fb44"
+ },
+ "responses": {
+  "0547d4b57cd8d3972846f656cf0517cbb5e4ada03a1bc1fd4a27838816411da3": "{\"rule\": \"ClaimTask\", \"tuple_index\": 0}",
+  "1be07b60061ed5474f1d606194f68455731284d73a66155e729f30cf74f1df6f": "{\"rule\": null}",
+  "29b8b94c3568c4c99e3fbbf8038ae578267009521239b4bfa116a89f4fe97a3a": "{\"rule\": null}",
+  "2d686cc34ec086ee08416abf0afbcd3eddc84ddb147a74d63826c5c9b5ebf761": "{\"rule\": null}",
+  "35d98fadd4a371815959a7611a91de45fa3e7dcebd03d3cbae00b3668885e2e4": "{\"rule\": null}",
+  "5f696a9e68b1680fd98facd571551b9968fcc25371c7626fe8868608eb07b6ea": "{\"rule\": null}",
+  "640cfa1056807379280031cda098f292d9935af0748572b8baa10f19ce4f11d1": "{\"rule\": null}",
+  "647e5d4ed3600d278118cbab1bbaa959d5a1888c02173f8e9ed493f84b6a9826": "{\"rule\": null}",
+  "69328c030014956f4418983509e31099d2da3a9fa31466eec260b732880fd9b1": "{\"rule\": null}",
+  "7385ff583f4414b4aa9711837d6790b8489b9c7e99e91f91d963fe53d43a0945": "{\"rule\": null}",
+  "7897396f789a8c30c810f4ddf9432efb74f624c2ecc9b5990526e76e2e1332ad": "{\"rule\": null}",
+  "836d8909d75e0eeaaf219762f2527a7f550df665d837d6136bc1e678f972f897": "{\"rule\": \"ClaimTask\", \"tuple_index\": 0}",
+  "84f9c532dd7f9e2c3469503e735dffbdde8ce07ab9678c5fb31ca485df821038": "{\"rule\": \"ClaimTask\", \"tuple_index\": 0}",
+  "96f671e376e26206a0b13d101f4dc408dc9418aea7a4b6f4d25de3ec0f7947da": "{\"rule\": null}",
+  "a13437f4d2c7c64441be4a01df9ed9a524fb69f2eb2b563081bd8835e03c0619": "{\"rule\": null}",
+  "a62ce372090a1e03e95692af2e69d7631427f200f8e46618eaba6f025a715e91": "{\"rule\": \"CompleteTask\", \"text\": \"status update posted\", \"tuple_index\": 0}",
+  "acbe191a7f4601303a256f6e2a7d29cec9f3b3bc7a7c4af642e0531c2b47007f": "{\"rule\": \"OpenIncident\", \"tuple_index\": 0}",
+  "b416517e8ec3b546e276215803a4513f7d5602ead5bf92536b1faf73ad56e005": "{\"rule\": \"CompleteTask\", \"text\": \"root cause identified and recorded\", \"tuple_index\": 0}",
+  "b531fc35c9f9814421de0685f93096301942e61292802527b6354b4c2755d158": "{\"rule\": null}",
+  "b842a862bfc895d5642ce245e1021039e0481589b1ca083ff6994d0fe2c5082c": "{\"rule\": null}",
+  "bd076915774a0e75f6077d2b357675a1d3f647ef187213538ddf4070566e1369": "{\"rule\": null}",
+  "c4982ba58b3d2a7c7e548ab6eba72cf153806d77e6ccea14d6487d66c2708629": "{\"rule\": null}",
+  "c912b83e9083568ceac6a9d7bac5ee11675645057b70a413eb839ddfbd46382a": "{\"rule\": \"ResolveIncident\", \"tuple_index\": 0}",
+  "d30dd0befa7d6253a9933de47c1fd31e6b43dce12e5fb6a3244c35e716a8f059": "{\"rule\": \"ClaimTask\", \"tuple_index\": 0}",
+  "d4589bc52c77d3e1c9b6a0abd21825892abdbb742313ec425aee67806c5ff5f5": "{\"incident\": \"i-al:s15:1\", \"params\": {\"cites\": [{\"fid\": \"inv-b:7#0\", \"s\": \"inc:i-al:s15:1\"}], \"incident\": \"i-al:s15:1\", \"message_id\": \"m-i-al:s15:1\"}, \"rule\": \"PostUpdate\", \"text\": \"Incident i-al:s15:1: root cause found.\"}",
+  "d7e9a73aad5824780ac456e04bfa25f432e77a4c8fe20737039c83485584c8cc": "{\"rule\": null}",
+  "e67bb9179c6de0b668791a5daa580a45f2cabf81d55fb1b4c4ebdb2bd5151a4d": "{\"rule\": null}",
+  "f8bf9abac2ee1c0416f0f291e7b4d2cb18dae88da5b0811a7a4bcebf63b45df0": "{\"incident\": \"i-al:s15:1\", \"params\": {\"confidence\": 80}, \"rule\": \"ProposeCause\", \"tuple_index\": 0}"
+ }
+}
