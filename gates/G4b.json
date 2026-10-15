@@ -1,0 +1,42 @@
+{
+  "gate": "G4b",
+  "module": "A09",
+  "status": "provisional",
+  "commit": "a0156ebf7675d9ff85503346dad33e9491879dba",
+  "utc": "2026-10-15T18:23:09Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a",
+    "gate_g1b",
+    "gate_g1c",
+    "gate_g2a",
+    "gate_g2b",
+    "gate_g3",
+    "gate_g4a",
+    "gate_g4b"
+  ],
+  "tests": {
+    "passed": 1040,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 128.035
+  },
+  "coverage": {
+    "gnomon/ops": 1.0,
+    "gnomon/sim": 0.9652,
+    "gnomon/agents": 0.9747
+  },
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [],
+  "forbidden": []
+}

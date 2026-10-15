@@ -1,5 +1,5 @@
 # STATE
-current_module:        A08          status: green
+current_module:        A09          status: provisional
 last_green_gate:       G4a
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -39,9 +39,9 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
 fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25)]
 kernel_sha:            d7f9a0f8941f7d3ba53ba3c6f98d7a6595f7265a0ab00ab49a5a145fe45be0fc (Head.kernel_sha: udf/kernel.js + gnomon/kernel/composer.py + segments pg/p0/q0/ret, LF; changed in A07 by Kernel.invariantProbe)
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
-layers_active:         []
+layers_active:         [core]
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; G4a complete (995 passed); next module A09 (gate G4b)
+resume_point:          none; G4b provisional (1040 passed), awaiting the explain-back sign-off (docs/explain/A09.md); Core release tag v-core after sign-off; next module A10 (gate TA)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -52,3 +52,4 @@ module_table:          | module | gate | status | commit |
                        | A06    | G2b  | green  | 50ef436 |
                        | A07    | G3   | green  | 8c0d59a |
                        | A08    | G4a  | green  | 54a8899, 4e74d22 |
+                       | A09    | G4b  | provisional | 757b1c4, a0156eb |
