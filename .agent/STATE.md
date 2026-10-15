@@ -1,5 +1,5 @@
 # STATE
-current_module:        A05          status: green
+current_module:        A06          status: provisional (awaiting explain-back)
 last_green_gate:       G2a
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -32,14 +32,15 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        F5: PASS → PROFILE lines match master §16.3
                        F6: PASS → algo signatures as §10.5; maxFlow YIELD nodes, edges, edgeFlows, maxFlow
                        F7: PASS → UDF graph API read-only; traverse ignores `distance`
+                       S25 (A06 hazard): FAIL → planner pushes an OPTIONAL MATCH filter below its traverse after an aggregation; filter in sum(CASE…) instead (D-25)
                        S24 (A05 hazard): FAIL → slow write with a multi-byte char at byte 2048 of its text aborts the server; send ASCII query text (D-20)
                        S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8)
-fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20)]
+fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25)]
 kernel_sha:            267426dbc01ac862ac9667c84d2f018139bcfb8e784d5a00fb9124008bdc5f21 (Head.kernel_sha: udf/kernel.js + gnomon/kernel/composer.py + segments pg/p0/q0/ret, LF)
 kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; next module A06 (gate G2b) needs gates/G2a.json green
+resume_point:          A06 checkpoint: human answers Q1-Q5 in docs/explain/A06.md, sets HUMAN-SIGNED: yes, then `uv run python scripts/gate.py G2b` and commit gate(G2b): green; next module A07 (gate G3)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -47,3 +48,4 @@ module_table:          | module | gate | status | commit |
                        | A03    | G1b  | green  | 12b4bed |
                        | A04    | G1c  | green  | 3aa5942 |
                        | A05    | G2a  | green  | 43deb49, 59c4153 |
+                       | A06    | G2b  | provisional | 50ef436 |
