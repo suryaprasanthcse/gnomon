@@ -1,0 +1,29 @@
+{
+  "gate": "H0",
+  "module": "A00",
+  "status": "provisional",
+  "commit": "66168292655826471873cd86be7476d4fd8a4508",
+  "utc": "2026-10-15T05:46:43Z",
+  "image_digest": "unpinned",
+  "markers": [
+    "gate_h0"
+  ],
+  "tests": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 16.907
+  },
+  "coverage": {},
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [],
+  "forbidden": []
+}
