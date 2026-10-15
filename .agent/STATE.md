@@ -1,5 +1,5 @@
 # STATE
-current_module:        A07          status: green
+current_module:        A08          status: provisional
 last_green_gate:       G3
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -41,7 +41,7 @@ kernel_sha:            d7f9a0f8941f7d3ba53ba3c6f98d7a6595f7265a0ab00ab49a5a145fe
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; G3 complete (857 passed); next module A08 (gate G4a)
+resume_point:          none; G4a provisional (995 passed), awaiting the explain-back sign-off (docs/explain/A08.md); next module A09 (gate G4b)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -51,3 +51,4 @@ module_table:          | module | gate | status | commit |
                        | A05    | G2a  | green  | 43deb49, 59c4153 |
                        | A06    | G2b  | green  | 50ef436 |
                        | A07    | G3   | green  | 8c0d59a |
+                       | A08    | G4a  | provisional | 54a8899, 4e74d22 |
