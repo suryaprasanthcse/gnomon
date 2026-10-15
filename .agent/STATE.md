@@ -1,6 +1,6 @@
 # STATE
-current_module:        A03          status: provisional (awaiting explain-back)
-last_green_gate:       G1a
+current_module:        A03          status: green
+last_green_gate:       G1b
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -38,9 +38,9 @@ kernel_sha:            267426dbc01ac862ac9667c84d2f018139bcfb8e784d5a00fb9124008
 kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          A03 explain-back: human answers Q1-Q5 in docs/explain/A03.md, sets HUMAN-SIGNED: yes, then `uv run python scripts/gate.py G1b` and commit gate(G1b): green; next module A04 (gate G1c)
+resume_point:          none; next module A04 (gate G1c) needs gates/G1b.json green
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
                        | A02    | G1a  | green  | 1cd38d9 |
-                       | A03    | G1b  | provisional | 12b4bed |
+                       | A03    | G1b  | green  | 12b4bed |

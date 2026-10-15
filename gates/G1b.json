@@ -1,9 +1,9 @@
 {
   "gate": "G1b",
   "module": "A03",
-  "status": "provisional",
-  "commit": "12b4bede8b0618dec74cd22950683c3da97c0b3f",
-  "utc": "2026-10-15T12:54:07Z",
+  "status": "green",
+  "commit": "6f2697bafbe7fb006b50f4fadd86180a3843d5c0",
+  "utc": "2026-10-15T13:17:09Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -15,7 +15,7 @@
     "passed": 329,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 33.863
+    "duration_s": 29.502
   },
   "coverage": {
     "gnomon/kernel": 0.9725,
@@ -29,7 +29,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
+  "human_signed": true,
   "failures": [],
   "forbidden": []
 }
