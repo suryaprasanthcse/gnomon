@@ -1,6 +1,6 @@
 # STATE
-current_module:        A05          status: provisional (awaiting explain-back)
-last_green_gate:       G1c
+current_module:        A05          status: green
+last_green_gate:       G2a
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -39,11 +39,11 @@ kernel_sha:            267426dbc01ac862ac9667c84d2f018139bcfb8e784d5a00fb9124008
 kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          A05 checkpoint: human answers Q1-Q5 in docs/explain/A05.md, sets HUMAN-SIGNED: yes, then `uv run python scripts/gate.py G2a` and commit gate(G2a): green; next module A06 (gate G2b)
+resume_point:          none; next module A06 (gate G2b) needs gates/G2a.json green
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
                        | A02    | G1a  | green  | 1cd38d9 |
                        | A03    | G1b  | green  | 12b4bed |
                        | A04    | G1c  | green  | 3aa5942 |
-                       | A05    | G2a  | provisional | 43deb49, 59c4153 |
+                       | A05    | G2a  | green  | 43deb49, 59c4153 |
