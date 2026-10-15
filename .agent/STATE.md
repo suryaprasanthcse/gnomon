@@ -1,6 +1,6 @@
 # STATE
-current_module:        A02          status: provisional (awaiting explain-back)
-last_green_gate:       G0
+current_module:        A02          status: green
+last_green_gate:       G1a
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -37,8 +37,8 @@ fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budg
 kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          A02 explain-back: human answers Q1-Q5 in docs/explain/A02.md, sets HUMAN-SIGNED: yes, then `python scripts/gate.py G1a` and commit gate(G1a): green; next module A03 (gate G1b)
+resume_point:          none; next module A03 (gate G1b) needs gates/G1a.json green
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
-                       | A02    | G1a  | provisional | 1cd38d9 |
+                       | A02    | G1a  | green  | 1cd38d9 |
