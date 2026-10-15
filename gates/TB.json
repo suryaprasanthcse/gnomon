@@ -1,9 +1,9 @@
 {
   "gate": "TB",
   "module": "A11",
-  "status": "red",
-  "commit": "b20cdda2742cdbd849fdcf69b72e428da407074e",
-  "utc": "2026-10-15T21:23:10Z",
+  "status": "provisional",
+  "commit": "af50fdb6fd2be2ad4447e53ee711b587736f4789",
+  "utc": "2026-10-15T21:35:54Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -20,17 +20,17 @@
     "gate_tb"
   ],
   "tests": {
-    "passed": 1216,
-    "failed": 10,
+    "passed": 1226,
+    "failed": 0,
     "skipped": 0,
-    "duration_s": 434.903
+    "duration_s": 587.14
   },
   "coverage": {
     "gnomon/executive": 0.9329,
     "gnomon/query": 0.8816,
     "gnomon/agents": 0.9422,
     "gnomon/mcp": 0.9524,
-    "gnomon/audit": 0.9333
+    "gnomon/audit": 0.9293
   },
   "tdd": {
     "batches": 1,
@@ -41,8 +41,6 @@
   },
   "forbidden_patterns": 0,
   "human_signed": false,
-  "failures": [
-    "pytest exited with 1 (10 failed or errored)"
-  ],
+  "failures": [],
   "forbidden": []
 }
