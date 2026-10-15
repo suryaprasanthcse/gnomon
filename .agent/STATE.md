@@ -1,6 +1,6 @@
 # STATE
-current_module:        A06          status: green
-last_green_gate:       G2b
+current_module:        A07          status: provisional
+last_green_gate:       G2b          (G3 provisional, awaiting explain-back sign-off)
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -32,15 +32,16 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        F5: PASS → PROFILE lines match master §16.3
                        F6: PASS → algo signatures as §10.5; maxFlow YIELD nodes, edges, edgeFlows, maxFlow
                        F7: PASS → UDF graph API read-only; traverse ignores `distance`
+                       A07 observation (D-30): an inline map in a later MATCH that references an earlier variable ({id: e.rw}) fails "Variable not found"; use WHERE
                        S25 (A06 hazard): FAIL → planner pushes an OPTIONAL MATCH filter below its traverse after an aggregation; filter in sum(CASE…) instead (D-25)
                        S24 (A05 hazard): FAIL → slow write with a multi-byte char at byte 2048 of its text aborts the server; send ASCII query text (D-20)
                        S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8)
 fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25)]
-kernel_sha:            267426dbc01ac862ac9667c84d2f018139bcfb8e784d5a00fb9124008bdc5f21 (Head.kernel_sha: udf/kernel.js + gnomon/kernel/composer.py + segments pg/p0/q0/ret, LF)
-kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
+kernel_sha:            d7f9a0f8941f7d3ba53ba3c6f98d7a6595f7265a0ab00ab49a5a145fe45be0fc (Head.kernel_sha: udf/kernel.js + gnomon/kernel/composer.py + segments pg/p0/q0/ret, LF; changed in A07 by Kernel.invariantProbe)
+kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; G2 complete (G2a, G2b); next module A07 (gate G3)
+resume_point:          A07 implemented, gate G3 provisional (857 passed); next: human answers docs/explain/A07.md, then scripts/gate.py G3 → green, then A08 (gate G4a)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -49,3 +50,4 @@ module_table:          | module | gate | status | commit |
                        | A04    | G1c  | green  | 3aa5942 |
                        | A05    | G2a  | green  | 43deb49, 59c4153 |
                        | A06    | G2b  | green  | 50ef436 |
+                       | A07    | G3   | provisional | 8c0d59a |
