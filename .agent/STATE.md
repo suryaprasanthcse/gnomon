@@ -1,5 +1,5 @@
 # STATE
-current_module:        A01          status: green
+current_module:        A02          status: provisional (awaiting explain-back)
 last_green_gate:       G0
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -32,10 +32,13 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        F5: PASS → PROFILE lines match master §16.3
                        F6: PASS → algo signatures as §10.5; maxFlow YIELD nodes, edges, edgeFlows, maxFlow
                        F7: PASS → UDF graph API read-only; traverse ignores `distance`
-fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6)]
+                       S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8)
+fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8)]
+kernel_udf_sha:        768790ef5e3caa601e38847e027f8313a26417e14efefe24a552c840561e32bf (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         []
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; next module A02 (gate G1a) needs gates/G0.json green
+resume_point:          A02 explain-back: human answers Q1-Q5 in docs/explain/A02.md, sets HUMAN-SIGNED: yes, then `python scripts/gate.py G1a` and commit gate(G1a): green; next module A03 (gate G1b)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
+                       | A02    | G1a  | provisional | 1cd38d9 |

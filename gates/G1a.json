@@ -1,0 +1,33 @@
+{
+  "gate": "G1a",
+  "module": "A02",
+  "status": "provisional",
+  "commit": "1cd38d9d2eabb87a62b5d4daf504bd00e2ba1031",
+  "utc": "2026-10-15T07:51:16Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a"
+  ],
+  "tests": {
+    "passed": 182,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 63.352
+  },
+  "coverage": {
+    "gnomon/udf": 0.9556
+  },
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [],
+  "forbidden": []
+}
