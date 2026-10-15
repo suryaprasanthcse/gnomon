@@ -7,9 +7,10 @@ from dataclasses import dataclass
 
 import redis
 
-from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6
+from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6, k7
 
 CHECKS = ("K1", "K2", "K3", "K4", "K5", "K6")
+OPTIONAL_CHECKS = ("K7",)  # selectable by name; part of the default set once a layer with decisions is active
 
 WHY_ENTITY = """MATCH (e:Entity {uid: $uid})
 MATCH (w:Rewrite)
@@ -38,9 +39,9 @@ class AuditReport:
 
 
 def audit(db, client: redis.Redis, key: str, checks: Iterable[str] | None = None) -> AuditReport:
-    """Runs the selected checks (default: K1–K6) on graph `key`, in catalogue order."""
+    """Runs the selected checks (default: K1–K6; K7 by name) on graph `key`, in catalogue order."""
     selected = set(CHECKS if checks is None else checks)
-    unknown = selected - set(CHECKS)
+    unknown = selected - set(CHECKS) - set(OPTIONAL_CHECKS)
     if unknown:
         raise ValueError(f"unknown checks {sorted(unknown)}; known: {', '.join(CHECKS)}")
     graph = db.select_graph(key)
@@ -51,9 +52,10 @@ def audit(db, client: redis.Redis, key: str, checks: Iterable[str] | None = None
         "K4": lambda: [k4.check(db, client, key)],
         "K5": lambda: k5.check(graph),
         "K6": lambda: [k6.check(graph)],
+        "K7": lambda: [k7.check(graph)],
     }
     results: dict[str, CheckResult] = {}
-    for name in CHECKS:
+    for name in (*CHECKS, *OPTIONAL_CHECKS):
         if name in selected:
             results.update((r.name, r) for r in runs[name]())
     return AuditReport(key, results)

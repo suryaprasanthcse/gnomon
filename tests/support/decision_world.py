@@ -69,14 +69,14 @@ class DW:
                              attach=envelope.attach_of(d) if attach is None else attach, mode="replay",
                              rec_pt=self.ir.clock, rec_lc=0)
 
-    def request(self, d: dict, *, ttl=60_000, agent=EXECUTIVE, rule="NoopActionGated", **over):
+    def request(self, d: dict, *, ttl=60_000, agent=EXECUTIVE, rule="NoopActionGated", pid=None, **over):
         from gnomon.executive import envelope
 
         p = {"aid": d["aid"], "did": d["did"], "decision_sha": d["sha"], "rule": rule,
              "params_sha": envelope.params_sha({"mark": f"m{self.marks}"}), "summary": "roll back the deploy",
              "incident": "i1", "ttl_ms": ttl}
         p.update(over)
-        return self.ir.submit("RequestApproval", p, agent, pid=f"req-{p['aid']}")
+        return self.ir.submit("RequestApproval", p, agent, pid=pid or f"req-{p['aid']}")
 
     def decide(self, aid: str, sha: str, verdict="approve", *, agent=HUMAN, at=None, **over):
         p = {"aid": aid, "decision_sha": sha, "verdict": verdict, "note": "seen"}

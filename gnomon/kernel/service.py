@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 import dataclasses
+import json
 from dataclasses import dataclass, field
 
 import redis
@@ -25,6 +26,7 @@ ZERO64 = "0" * 64
 MODES = ("live", "replay", "sim")
 MAX_TTL_MS = 900_000  # Appendix C (D-21)
 MAX_ATTEMPTS = 5
+APPROVAL_TTL_MS = 900_000  # Appendix C: R16 bound
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
@@ -112,7 +114,17 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         params_json = canonicalize(proposal.p)
     except JcsError as exc:
         raise SchemaRejected(f"params are not canonical JSON: {exc}") from exc
-    return {
+    decision = None
+    if rule.requires_decision:
+        if not isinstance(proposal.attach, str) or not proposal.attach:
+            raise SchemaRejected("a decision rule needs its decision envelope in attach")
+        try:
+            decision = json.loads(proposal.attach)
+        except ValueError as exc:
+            raise SchemaRejected(f"attach is not JSON: {exc}") from exc
+        if not isinstance(decision, dict):
+            raise SchemaRejected("attach must be the decision envelope (a JSON object)")
+    out = {
         "rule": rule.name,
         "rule_sha": rule.sha,
         "agent": proposal.agent,
@@ -131,7 +143,11 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "ROLES": list(ROLES),
         "MAX_TTL_MS": MAX_TTL_MS,
         "MAX_ATTEMPTS": MAX_ATTEMPTS,
+        "APPROVAL_TTL_MS": APPROVAL_TTL_MS,
     }
+    if decision is not None:
+        out["d"] = decision
+    return out
 
 
 class LintRejected(SchemaRejected):
@@ -192,8 +208,8 @@ class KernelService:
         except redis.ResponseError as exc:
             return Outcome(Code.KERNEL_ERROR, detail={"error": str(exc)})
         if rows:
-            seq, digest = rows[0]
-            return Outcome(Code.APPLIED, seq=seq, hash=digest)
+            seq, digest, *decision = rows[0]  # E0 also returns the Decision id
+            return Outcome(Code.APPLIED, seq=seq, hash=digest, detail={"decision": decision[0]} if decision else {})
         return diagnosis.diagnose(self.graph, rule, params)
 
     def diagnose(self, proposal: Proposal) -> Outcome:

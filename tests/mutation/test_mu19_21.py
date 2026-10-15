@@ -7,7 +7,7 @@ from tests.support.ir_world import ir, opened  # noqa: F401
 
 pytestmark = [pytest.mark.integration, pytest.mark.mutation, pytest.mark.gate_ta]
 
-EXPECTED = {"MU19": {"K7", "K4"}, "MU20": {"K7"}, "MU21": {"K7", "K4"}}
+EXPECTED = {"MU19": {"K7", "K4"}, "MU20": {"K7", "K4"}, "MU21": {"K7", "K4"}}
 
 
 @pytest.fixture
@@ -15,7 +15,7 @@ def decided_copy(opened, redis_raw):
     dw = activate(opened)
     assert dw.commit(dw.envelope("D-1")).code == "APPLIED"
     d2 = dw.approved("D-2")
-    assert dw.commit(d2, rule="NoopActionGated").code == "APPLIED"
+    assert dw.commit(d2, rule="NoopActionGated", params=dw.params(d2, {"mark": "m2"})).code == "APPLIED"
     name = f"{opened.k.graph.name}:replay:mut-ta"
     redis_raw.execute_command("GRAPH.COPY", opened.k.graph.name, name)
     return name

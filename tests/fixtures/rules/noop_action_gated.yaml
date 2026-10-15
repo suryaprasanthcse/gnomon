@@ -9,8 +9,8 @@ prelude: P0
 requires_decision: true
 gated: true
 evidence: true
-reads: [ActionMark, ActionMark.id]
-writes: [ActionMark]
+reads: [Entity, Entity.uid]
+writes: [ActionMark, Entity]
 key_templates: ["ActionMark:*", "ActionMark:{p.mark}"]
 view_templates: []
 guard_probes: generate

@@ -198,6 +198,10 @@ class Registry:
     def fact_types(self) -> list[dict]:
         return [dict(ft) for ft in self._fact_types]
 
+    def with_rules(self, *rules: RuleDef) -> Registry:
+        """A new registry with `rules` added (a layer's rules, once the log says they are registered)."""
+        return Registry([*self.rules(), *rules], self._fact_types)
+
     def get(self, name: str) -> RuleDef:
         try:
             return self._rules[name]
@@ -291,6 +295,17 @@ def load_registry(path: Path = REGISTRY_FILE) -> Registry:
         rules.extend(family_members(family, path.parent))
     probe_macros = document.get("probe_macros") or {}
     return Registry((_with_probe_macros(r, probe_macros) for r in rules), document.get("fact_types", []))
+
+
+def layer_rules(name: str, path: Path = REGISTRY_FILE) -> list[RuleDef]:
+    """The rules of a layer (master §14): defined in the registry file but not registered at genesis."""
+    path = Path(path)
+    document = yaml.safe_load(path.read_text(encoding="utf-8"))
+    specs = (document.get("layers") or {}).get(name)
+    if specs is None:
+        raise KeyError(f"unknown layer {name!r}")
+    probe_macros = document.get("probe_macros") or {}
+    return [_with_probe_macros(rule_from_mapping(spec, path.parent), probe_macros) for spec in specs]
 
 
 def register_rule_params(rule: RuleDef) -> dict:

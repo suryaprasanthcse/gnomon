@@ -3,7 +3,9 @@
     R0 Genesis          PG · BODY · Q0 · RET      tick T0 on (0, 0), inside PG
     standard (P0)       P0 · BODY · Q0 · RET      tick T0, substituted for <TICK> in P0
 
-The add-ons P1/E0 (decisions, A10) and P2/P3 (federation, A13) are not installed yet; asking for one
+    decision (P0)       P0 · P1 · BODY · Q0 · E0  P1 is spliced into P0 at its add-on mark, E0 returns the Decision
+
+The add-ons P1/E0 (decisions) are installed by A10; P2/P3 (federation, A13) are not yet, and asking for one
 raises SegmentNotInstalled. This file, the segments and the Kernel UDF library form `kernel_src`,
 whose sha Genesis pins as Head.kernel_sha.
 """
@@ -18,10 +20,11 @@ from gnomon.kernel.registry import RuleDef
 from gnomon.udf import loader
 
 SEGMENT_DIR = Path(__file__).resolve().parent / "segments"
-INSTALLED = ("PG", "P0", "Q0", "RET")
-ADD_ONS = ("P1", "P2", "P3", "E0")
+INSTALLED = ("PG", "P0", "P1", "Q0", "E0", "RET")
+ADD_ONS = ("P2", "P3")
 T0 = "Kernel.tick(h.pt, h.lc, timestamp(), $mode, $rec_pt, $rec_lc)"
 TICK = "<TICK>"
+ADD_ON_MARK = "//-- add-on segment (P1 decision checks; P2/P3 federation) is inserted here --"
 
 
 class SegmentNotInstalled(LookupError):
@@ -56,12 +59,20 @@ def plan(rule: RuleDef) -> list[str]:
 
 def compose(rule: RuleDef) -> str:
     parts = []
-    for name in plan(rule):
+    names = plan(rule)
+    for name in names:
         if name == "BODY":
             parts.append(rule.body)
+        elif name == "P1":
+            continue  # spliced into P0 below, between the tick and the apply variables
         else:
             text = segment(name)
-            parts.append(text.replace(TICK, T0) if name == "P0" else text)
+            if name == "P0":
+                if "P1" in names:
+                    head, tail = text.split(ADD_ON_MARK)
+                    text = head + segment("P1") + tail
+                text = text.replace(TICK, T0)
+            parts.append(text)
     return "\n".join(part.rstrip("\n") for part in parts) + "\n"
 
 

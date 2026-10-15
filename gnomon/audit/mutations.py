@@ -1,4 +1,4 @@
-"""Mutation suite MU1–MU18 (master §21.2, Core rows).
+"""Mutation suite MU1–MU18 (master §21.2, Core rows) and MU19–MU21 (T-A rows, `LAYER_MUTATIONS`).
 
 Each mutation corrupts a scratch copy (`t:<tenant>:replay:…`) out of band, dropping a constraint first where
 one would block it, and names the checks that must detect it. Targets are found in the graph itself, so a
@@ -175,6 +175,22 @@ def mu18(graph, client, key):
     graph.query("CREATE (:Rewrite {id: 'mu18-ghost'})")
 
 
+def mu19(graph, client, key):
+    cid = _row(graph, "MATCH (c:Candidate) WHERE c.score_num IS NOT NULL RETURN c.cid ORDER BY c.cid LIMIT 1",
+               what="scored Candidate")[0]
+    graph.query("MATCH (c:Candidate {cid: $cid}) SET c.score_num = c.score_num + 1", {"cid": cid})
+
+
+def mu20(graph, client, key):
+    did = _row(graph, "MATCH (x:Decision) RETURN x.id ORDER BY x.id LIMIT 1", what="Decision")[0]
+    graph.query("MATCH (x:Decision {id: $id}) DETACH DELETE x", {"id": did})
+
+
+def mu21(graph, client, key):
+    did = _row(graph, "MATCH (x:Decision) RETURN x.id ORDER BY x.id LIMIT 1", what="Decision")[0]
+    graph.query("MATCH (x:Decision {id: $id}) SET x.read_seq = x.read_seq + 1", {"id": did})
+
+
 MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
     Mutation("MU1", "Edit Rewrite.params", ("K1", "K4"), mu1),
     Mutation("MU2", "Edit Rewrite.pt", ("K1",), mu2),
@@ -197,8 +213,16 @@ MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
 )}
 
 
+# T-A rows (§21.2); kept apart so the Core catalogue stays MU1-MU18 until the layer is active.
+LAYER_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
+    Mutation("MU19", "Edit Candidate.score_num", ("K7", "K4"), mu19),
+    Mutation("MU20", "Delete a Decision", ("K7", "K4"), mu20),
+    Mutation("MU21", "Edit Decision.read_seq", ("K7", "K4"), mu21),
+)}
+
+
 def apply_mutation(db, client: redis.Redis, key: str, mu: str) -> Mutation:
     """Applies mutation `mu` to graph `key` (a scratch copy) and returns it."""
-    mutation = MUTATIONS[mu]
+    mutation = {**MUTATIONS, **LAYER_MUTATIONS}[mu]
     mutation.apply(db.select_graph(key), client, key)
     return mutation

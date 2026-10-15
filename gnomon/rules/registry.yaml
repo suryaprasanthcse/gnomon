@@ -462,3 +462,47 @@ families:
           <KIND>: ext
           <VALID>: "AND $p.contract_criticality >= 1 AND $p.contract_criticality <= 5"
           <PROPS>: ", tenant: $p.tenant, remote_id: $p.remote_id, contract_criticality: $p.contract_criticality, health: 'ok', remote_mode: 'normal'"
+
+# Layers (master §14): rules that are not registered at genesis. A layer is switched on by logged rewrites
+# (M3 RegisterRule for each rule, M5 for a scorer, M6 for its agents), never by editing the genesis registry.
+layers:
+  TA:
+    - name: RegisterScorer
+      version: 1
+      class: meta
+      layer: titan
+      family: null
+      caller: [operator]
+      prelude: P0
+      reads: ["Scorer", "Scorer.active", "Scorer.name", "Scorer.sha"]
+      writes: ["Scorer", "Scorer.active", "Scorer.deactivated_seq"]
+      key_templates: ["Scorer:{p.name}", "Scorer:*"]
+      guard_probes: generate
+      guard_labels: [sha_new, kind_valid]
+      body_file: titan/register_scorer.cypher
+    - name: RequestApproval
+      version: 1
+      class: meta
+      layer: titan
+      family: null
+      caller: [executive]
+      prelude: P0
+      reads: ["Approval", "Approval.aid", "Incident", "Incident.id", "Incident.state"]
+      writes: ["Approval", "FOR"]
+      key_templates: ["Approval:{p.aid}", "Approval:*"]
+      guard_probes: generate
+      guard_labels: [aid_new, ttl_positive, ttl_max, incident_exists, incident_open]
+      body_file: titan/request_approval.cypher
+    - name: ApproveDecision
+      version: 1
+      class: meta
+      layer: titan
+      family: null
+      caller: [human]
+      prelude: P0
+      reads: ["Approval", "Approval.aid", "Approval.decision_sha", "Approval.expires_pt", "Approval.state"]
+      writes: ["Approval.approver", "Approval.decided_seq", "Approval.note", "Approval.state", "Approval.verdict"]
+      key_templates: ["Approval:{p.aid}"]
+      guard_probes: generate
+      guard_labels: [approval_exists, pending, sha_matches, unexpired, verdict_valid]
+      body_file: titan/approve_decision.cypher

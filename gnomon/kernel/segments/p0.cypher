@@ -13,5 +13,6 @@ OPTIONAL MATCH (kv:KeyVersion)
 WHERE kv.key IN $view_keys
 WITH h, rule, sum(CASE WHEN kv.seq > $read_seq THEN 1 ELSE 0 END) AS stale, collect(DISTINCT kv.rw) AS causes
 WHERE stale = 0
-WITH h, causes, <TICK> AS c
+WITH h, rule, causes, <TICK> AS c
+//-- add-on segment (P1 decision checks; P2/P3 federation) is inserted here --
 WITH h, causes, h.seq + 1 AS nseq, c.pt AS now, c.lc AS now_lc

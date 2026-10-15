@@ -32,7 +32,8 @@ def test_request_creates_a_pending_approval_for_the_incident(dw):
 def test_request_guards(dw):
     d = dw.envelope("D-2")
     assert dw.request(d).code == "APPLIED"
-    assert guard(dw.request(d)) == "aid_new"
+    assert dw.request(d).code == "DUPLICATE"  # the same pid is idempotent
+    assert guard(dw.request(d, pid="req-again")) == "aid_new"
     other = dw.envelope("D-3")
     assert guard(dw.request(other, ttl=0)) == "ttl_positive"
     assert guard(dw.request(other, ttl=900_001)) == "ttl_max"

@@ -12,7 +12,7 @@ pytestmark = [pytest.mark.integration, pytest.mark.gate_ta]
 def decided(dw):
     assert dw.commit(dw.envelope("D-1")).code == "APPLIED"
     d2 = dw.approved("D-2")
-    assert dw.commit(d2, rule="NoopActionGated").code == "APPLIED"
+    assert dw.commit(d2, rule="NoopActionGated", params=dw.params(d2, {"mark": "m2"})).code == "APPLIED"
     return dw
 
 
