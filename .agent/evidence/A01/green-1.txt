@@ -1,0 +1,150 @@
+# A01 batch 1 GREEN evidence
+# utc: 2026-10-15T06:09:52Z
+# command: uv run pytest -n 4 -rA
+
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+created: 4/4 workers
+4 workers [49 items]
+
+.................................................                        [100%]
+=================================== PASSES ====================================
+____________ test_f06_algorithm_signatures_used_by_the_tool_plane _____________
+[gw1] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+F6 signatures that differ: []
+_____________________ test_s05_copy_duration_at_demo_size _____________________
+[gw1] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+S5 copy ms at 16000 rewrites: [162.3, 151.0, 140.1]
+______________ test_s15_cypher_constructs_used_by_the_templates _______________
+[gw1] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+S15 unsupported constructs: []
+_____________________________ test_tenant_cleanup _____________________________
+[gw0] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+running: C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe -mpytest --basetemp=C:\Users\surya\AppData\Local\Temp\pytest-of-surya\pytest-349\popen-gw0\test_tenant_cleanup0\runpytest-0 -p no:cacheprovider
+     in: C:\Users\surya\AppData\Local\Temp\pytest-of-surya\pytest-349\popen-gw0\test_tenant_cleanup0
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\surya\AppData\Local\Temp\pytest-of-surya\pytest-349\popen-gw0\test_tenant_cleanup0
+configfile: pyproject.toml
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 1 item
+
+test_inner.py .                                                          [100%]
+
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\myspace\hacckathons\gnomon\.venv\Lib\site-packages\_pytest\config\__init__.py:1624
+  C:\myspace\hacckathons\gnomon\.venv\Lib\site-packages\_pytest\config\__init__.py:1624: PytestConfigWarning: No files were found in testpaths; consider removing or adjusting your testpaths configuration. Searching recursively from the current directory instead.
+    self.args, self.args_source = self._decide_args(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 1 warning in 0.13s =========================
+____________ test_s13_memory_returns_after_deleting_scratch_copies ____________
+[gw2] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+S13 copies grew used_memory by 136.2 MB; residue after deletes 2.88 MB
+_______________ test_s10_copy_cost_grows_linearly_with_the_log ________________
+[gw3] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+S10 best copy ms by log size: {2000: 30.8, 8000: 79.4, 32000: 178.1}
+____________ test_s22_copies_stay_complete_while_libraries_reload _____________
+[gw1] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+S22 100 copies during 1301 reloads
+___________________________ test_markers_registered ___________________________
+[gw2] win32 -- Python 3.12.14 C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe
+---------------------------- Captured stdout call -----------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\surya\AppData\Local\Temp\pytest-of-surya\pytest-349\popen-gw2\test_markers_registered0
+configfile: pyproject.toml
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 0 items / 1 error
+
+=================================== ERRORS ====================================
+______________________ ERROR collecting test_unknown.py _______________________
+'not_a_registered_marker' not found in `markers` configuration option
+=========================== short test summary info ===========================
+ERROR test_unknown.py - Failed: 'not_a_registered_marker' not found in `marke...
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+============================== 1 error in 0.26s ===============================
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\surya\AppData\Local\Temp\pytest-of-surya\pytest-349\popen-gw2\test_markers_registered0
+configfile: pyproject.toml
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 1 item
+
+test_known.py .                                                          [100%]
+
+============================== 1 passed in 0.01s ==============================
+=========================== short test summary info ===========================
+PASSED tests/spikes/test_a01_inventory.py::test_every_fail_has_a_fallback_decision
+PASSED tests/integration/test_container_smoke.py::test_ping
+PASSED tests/integration/test_container_smoke.py::test_udf_load_roundtrip
+PASSED tests/spikes/test_a01_inventory.py::test_image_digest_is_pinned_everywhere
+PASSED tests/integration/test_container_smoke.py::test_graph_roundtrip
+PASSED tests/spikes/test_f03_relationship_index.py::test_f03_relationship_index_create_explain_and_drop
+PASSED tests/spikes/test_a01_inventory.py::test_every_spike_and_fact_has_a_test_and_a_record
+PASSED tests/spikes/test_f06_algorithm_signatures.py::test_f06_algorithm_signatures_used_by_the_tool_plane
+PASSED tests/spikes/test_f07_udf_api.py::test_f07_udf_graph_api_is_read_only
+PASSED tests/spikes/test_s01_udf_in_writes.py::test_s01_udfs_in_where_and_set_of_write_queries
+PASSED tests/spikes/test_f01_copy_snapshot.py::test_f01_copy_is_an_isolated_snapshot_with_its_schema
+PASSED tests/spikes/test_f04_constraints.py::test_f04_constraint_creation_is_asynchronous
+PASSED tests/spikes/test_f02_foreach_clauses.py::test_f02_foreach_clauses_and_outer_variables
+PASSED tests/spikes/test_f05_profile_format.py::test_f05_profile_lines_follow_the_documented_grammar
+PASSED tests/spikes/test_s07_plan_stability.py::test_s07_explain_is_stable_and_matches_recorded_plans
+PASSED tests/spikes/test_s08_cloud_udf_support.py::test_s08_udf_support_on_falkordb_cloud
+PASSED tests/spikes/test_s12_mcp_round_trip.py::test_s12_tool_call_round_trip_is_schema_checked_and_logged
+PASSED tests/spikes/test_s05_copy_duration.py::test_s05_copy_duration_at_demo_size
+PASSED tests/spikes/test_s06_index_status_polling.py::test_s06_index_build_is_polled_until_operational
+PASSED tests/spikes/test_s15_cypher_constructs.py::test_s15_cypher_constructs_used_by_the_templates
+PASSED tests/spikes/test_s16_internal_execution_time.py::test_s16_query_statistics_carry_internal_execution_time
+PASSED tests/spikes/test_s17_sppaths_and_bfs.py::test_s17_sppaths_counts_hops_and_bfs_direction
+PASSED tests/spikes/test_s18_db_indexes_columns.py::test_s18_db_indexes_yields_named_columns
+PASSED tests/spikes/test_s19_q5_edge_index.py::test_s19_q5_switches_to_edge_by_index_scan
+PASSED tests/spikes/test_s20_in_list_index.py::test_s20_in_list_predicates_use_node_index_scan
+PASSED tests/integration/test_container_smoke.py::test_tenant_cleanup
+PASSED tests/spikes/test_s02_foreach_forms.py::test_s02_conditional_nested_and_deleting_foreach
+PASSED tests/spikes/test_s03_write_serialization.py::test_s03_concurrent_writes_to_one_graph_are_serialized
+PASSED tests/spikes/test_s04_atomic_rollback.py::test_s04_errors_after_writes_roll_the_whole_query_back
+PASSED tests/spikes/test_s13_memory_reclaim.py::test_s13_memory_returns_after_deleting_scratch_copies
+PASSED tests/spikes/test_s21_write_timeouts.py::test_s21_timeouts_for_reads_and_writes
+PASSED tests/spikes/test_s10_copy_cost_growth.py::test_s10_copy_cost_grows_linearly_with_the_log
+PASSED tests/spikes/test_s11_udf_edge_objects.py::test_s11_edges_carry_full_endpoint_nodes
+PASSED tests/spikes/test_s14_memory_usage.py::test_s14_memory_usage_of_a_graph_key
+PASSED tests/spikes/test_s22_copy_during_udf_load.py::test_s22_copies_stay_complete_while_libraries_reload
+PASSED tests/unit/test_gate_runner.py::test_gate_green_on_clean_signed_repo
+PASSED tests/unit/test_gate_runner.py::test_gate_ignores_patterns_outside_scope
+PASSED tests/unit/test_gate_runner.py::test_gate_fails_on_todo_in_scope
+PASSED tests/unit/test_gate_runner.py::test_gate_fails_on_bare_pass_in_scope
+PASSED tests/unit/test_gate_runner.py::test_gate_fails_on_skip
+PASSED tests/unit/test_gate_runner.py::test_check_tdd_requires_red_evidence_in_test_commit
+PASSED tests/unit/test_harness_smoke.py::test_clock_is_deterministic_and_steppable
+PASSED tests/unit/test_harness_smoke.py::test_deferred_fixtures_fail_with_module_name
+PASSED tests/unit/test_gate_runner.py::test_gate_requires_human_signed
+PASSED tests/unit/test_gate_runner.py::test_check_tdd_requires_test_commit_before_feat
+PASSED tests/unit/test_harness_smoke.py::test_hypothesis_profiles
+PASSED tests/unit/test_gate_runner.py::test_explain_scaffold
+PASSED tests/unit/test_gate_runner.py::test_gate_provisional_skips_only_human_signed
+PASSED tests/unit/test_harness_smoke.py::test_markers_registered
+============================= 49 passed in 22.12s =============================

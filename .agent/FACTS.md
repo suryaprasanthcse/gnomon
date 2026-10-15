@@ -1,1 +1,45 @@
 falkordb_image: falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+# PLATFORM FACTS (A01, gate G0)
+
+Observed on the pinned image (graph module 60002, built 2026-10-08) on 2026-10-15. Each line is checked
+by its spike test in tests/spikes/: a different verdict on a future image fails the test. Later modules
+rely only on these lines (contract C10). Format: `S<n>: PASS | FAIL → <observed fact>; fallback: <…>`.
+
+## Spikes (master §23.2)
+
+S1: PASS → UDFs work in WHERE and SET of write queries, take node arguments, and return maps and lists usable in Cypher (m.a, l[0..2]). A map, or a list holding null, cannot be stored as a property ("Property values can only be of primitive types or arrays of primitive types"); fallback: none
+S2: PASS → FOREACH (_ IN CASE WHEN c THEN [1] ELSE [] END | …) runs 0 or 1 times; nested FOREACH with MERGE is idempotent and sees outer variables; DELETE of collected edges and nodes inside FOREACH works; fallback: none
+S3: PASS → writes to one graph are serialized: 16 threads × 20 read-modify-write increments give exactly 320, and 50 concurrent compare-and-set queries on Head.seq give exactly 1 winner; fallback: none
+S4: PASS → any error in a write query rolls the whole query back: a throwing UDF after CREATE or inside SET, a unique-constraint violation and a mandatory-constraint violation all leave zero partial writes; fallback: none
+S5: PASS → GRAPH.COPY of a 16,000-rewrite log (16k nodes + 16k CAUSED_BY edges) takes about 50 ms on a quiet server (budget 1,000 ms); fallback: none
+S6: PASS → db.indexes() status is "[Indexing] <done>/<total>: UNDER CONSTRUCTION" while building and "OPERATIONAL" when ready; polling db.indexes() works and the plan then uses Node By Index Scan; fallback: none
+S7: PASS → GRAPH.EXPLAIN is identical across runs and matches the trees recorded in tests/fixtures/plans/ (indent of 4 spaces per level, "Op | argument"); fallback: none (fixtures are pinned to this image)
+S8: FAIL → unverified: no FalkorDB Cloud endpoint is configured (set GNOMON_FALKORDB_CLOUD_URL to probe one); the pinned local image serves GRAPH.UDF; fallback: Docker Compose deployment for live; Cloud for read-only replicas (§23.2)
+S10: PASS → copy time grows linearly with the log: about 3–4 µs per rewrite node with its edge (64k rewrites ≈ 210 ms); fallback: none needed at demo size (archiving old Rewrite bodies stays future work)
+S11: PASS → in UDFs, getNeighbors({returnType: 'edges'}) returns edge objects whose source and target are full node objects (with attributes and getNeighbors), plus id, type and attributes; fallback: none
+S12: PASS → MCP Python SDK 2.3.0: an in-process Client(MCPServer) lists tools with JSON schemas, round-trips a call, rejects a call with missing arguments before the tool runs, and the server-side handler logs each call. API names are v2: MCPServer (not FastMCP), Tool.input_schema, CallToolResult.is_error; a dict result arrives as JSON text in content[0]; fallback: none
+S13: PASS → memory returns after GRAPH.DELETE: 50 copies grew used_memory by hundreds of MB, and after deleting them (ASYNC_DELETE frees in the background) the residue is under 10% of the growth; fallback: none
+S14: FAIL → MEMORY USAGE <graph key> reports only the key handle (tens of bytes) whatever the graph size. GRAPH.MEMORY USAGE <key> reports the graph in whole MB (total_graph_sz_mb, indices_sz_mb, …); fallback: drop the memory term from the optimizer cost model and use an index-count budget only (§23.2); see DECISIONS D-4 for the GRAPH.MEMORY alternative
+S15: PASS → label predicates in WHERE (n:L), *0..4 var-length paths, null properties and null map fields omitted on CREATE, toString, startNode, endNode, properties and UNION all work; fallback: none
+S16: PASS → every GRAPH.QUERY reply carries "Query internal execution time: <float> milliseconds" in its statistics; fallback: none
+S17: FAIL → algo.SPpaths without weightProp counts hops (pathWeight = hops) and relDirection 'both' works, but algo.bfs(node, depth, relType) follows outgoing edges only and takes no direction argument; fallback: no constant w is needed for SPpaths; for upstream (incoming) neighbourhoods use a variable-length pattern (s)<-[:DEP_NOW*1..d]-(x) instead of BFS (DECISIONS D-5; the §23.2 "run BFS twice" fallback is not possible)
+S18: PASS → CALL db.indexes() YIELD label, properties, types, options, language, stopwords, entitytype, status, info; types maps each property to ["RANGE"]; entitytype is NODE or RELATIONSHIP; fallback: none
+S19: PASS → once ()-[f:OWNED_BY]-() ON (f.vf) is indexed, the unanchored Q5 plan uses Edge By Index Scan (it used no index before); fallback: none
+S20: PASS → kv.key IN $list and e.uid IN $list are served by Node By Index Scan, including the P0 prelude shape (OPTIONAL MATCH + aggregate); fallback: none
+S21: PASS → TIMEOUT_DEFAULT and TIMEOUT_MAX ship as 0 (no timeout). A per-query TIMEOUT stops reads but is ignored by writes. With TIMEOUT_DEFAULT > 0 writes time out too and roll back completely. Kernel writes are therefore untimed as long as TIMEOUT_DEFAULT stays 0, and reads use per-query timeouts; fallback: none (operating rule: never set TIMEOUT_DEFAULT on a GNOMON server)
+S22: PASS → 100 GRAPH.COPY calls during about 850 concurrent GRAPH.UDF LOAD REPLACE calls all completed with full row counts; fallback: none. Hazard seen while probing: a query calling a library at the instant it is replaced can fail with "Unknown function" (2 of 100 calls), so libraries are loaded at startup and never replaced under traffic
+
+## Facts (master §23.1)
+
+F1: PASS → GRAPH.COPY is a snapshot: writes to the source after the copy are not visible in the destination; the copy carries indexes and constraints (operational and enforced), which patch P3 relies on; copying onto an existing key fails ("destination key already exists")
+F2: PASS → FOREACH accepts CREATE, MERGE, SET, REMOVE, DELETE and nested FOREACH, and sees outer variables
+F3: FAIL → CREATE INDEX FOR ()-[f:R]-() ON (f.p) works and EXPLAIN shows Edge By Index Scan, but DROP INDEX ON :R(p) fails for relationship indexes ("Unable to drop index on :R(p): no such index"). DROP INDEX FOR ()-[f:R]-() ON (f.p) drops it; DROP INDEX ON :L(p) still works for node indexes; fallback: the optimizer and reconciler use the FOR-pattern drop for relationship indexes (DECISIONS D-6)
+F4: PASS → GRAPH.CONSTRAINT CREATE replies PENDING; db.constraints() (type, label, properties, entitytype, status) reaches OPERATIONAL; creating a constraint without its supporting index fails with "missing supporting exact-match index"
+F5: PASS → GRAPH.PROFILE lines follow master §16.3: 4-space indent per level, "Op[ | argument] | Records produced: <int>, Execution time: <float> ms"
+F6: PASS → algo.pageRank(label, relType); algo.betweenness({nodeLabels, relationshipTypes, samplingSize, samplingSeed}); algo.WCC({…}) YIELD node, componentId; algo.labelPropagation({…, maxIterations}) YIELD node, communityId; algo.bfs(node, depth, relType) YIELD nodes, edges; algo.SPpaths({…}) YIELD path, pathWeight, pathCost; algo.maxFlow({sourceNodes, targetNodes, capacityProperty, relationshipTypes}) YIELD nodes, edges, edgeFlows, maxFlow
+F7: PASS → falkor.register (plus falkor.log); node.getNeighbors({direction, types, returnType}); graph.getNodeById(id) (null when absent); graph.traverse([nodes], {direction, types}) returns one list of direct neighbours per start node (a `distance` option is ignored); graph.iterateNodes(label) and graph.iterateEdges(type) take one string. Changes a UDF makes to node objects are never written to the graph
+
+## Server configuration observed (not spikes)
+
+- GRAPH.CONFIG: RESULTSET_SIZE 10000 (a query returns at most 10,000 rows), MAX_QUEUED_QUERIES 25, legacy TIMEOUT 1000 (from FALKORDB_ARGS; reads only), TIMEOUT_DEFAULT 0, TIMEOUT_MAX 0, THREAD_COUNT 8, ASYNC_DELETE 1, JS_HEAP_SIZE 256 MiB.
+- Data directory: FALKORDB_DATA_PATH=/var/lib/falkordb/data.
