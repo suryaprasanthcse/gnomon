@@ -1,0 +1,35 @@
+{
+  "gate": "G1c",
+  "module": "A04",
+  "status": "provisional",
+  "commit": "0c909db1ab82c45c12a342cb468f43675d58b0e8",
+  "utc": "2026-10-15T13:39:21Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a",
+    "gate_g1b",
+    "gate_g1c"
+  ],
+  "tests": {
+    "passed": 438,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 36.397
+  },
+  "coverage": {
+    "gnomon/kernel": 0.9732
+  },
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [],
+  "forbidden": []
+}
