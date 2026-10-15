@@ -1,0 +1,14 @@
+     54 E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\myspace\\hacckathons\\gnomon\\udf\\exec.js'
+      2 E   ImportError: cannot import name 'scoring' from 'gnomon.executive' (C:\myspace\hacckathons\gnomon\gnomon\executive\__init__.py)
+      1 FAILED tests/unit/kernel/test_compose_sim.py::test_sim_plan_drops_p1_and_e0
+      1 FAILED tests/unit/kernel/test_compose_sim.py::test_sim_composition_has_no_decision_segments
+      1 FAILED tests/unit/kernel/test_compose_sim.py::test_sim_binding_needs_no_attach_and_a_live_binding_still_does
+      1 FAILED tests/mutation/test_mu22_23.py::test_the_mutations_refuse_a_graph_without_executive_decisions
+      1 FAILED tests/mutation/test_mu22_23.py::test_catalogue_adds_the_executive_mutations
+      1 ERROR tests/property/test_scorer_props.py::test_scorer_byte_identical - FileN...
+      1 ERROR tests/mutation/test_mu22_23.py::test_mu23_a_changed_lambda - FileNotFou...
+      1 ERROR tests/mutation/test_mu22_23.py::test_mu22_a_different_library_under_the_same_name
+      1 ERROR tests/integration/executive/test_scoring_math.py
+      1 ERROR tests/integration/executive/test_scorer.py::test_the_scorer_only_reads
+      1 ERROR tests/integration/executive/test_scorer.py::test_the_propagation_is_bounded_by_the_hop_count_too
+      1 ERROR tests/integration/executive/test_scorer.py::test_soft_reached_nodes_do_not_propagate

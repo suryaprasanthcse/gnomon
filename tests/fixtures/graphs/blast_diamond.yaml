@@ -1,0 +1,28 @@
+# x depends on y1 and y2 (hard), both depend on z (down). x is reached equally through y1 and y2: the lowest parent wins.
+seed: x
+hops: 4
+services:
+  x: {crit: 2, health: ok, mode: normal}
+  y1: {crit: 1, health: ok, mode: normal}
+  y2: {crit: 1, health: ok, mode: normal}
+  z: {crit: 1, health: down, mode: normal}
+edges:
+  - [x, y1, true, f-xy1]
+  - [x, y2, true, f-xy2]
+  - [y1, z, true, f-y1z]
+  - [y2, z, true, f-y2z]
+owners: {x: t1, y1: t1, y2: t1, z: t2}
+expected:
+  region: [svc:x, svc:y1, svc:y2, svc:z]
+  sources: [svc:z]
+  impacted:
+    - [svc:x, down, 2, 3360, svc:y1, f-xy1]
+    - [svc:y1, down, 1, 2520, svc:z, f-y1z]
+    - [svc:y2, down, 1, 2520, svc:z, f-y2z]
+    - [svc:z, down, 0, 5040, null, null]
+  teams: [team:t1, team:t2]
+  owner_edges:
+    - [svc:x, team:t1, o-x]
+    - [svc:y1, team:t1, o-y1]
+    - [svc:y2, team:t1, o-y2]
+    - [svc:z, team:t2, o-z]

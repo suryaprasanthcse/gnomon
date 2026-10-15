@@ -1,0 +1,21 @@
+# a depends softly on b (down); d depends hard on a. a is reached softly, so it does not propagate to d.
+seed: a
+hops: 4
+services:
+  a: {crit: 3, health: ok, mode: normal}
+  b: {crit: 2, health: down, mode: normal}
+  d: {crit: 5, health: ok, mode: normal}
+edges:
+  - [a, b, false, f-ab]
+  - [d, a, true, f-da]
+owners: {a: t1, b: t2, d: t3}
+expected:
+  region: [svc:a, svc:b, svc:d]
+  sources: [svc:b]
+  impacted:
+    - [svc:a, degraded, 1, 3780, svc:b, f-ab]
+    - [svc:b, down, 0, 10080, null, null]
+  teams: [team:t1, team:t2]
+  owner_edges:
+    - [svc:a, team:t1, o-a]
+    - [svc:b, team:t2, o-b]

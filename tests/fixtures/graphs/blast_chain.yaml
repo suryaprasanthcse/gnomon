@@ -1,0 +1,23 @@
+# a depends on b depends on c (all hard); c is down. W = 2520: c 1*2*2520, b 3*2*1260, a 2*2*840.
+seed: a
+hops: 4
+services:
+  a: {crit: 2, health: ok, mode: normal}
+  b: {crit: 3, health: ok, mode: normal}
+  c: {crit: 1, health: down, mode: normal}
+edges:   # [dependent, dependency, hard, fid]
+  - [a, b, true, f-ab]
+  - [b, c, true, f-bc]
+owners: {a: t1, b: t2, c: t2}
+expected:
+  region: [svc:a, svc:b, svc:c]
+  sources: [svc:c]
+  impacted:   # [uid, sev, d, w, parent, parent_fid]
+    - [svc:a, down, 2, 3360, svc:b, f-ab]
+    - [svc:b, down, 1, 7560, svc:c, f-bc]
+    - [svc:c, down, 0, 5040, null, null]
+  teams: [team:t1, team:t2]
+  owner_edges:
+    - [svc:a, team:t1, o-a]
+    - [svc:b, team:t2, o-b]
+    - [svc:c, team:t2, o-c]
