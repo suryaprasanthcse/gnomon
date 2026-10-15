@@ -1,0 +1,113 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 5 items
+
+tests\unit\kernel\test_wire_text.py FFFFF                                [100%]
+
+================================== FAILURES ===================================
+_____________ test_every_composed_query_is_ascii_without_comments _____________
+
+    def test_every_composed_query_is_ascii_without_comments():
+        from gnomon.kernel import composer
+        from gnomon.kernel.registry import load_registry, load_rule_file
+    
+        rules = [*load_registry().rules(), load_rule_file(ROOT / "tests" / "fixtures" / "rules" / "noop.yaml")]
+        for rule in rules:
+            composed = composer.compose(rule)
+            assert not composed.isascii(), rule.name  # the sources do carry non-ASCII comments
+>           text = wire(composed)
+                   ^^^^^^^^^^^^^^
+
+tests\unit\kernel\test_wire_text.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = '// \u2500\u2500 PG \xb7 genesis prelude (R0 only) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\\n// Every validation runs before the f...n// \u2500\u2500 RET \xb7 standard return \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\\nRETURN r.seq AS seq, r.hash AS hash\\n'
+
+    def wire(text):
+>       from gnomon.kernel.service import wire_text
+E       ImportError: cannot import name 'wire_text' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\unit\kernel\test_wire_text.py:17: ImportError
+________________________ test_comments_go_strings_stay ________________________
+
+    def test_comments_go_strings_stay():
+        text = "// head \u2500 comment\\nMATCH (t:T {a: 'x//y', b: \\"q // r\\"}) // trailing \u2500\\n/* block\\n \u2500 */RETURN 1\\n"
+>       assert wire(text) == "MATCH (t:T {a: 'x//y', b: \"q // r\"})\nRETURN 1\n"
+               ^^^^^^^^^^
+
+tests\unit\kernel\test_wire_text.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = '// head \u2500 comment\\nMATCH (t:T {a: \\'x//y\\', b: "q // r"}) // trailing \u2500\\n/* block\\n \u2500 */RETURN 1\\n'
+
+    def wire(text):
+>       from gnomon.kernel.service import wire_text
+E       ImportError: cannot import name 'wire_text' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\unit\kernel\test_wire_text.py:17: ImportError
+_____________________ test_escaped_quotes_inside_strings ______________________
+
+    def test_escaped_quotes_inside_strings():
+        text = "RETURN 'it\\'s // not a comment' AS s // but this is\n"
+>       assert wire(text) == "RETURN 'it\\'s // not a comment' AS s\n"
+               ^^^^^^^^^^
+
+tests\unit\kernel\test_wire_text.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = "RETURN 'it\\'s // not a comment' AS s // but this is\n"
+
+    def wire(text):
+>       from gnomon.kernel.service import wire_text
+E       ImportError: cannot import name 'wire_text' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\unit\kernel\test_wire_text.py:17: ImportError
+_________________________ test_backticked_names_stay __________________________
+
+    def test_backticked_names_stay():
+>       assert wire("MATCH (n:`odd//label`) RETURN n // x\n") == "MATCH (n:`odd//label`) RETURN n\n"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\kernel\test_wire_text.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = 'MATCH (n:`odd//label`) RETURN n // x\n'
+
+    def wire(text):
+>       from gnomon.kernel.service import wire_text
+E       ImportError: cannot import name 'wire_text' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\unit\kernel\test_wire_text.py:17: ImportError
+_____________________ test_stripping_keeps_the_footprint ______________________
+
+    def test_stripping_keeps_the_footprint():
+        from gnomon.footprint.parser import extract
+        from gnomon.kernel.registry import load_registry
+    
+        for rule in load_registry().rules():
+>           before, after = extract(rule.body), extract(wire(rule.body))
+                                                        ^^^^^^^^^^^^^^^
+
+tests\unit\kernel\test_wire_text.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = "// \u2500\u2500 BODY \xb7 Genesis@1 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\\n// Seeds the kernel graph from params...: cx.label, props: cx.props,\\n                            state: 'operational'}))\\nWITH h, causes, nseq, now, now_lc\\n"
+
+    def wire(text):
+>       from gnomon.kernel.service import wire_text
+E       ImportError: cannot import name 'wire_text' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\unit\kernel\test_wire_text.py:17: ImportError
+=========================== short test summary info ===========================
+FAILED tests/unit/kernel/test_wire_text.py::test_every_composed_query_is_ascii_without_comments
+FAILED tests/unit/kernel/test_wire_text.py::test_comments_go_strings_stay - I...
+FAILED tests/unit/kernel/test_wire_text.py::test_escaped_quotes_inside_strings
+FAILED tests/unit/kernel/test_wire_text.py::test_backticked_names_stay - Impo...
+FAILED tests/unit/kernel/test_wire_text.py::test_stripping_keeps_the_footprint
+============================== 5 failed in 0.30s ==============================
