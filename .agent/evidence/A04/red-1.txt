@@ -1,0 +1,2916 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+collected 438 items / 329 deselected / 109 selected
+
+tests\integration\facts\test_fact_concurrency.py EE                      [  1%]
+tests\integration\facts\test_facts.py EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE [ 33%]
+EEEEEEEEEEEEEEE                                                          [ 46%]
+tests\integration\registry\test_meta_rules.py FFFFFFFFFFFFFFFFFFFFFFFFFF [ 70%]
+FFFFFFFF                                                                 [ 77%]
+tests\integration\registry\test_registry_members.py FFFFFFFFFFFFFFFFFFFF [ 96%]
+FFF                                                                      [ 99%]
+tests\property\test_bitemporal_props.py E                                [100%]
+
+=================================== ERRORS ====================================
+_______ ERROR at setup of test_50_parallel_identical_asserts[view-keys] _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000093539E0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000093539E0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____ ERROR at setup of test_50_parallel_identical_asserts[no-view-keys] ______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000097C2EA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000097C2EA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_assert_creates_open_version[FP-OWNED_BY] _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x000000000987FAD0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x000000000987FAD0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_assert_creates_open_version[F-DEPLOYED] ________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB6600>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AB6600>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+______ ERROR at setup of test_assert_creates_open_version[F-REPLICA_OF] _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB7E60>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AB7E60>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+______ ERROR at setup of test_assert_creates_open_version[SP-DEPENDS_ON] ______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000008E6B980>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E6B980>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_assert_creates_open_version[S-MEMBER_OF] _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB6330>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AB6330>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____________ ERROR at setup of test_depends_on_external_service ______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AF9CA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AF9CA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___________ ERROR at setup of test_set_fact_allows_several_objects ____________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB6840>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AB6840>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___ ERROR at setup of test_supersede_closes_old_and_copies_it[FP-OWNED_BY] ____
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AF8AA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AF8AA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___ ERROR at setup of test_supersede_closes_old_and_copies_it[F-REPLICA_OF] ___
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFC800>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFC800>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__________________ ERROR at setup of test_deployed_supersede __________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFEFC0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFEFC0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_supersede_requires_actual_old_object[wrong-old_o] ___
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFF170>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFF170>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_ ERROR at setup of test_supersede_requires_actual_old_object[missing-old_o] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B04980>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B04980>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_supersede_requires_actual_old_object[same-object] ___
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B04B90>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B04B90>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_supersede_requires_actual_old_object[vf-not-after] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B07DA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B07DA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_ ERROR at setup of test_supersede_requires_actual_old_object[no-supersede-flag] _
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B48080>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B48080>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_supersede_without_open_version_rejected ________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B07E30>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B07E30>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_end_creates_closed_current_copy[FP] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x000000000938D970>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x000000000938D970>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__________ ERROR at setup of test_end_creates_closed_current_copy[F] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000008C74AA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008C74AA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_end_creates_closed_current_copy[SP] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFF020>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFF020>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__________ ERROR at setup of test_end_creates_closed_current_copy[S] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000096BC740>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000096BC740>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____ ERROR at setup of test_end_rejects_bad_vt_end[4102444800000-future] _____
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009837380>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009837380>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_end_rejects_bad_vt_end[1791000000100-not-after-vf] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB6090>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AB6090>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_end_rejects_bad_vt_end[None-missing] _________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B48560>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B48560>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+____________ ERROR at setup of test_end_of_closed_version_rejected ____________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFA450>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFA450>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_void_closes_without_replacement[FP] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4D010>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4D010>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__________ ERROR at setup of test_void_closes_without_replacement[F] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4E4B0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4E4B0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_void_closes_without_replacement[SP] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B57680>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B57680>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__________ ERROR at setup of test_void_closes_without_replacement[S] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000096BEE70>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000096BEE70>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_void_of_superseded_copy_keeps_projection _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000097C32F0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000097C32F0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___________ ERROR at setup of test_retract_requires_current_version ___________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000090499A0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x00000000090499A0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____________ ERROR at setup of test_retract_rejects_unknown_mode _____________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000008E9D580>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000008E9D580>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_________ ERROR at setup of test_retract_root_cause_copies_attributes _________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFE000>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFE000>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+______________ ERROR at setup of test_vf_in_future_rejected[FP] _______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B07B30>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B07B30>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______________ ERROR at setup of test_vf_in_future_rejected[F] _______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B06C60>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B06C60>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+______________ ERROR at setup of test_vf_in_future_rejected[SP] _______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B54C20>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B54C20>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______________ ERROR at setup of test_vf_in_future_rejected[S] _______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B55910>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B55910>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_entities_must_exist_and_be_typed[owned-by-service] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B57BC0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B57BC0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+__ ERROR at setup of test_entities_must_exist_and_be_typed[unknown-subject] ___
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B351F0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B351F0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___ ERROR at setup of test_entities_must_exist_and_be_typed[deployed-team] ____
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B90410>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B90410>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_ ERROR at setup of test_entities_must_exist_and_be_typed[member-of-service] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009048440>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009048440>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_ ERROR at setup of test_entities_must_exist_and_be_typed[depends-on-from-team] _
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B55BE0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B55BE0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___________ ERROR at setup of test_duplicate_open_set_fact_rejected ___________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFDD00>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFDD00>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____ ERROR at setup of test_self_dependency_rejected[DEPENDS_ON-extra0] ______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000005EED9D0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000005EED9D0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____ ERROR at setup of test_self_dependency_rejected[REPLICA_OF-extra1] ______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFA5D0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009AFA5D0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+____________ ERROR at setup of test_depends_on_needs_boolean_hard _____________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B489E0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B489E0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_______ ERROR at setup of test_deployed_requires_deploy_of_that_service _______
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4EBA0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B4EBA0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_ ERROR at setup of test_assert_may_not_overlap_an_ended_version[functional] __
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B35490>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B35490>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____ ERROR at setup of test_assert_may_not_overlap_an_ended_version[set] _____
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B34FB0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B34FB0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+_____________ ERROR at setup of test_fact_rules_deny_other_roles ______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B927B0>
+
+    @pytest.fixture
+    def world(genesis) -> World:
+        w = World(genesis, itertools.count(1))
+        for sid in ("a", "b", "c"):
+>           w.entity("Service", id=sid, name=f"Service {sid}", tier="t1", criticality=3, user_facing=True)
+
+tests\integration\facts\conftest.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = World(k=<gnomon.kernel.service.KernelHandle object at 0x0000000009B927B0>, _pids=count(2))
+label = 'Service'
+p = {'id': 'a', 'name': 'Service a', 'tier': 't1', 'criticality': 3, ...}
+
+    def entity(self, label: str, **p):
+        out = self.k.submit(f"RegisterEntity.{label}", p, pid=self.pid(f"reg-{label}"), agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\facts\conftest.py:25: AssertionError
+___________ ERROR at setup of test_random_sequences_keep_i7_and_i9 ____________
+
+db = <falkordb.falkordb.FalkorDB object at 0x0000000005CD2E70>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+golden_genesis = 't:test-golden-b2cbe348'
+genesis_config = {'tenant': 'test', 'agents': [{'id': 'kernel', 'role': 'kernel', 'skills': []}, {'id': 'triage-1', 'role': 'triage', '..., 'triage']}], 'skills': ['ops', 'triage'], 'registry': <gnomon.kernel.registry.Registry object at 0x0000000009B48650>}
+
+    @pytest.fixture(scope="module")
+    def base(db, redis_raw, golden_genesis, genesis_config):
+        from gnomon.kernel.service import KernelHandle
+    
+        key = f"t:test-facts-{uuid.uuid4().hex[:8]}"
+        redis_raw.execute_command("GRAPH.COPY", golden_genesis, key)
+        k = KernelHandle(db.select_graph(key), genesis_config["registry"])
+        for i, sid in enumerate(s.split(":")[1] for s in SERVICES):
+>           assert k.submit("RegisterEntity.Service", {"id": sid, "name": sid, "tier": "t1", "criticality": 3,
+                                                       "user_facing": False}, pid=f"rs{i}", agent="ops-1").applied
+E           assert False
+E            +  where False = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"}).applied
+E            +    where Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"}) = submit('RegisterEntity.Service', {'id': 'a', 'name': 'a', 'tier': 't1', 'criticality': 3, ...}, pid='rs0', agent='ops-1')
+E            +      where submit = <gnomon.kernel.service.KernelHandle object at 0x0000000009D4B2C0>.submit
+
+tests\property\test_bitemporal_props.py:41: AssertionError
+================================== FAILURES ===================================
+________________________ test_m3_registers_a_new_rule _________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1F5C0>
+
+    def test_m3_registers_a_new_rule(genesis):
+        noop = genesis.registry.get("Noop")
+        ping = dataclasses.replace(noop, name="Ping", cls="memory")
+>       out = m3(genesis, ping, pid="m3-ping")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1F5C0>
+rule = RuleDef(name='Ping', version=1, cls='memory', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-ping', agent = 'ops-1', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+_______________ test_m3_replacing_deactivates_previous_version ________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1E030>
+
+    def test_m3_replacing_deactivates_previous_version(genesis):
+        from gnomon.kernel.registry import Registry
+        from gnomon.kernel.service import KernelHandle
+    
+        noop1 = genesis.registry.get("Noop")
+        noop2 = dataclasses.replace(noop1, version=2)
+>       out = m3(genesis, noop2, pid="m3-noop2")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1E030>
+rule = RuleDef(name='Noop', version=2, cls='kernel', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-noop2', agent = 'ops-1', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+________________________ test_m3_version_must_be_next _________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B903B0>
+
+    def test_m3_version_must_be_next(genesis):
+        noop = genesis.registry.get("Noop")
+>       assert guard(m3(genesis, dataclasses.replace(noop, version=3), pid="m3-v3")) == "version_next"
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009B903B0>
+rule = RuleDef(name='Noop', version=3, cls='kernel', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-v3', agent = 'ops-1', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+_______________________ test_m3_sha_must_match_def_json _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000005EED9D0>
+
+    def test_m3_sha_must_match_def_json(genesis):
+        ping = dataclasses.replace(genesis.registry.get("Noop"), name="Ping")
+>       assert guard(m3(genesis, ping, pid="m3-bad", sha="f" * 64)) == "sha_matches_def"
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000005EED9D0>
+rule = RuleDef(name='Ping', version=1, cls='kernel', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-bad', agent = 'ops-1'
+overrides = {'sha': 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+___________________________ test_m3_sha_must_be_new ___________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB4F80>
+
+    def test_m3_sha_must_be_new(genesis):
+>       assert guard(m3(genesis, genesis.registry.get("Noop"), pid="m3-same")) == "sha_new"
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB4F80>
+rule = RuleDef(name='Noop', version=1, cls='kernel', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-same', agent = 'ops-1', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+______________________ test_m3_cannot_reregister_genesis ______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B48620>
+
+    def test_m3_cannot_reregister_genesis(genesis):
+        g2 = dataclasses.replace(genesis.registry.get("Genesis"), version=2)
+>       assert guard(m3(genesis, g2, pid="m3-g2")) == "sha_matches_def"
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009B48620>
+rule = RuleDef(name='Genesis', version=2, cls='kernel', layer='core', caller=('kernel',), prelude='PG', body="// \u2500\u2500 BODY \xb7 Ge...SE WHEN r.def_json IS NULL THEN false ELSE Kernel.sha256(r.def_json) = r.sha END) RETURN size(rules)'}), lint_sha=None)
+pid = 'm3-g2', agent = 'ops-1', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+____________________________ test_m3_operator_only ____________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4EB10>
+
+    def test_m3_operator_only(genesis):
+        ping = dataclasses.replace(genesis.registry.get("Noop"), name="Ping")
+>       assert m3(genesis, ping, pid="m3-k", agent="kernel").code == "CALLER_DENIED"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+k = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4EB10>
+rule = RuleDef(name='Ping', version=1, cls='kernel', layer='core', caller=('kernel',), prelude='P0', body='// \u2500\u2500 BODY \xb7 Noop@... 'cypher': 'OPTIONAL MATCH (b:Blocker) WITH count(b) AS blockers WHERE blockers = 0 RETURN blockers'},), lint_sha=None)
+pid = 'm3-k', agent = 'kernel', overrides = {}
+
+    def m3(k, rule, *, pid, agent="ops-1", **overrides):
+>       from gnomon.kernel.registry import register_rule_params
+E       ImportError: cannot import name 'register_rule_params' from 'gnomon.kernel.registry' (C:\myspace\hacckathons\gnomon\gnomon\kernel\registry.py)
+
+tests\integration\registry\test_meta_rules.py:18: ImportError
+______________________ test_m4_deactivates_a_memory_rule ______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AFD430>
+
+    def test_m4_deactivates_a_memory_rule(genesis):
+        out = genesis.submit("DeactivateRule", {"name": "AssertFact.MEMBER_OF", "version": 1}, pid="m4", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:91: AssertionError
+_____________ test_m4_protects_kernel_and_registry_rules[Genesis] _____________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1F1D0>
+name = 'Genesis'
+
+    @pytest.mark.parametrize("name", ["Genesis", "Noop", "RegisterRule", "DeactivateRule", "RegisterAgent"])
+    def test_m4_protects_kernel_and_registry_rules(genesis, name):
+        out = genesis.submit("DeactivateRule", {"name": name, "version": 1}, pid=f"m4-{name}", agent="ops-1")
+>       assert guard(out) == "active_and_not_kernel"
+               ^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________ test_m4_protects_kernel_and_registry_rules[Noop] _______________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1DB20>
+name = 'Noop'
+
+    @pytest.mark.parametrize("name", ["Genesis", "Noop", "RegisterRule", "DeactivateRule", "RegisterAgent"])
+    def test_m4_protects_kernel_and_registry_rules(genesis, name):
+        out = genesis.submit("DeactivateRule", {"name": name, "version": 1}, pid=f"m4-{name}", agent="ops-1")
+>       assert guard(out) == "active_and_not_kernel"
+               ^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+__________ test_m4_protects_kernel_and_registry_rules[RegisterRule] ___________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B56540>
+name = 'RegisterRule'
+
+    @pytest.mark.parametrize("name", ["Genesis", "Noop", "RegisterRule", "DeactivateRule", "RegisterAgent"])
+    def test_m4_protects_kernel_and_registry_rules(genesis, name):
+        out = genesis.submit("DeactivateRule", {"name": name, "version": 1}, pid=f"m4-{name}", agent="ops-1")
+>       assert guard(out) == "active_and_not_kernel"
+               ^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+_________ test_m4_protects_kernel_and_registry_rules[DeactivateRule] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C958B0>
+name = 'DeactivateRule'
+
+    @pytest.mark.parametrize("name", ["Genesis", "Noop", "RegisterRule", "DeactivateRule", "RegisterAgent"])
+    def test_m4_protects_kernel_and_registry_rules(genesis, name):
+        out = genesis.submit("DeactivateRule", {"name": name, "version": 1}, pid=f"m4-{name}", agent="ops-1")
+>       assert guard(out) == "active_and_not_kernel"
+               ^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+__________ test_m4_protects_kernel_and_registry_rules[RegisterAgent] __________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C969F0>
+name = 'RegisterAgent'
+
+    @pytest.mark.parametrize("name", ["Genesis", "Noop", "RegisterRule", "DeactivateRule", "RegisterAgent"])
+    def test_m4_protects_kernel_and_registry_rules(genesis, name):
+        out = genesis.submit("DeactivateRule", {"name": name, "version": 1}, pid=f"m4-{name}", agent="ops-1")
+>       assert guard(out) == "active_and_not_kernel"
+               ^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'DeactivateRule'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+_____________________ test_m4_rejects_inactive_or_unknown _____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C96E40>
+
+    def test_m4_rejects_inactive_or_unknown(genesis):
+        p = {"name": "AssertFact.MEMBER_OF", "version": 1}
+>       assert genesis.submit("DeactivateRule", p, pid="m4-a", agent="ops-1").code == "APPLIED"
+E       AssertionError: assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:110: AssertionError
+_______________________ test_m6_register_and_deactivate _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1FAA0>
+
+    def test_m6_register_and_deactivate(genesis):
+        out = genesis.submit("RegisterAgent", {"op": "register", "id": "inv-1", "role": "investigator",
+                                               "skills": ["triage", "ops"]}, pid="m6-r", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:121: AssertionError
+_______________________ test_m6_rejections[kernel-role] _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C97EF0>
+p = {'op': 'register', 'id': 'k2', 'role': 'kernel', 'skills': []}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________________ test_m6_rejections[unknown-role] _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B1E420>
+p = {'op': 'register', 'id': 'w1', 'role': 'wizard', 'skills': []}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________________ test_m6_rejections[unknown-skill] ______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B05070>
+p = {'op': 'register', 'id': 'w2', 'role': 'triage', 'skills': ['juggling']}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________________ test_m6_rejections[duplicate-id] _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000090499A0>
+p = {'op': 'register', 'id': 'ops-1', 'role': 'operator', 'skills': []}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+____________________ test_m6_rejections[deactivate-kernel] ____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AF8980>
+p = {'op': 'deactivate', 'id': 'kernel'}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+___________________ test_m6_rejections[deactivate-unknown] ____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000097C0B90>
+p = {'op': 'deactivate', 'id': 'ghost'}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+_________________________ test_m6_rejections[bad-op] __________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C95670>
+p = {'op': 'rename', 'id': 'ops-1'}
+
+    @pytest.mark.parametrize(
+        "p",
+        [
+            {"op": "register", "id": "k2", "role": "kernel", "skills": []},
+            {"op": "register", "id": "w1", "role": "wizard", "skills": []},
+            {"op": "register", "id": "w2", "role": "triage", "skills": ["juggling"]},
+            {"op": "register", "id": "ops-1", "role": "operator", "skills": []},
+            {"op": "deactivate", "id": "kernel"},
+            {"op": "deactivate", "id": "ghost"},
+            {"op": "rename", "id": "ops-1"},
+        ],
+        ids=["kernel-role", "unknown-role", "unknown-skill", "duplicate-id", "deactivate-kernel", "deactivate-unknown",
+             "bad-op"],
+    )
+    def test_m6_rejections(genesis, p):
+>       assert guard(genesis.submit("RegisterAgent", p, pid="m6-x", agent="ops-1")) == "op_valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+_________________ test_m6_deactivated_agent_stays_deactivated _________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4EF90>
+
+    def test_m6_deactivated_agent_stays_deactivated(genesis):
+>       assert genesis.submit("RegisterAgent", {"op": "deactivate", "id": "triage-1"}, pid="d1", agent="ops-1").applied
+E       assert False
+E        +  where False = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"}).applied
+E        +    where Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterAgent'"}) = submit('RegisterAgent', {'op': 'deactivate', 'id': 'triage-1'}, pid='d1', agent='ops-1')
+E        +      where submit = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4EF90>.submit
+
+tests\integration\registry\test_meta_rules.py:158: AssertionError
+___________________ test_m7_registers_each_member[Service] ____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B92DB0>
+label = 'Service', kind = 'svc'
+p = {'id': 'web', 'name': 'Web', 'tier': 't0', 'criticality': 5, ...}
+props = {'name': 'Web', 'tier': 't0', 'criticality': 5, 'user_facing': True, ...}
+
+    @pytest.mark.parametrize(("label", "kind", "p", "props"), MEMBERS, ids=[m[0] for m in MEMBERS])
+    def test_m7_registers_each_member(genesis, label, kind, p, props):
+        out = genesis.submit(f"RegisterEntity.{label}", p, pid=f"m7-{label}", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:178: AssertionError
+_____________________ test_m7_registers_each_member[Team] _____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B37110>
+label = 'Team', kind = 'team', p = {'id': 'sre', 'name': 'SRE'}
+props = {'name': 'SRE'}
+
+    @pytest.mark.parametrize(("label", "kind", "p", "props"), MEMBERS, ids=[m[0] for m in MEMBERS])
+    def test_m7_registers_each_member(genesis, label, kind, p, props):
+        out = genesis.submit(f"RegisterEntity.{label}", p, pid=f"m7-{label}", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Team'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:178: AssertionError
+____________________ test_m7_registers_each_member[Skill] _____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B4B3B0>
+label = 'Skill', kind = 'skill', p = {'id': 'dba'}, props = {}
+
+    @pytest.mark.parametrize(("label", "kind", "p", "props"), MEMBERS, ids=[m[0] for m in MEMBERS])
+    def test_m7_registers_each_member(genesis, label, kind, p, props):
+        out = genesis.submit(f"RegisterEntity.{label}", p, pid=f"m7-{label}", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Skill'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:178: AssertionError
+_______________ test_m7_registers_each_member[ExternalService] ________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C9E930>
+label = 'ExternalService', kind = 'ext'
+p = {'id': 'pay', 'tenant': 'acme', 'remote_id': 'svc-1', 'contract_criticality': 4}
+props = {'tenant': 'acme', 'remote_id': 'svc-1', 'contract_criticality': 4, 'health': 'ok', ...}
+
+    @pytest.mark.parametrize(("label", "kind", "p", "props"), MEMBERS, ids=[m[0] for m in MEMBERS])
+    def test_m7_registers_each_member(genesis, label, kind, p, props):
+        out = genesis.submit(f"RegisterEntity.{label}", p, pid=f"m7-{label}", agent="ops-1")
+>       assert out.code == "APPLIED", out
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.ExternalService'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'APPLIED'
+E         
+E         - APPLIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:178: AssertionError
+______________________ test_m7_deploy_needs_its_service _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000005EEEDB0>
+
+    def test_m7_deploy_needs_its_service(genesis):
+        p = {"id": "d1", "service": "web", "version": "1.2.3", "verified": True, "expected_health": "ok"}
+>       assert guard(genesis.submit("RegisterEntity.Deploy", p, pid="dep-0", agent="ops-1")) == "service_exists"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:189: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Deploy'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Deploy'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________________ test_m7_validates[criticality-0] _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x00000000090499A0>
+label = 'Service'
+p = {'id': 's0', 'name': 'x', 'tier': 't', 'criticality': 0, ...}
+
+    @pytest.mark.parametrize(
+        ("label", "p"),
+        [
+            ("Service", {"id": "s0", "name": "x", "tier": "t", "criticality": 0, "user_facing": True}),
+            ("Service", {"id": "s6", "name": "x", "tier": "t", "criticality": 6, "user_facing": True}),
+            ("Service", {"id": "s7", "name": "x", "tier": "t", "criticality": 3, "user_facing": "yes"}),
+            ("ExternalService", {"id": "e0", "tenant": "a", "remote_id": "r", "contract_criticality": 9}),
+        ],
+        ids=["criticality-0", "criticality-6", "user-facing-not-bool", "contract-criticality-9"],
+    )
+    def test_m7_validates(genesis, label, p):
+>       assert guard(genesis.submit(f"RegisterEntity.{label}", p, pid="m7-bad", agent="ops-1")) == "valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+______________________ test_m7_validates[criticality-6] _______________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B48890>
+label = 'Service'
+p = {'id': 's6', 'name': 'x', 'tier': 't', 'criticality': 6, ...}
+
+    @pytest.mark.parametrize(
+        ("label", "p"),
+        [
+            ("Service", {"id": "s0", "name": "x", "tier": "t", "criticality": 0, "user_facing": True}),
+            ("Service", {"id": "s6", "name": "x", "tier": "t", "criticality": 6, "user_facing": True}),
+            ("Service", {"id": "s7", "name": "x", "tier": "t", "criticality": 3, "user_facing": "yes"}),
+            ("ExternalService", {"id": "e0", "tenant": "a", "remote_id": "r", "contract_criticality": 9}),
+        ],
+        ids=["criticality-0", "criticality-6", "user-facing-not-bool", "contract-criticality-9"],
+    )
+    def test_m7_validates(genesis, label, p):
+>       assert guard(genesis.submit(f"RegisterEntity.{label}", p, pid="m7-bad", agent="ops-1")) == "valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+___________________ test_m7_validates[user-facing-not-bool] ___________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009B552B0>
+label = 'Service'
+p = {'id': 's7', 'name': 'x', 'tier': 't', 'criticality': 3, ...}
+
+    @pytest.mark.parametrize(
+        ("label", "p"),
+        [
+            ("Service", {"id": "s0", "name": "x", "tier": "t", "criticality": 0, "user_facing": True}),
+            ("Service", {"id": "s6", "name": "x", "tier": "t", "criticality": 6, "user_facing": True}),
+            ("Service", {"id": "s7", "name": "x", "tier": "t", "criticality": 3, "user_facing": "yes"}),
+            ("ExternalService", {"id": "e0", "tenant": "a", "remote_id": "r", "contract_criticality": 9}),
+        ],
+        ids=["criticality-0", "criticality-6", "user-facing-not-bool", "contract-criticality-9"],
+    )
+    def test_m7_validates(genesis, label, p):
+>       assert guard(genesis.submit(f"RegisterEntity.{label}", p, pid="m7-bad", agent="ops-1")) == "valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+__________________ test_m7_validates[contract-criticality-9] __________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009AB7AA0>
+label = 'ExternalService'
+p = {'id': 'e0', 'tenant': 'a', 'remote_id': 'r', 'contract_criticality': 9}
+
+    @pytest.mark.parametrize(
+        ("label", "p"),
+        [
+            ("Service", {"id": "s0", "name": "x", "tier": "t", "criticality": 0, "user_facing": True}),
+            ("Service", {"id": "s6", "name": "x", "tier": "t", "criticality": 6, "user_facing": True}),
+            ("Service", {"id": "s7", "name": "x", "tier": "t", "criticality": 3, "user_facing": "yes"}),
+            ("ExternalService", {"id": "e0", "tenant": "a", "remote_id": "r", "contract_criticality": 9}),
+        ],
+        ids=["criticality-0", "criticality-6", "user-facing-not-bool", "contract-criticality-9"],
+    )
+    def test_m7_validates(genesis, label, p):
+>       assert guard(genesis.submit(f"RegisterEntity.{label}", p, pid="m7-bad", agent="ops-1")) == "valid"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_meta_rules.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+outcome = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.ExternalService'"})
+
+    def guard(outcome):
+>       assert outcome.code == "REJECTED_GUARD", outcome
+E       AssertionError: Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.ExternalService'"})
+E       assert <Code.SCHEMA_...EMA_REJECTED'> == 'REJECTED_GUARD'
+E         
+E         - REJECTED_GUARD
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:13: AssertionError
+____________________ test_m7_kind_prefix_separates_labels _____________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000005CA4CE0>
+
+    def test_m7_kind_prefix_separates_labels(genesis):
+        # Same id, different kinds: uids differ (svc:x vs team:x), so both register.
+>       assert genesis.submit("RegisterEntity.Service", dict(MEMBERS[0][2], id="x"), pid="sx", agent="ops-1").applied
+E       assert False
+E        +  where False = Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"}).applied
+E        +    where Outcome(code=<Code.SCHEMA_REJECTED: 'SCHEMA_REJECTED'>, seq=None, hash=None, detail={'reason': "unknown rule 'RegisterEntity.Service'"}) = submit('RegisterEntity.Service', {'id': 'x', 'name': 'Web', 'tier': 't0', 'criticality': 5, ...}, pid='sx', agent='ops-1')
+E        +      where submit = <gnomon.kernel.service.KernelHandle object at 0x0000000005CA4CE0>.submit
+E        +      and   {'id': 'x', 'name': 'Web', 'tier': 't0', 'criticality': 5, ...} = dict({'id': 'web', 'name': 'Web', 'tier': 't0', 'criticality': 5, ...}, id='x')
+
+tests\integration\registry\test_meta_rules.py:216: AssertionError
+_______________________________ test_m7_callers _______________________________
+
+genesis = <gnomon.kernel.service.KernelHandle object at 0x0000000009C97EC0>
+
+    def test_m7_callers(genesis):
+>       assert genesis.submit("RegisterEntity.Team", {"id": "q", "name": "Q"}, pid="tq", agent="triage-1").code == \
+            "CALLER_DENIED"
+E       AssertionError: assert <Code.SCHEMA_...EMA_REJECTED'> == 'CALLER_DENIED'
+E         
+E         - CALLER_DENIED
+E         + SCHEMA_REJECTED
+
+tests\integration\registry\test_meta_rules.py:221: AssertionError
+_____________________________ test_core_rule_set ______________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+
+    def test_core_rule_set(registry):
+        names = [r.name for r in registry.rules()]
+        assert names[0] == "Genesis"
+>       assert set(names) == CORE and len(names) == len(CORE)
+E       AssertionError: assert ({'Genesis'} == {'AssertFact....ateRule', ...}
+E         
+E         Extra items in the right set:
+E         'RegisterEntity.Service'
+E         'RegisterEntity.Skill'
+E         'AssertFact.MEMBER_OF'
+E         'AssertFact.REPLICA_OF'
+E         'RegisterAgent'...
+E         
+E         ...Full output truncated (15 lines hidden), use '-vv' to show)
+
+tests\integration\registry\test_registry_members.py:28: AssertionError
+___________________ test_every_rule_is_expanded_and_hashed ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+
+    def test_every_rule_is_expanded_and_hashed(registry):
+        for rule in registry.rules():
+            for token in ("<REL>", "<SPRED>", "<OPRED>", "<PROJ>", "<EXTRA>", "<ATTRS>", "<ATTR_COPY>", "<Label>",
+                          "<KIND>", "<VALID>", "<PROPS>", "KCTX", "LIVE("):
+                assert token not in rule.body, (rule.name, token)
+                assert all(token not in g["cypher"] for g in rule.guard_probes), (rule.name, token)
+                assert all(token not in k for k in rule.key_templates), (rule.name, token)
+>       assert len({r.sha for r in registry.rules()}) == len(CORE)
+E       AssertionError: assert 1 == 20
+E        +  where 1 = len({'75c038bc700c470ea84c503b93a98ca00fcc26df5c2b71a10a6a0b9f2569485e'})
+E        +  and   20 = len({'AssertFact.DEPENDS_ON', 'AssertFact.DEPLOYED', 'AssertFact.MEMBER_OF', 'AssertFact.OWNED_BY', 'AssertFact.REPLICA_OF', 'DeactivateRule', ...})
+
+tests\integration\registry\test_registry_members.py:38: AssertionError
+_______________________ test_assert_members[DEPENDS_ON] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'DEPENDS_ON'
+
+    @pytest.mark.parametrize("rel", sorted(ASSERT))
+    def test_assert_members(registry, rel):
+>       rule = registry.get(f"AssertFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'AssertFact.DEPENDS_ON'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'AssertFact.DEPENDS_ON'"
+
+gnomon\kernel\registry.py:110: KeyError
+________________________ test_assert_members[DEPLOYED] ________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'DEPLOYED'
+
+    @pytest.mark.parametrize("rel", sorted(ASSERT))
+    def test_assert_members(registry, rel):
+>       rule = registry.get(f"AssertFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'AssertFact.DEPLOYED'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'AssertFact.DEPLOYED'"
+
+gnomon\kernel\registry.py:110: KeyError
+_______________________ test_assert_members[MEMBER_OF] ________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'MEMBER_OF'
+
+    @pytest.mark.parametrize("rel", sorted(ASSERT))
+    def test_assert_members(registry, rel):
+>       rule = registry.get(f"AssertFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'AssertFact.MEMBER_OF'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'AssertFact.MEMBER_OF'"
+
+gnomon\kernel\registry.py:110: KeyError
+________________________ test_assert_members[OWNED_BY] ________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'OWNED_BY'
+
+    @pytest.mark.parametrize("rel", sorted(ASSERT))
+    def test_assert_members(registry, rel):
+>       rule = registry.get(f"AssertFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'AssertFact.OWNED_BY'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'AssertFact.OWNED_BY'"
+
+gnomon\kernel\registry.py:110: KeyError
+_______________________ test_assert_members[REPLICA_OF] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'REPLICA_OF'
+
+    @pytest.mark.parametrize("rel", sorted(ASSERT))
+    def test_assert_members(registry, rel):
+>       rule = registry.get(f"AssertFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'AssertFact.REPLICA_OF'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'AssertFact.REPLICA_OF'"
+
+gnomon\kernel\registry.py:110: KeyError
+_______________________ test_retract_members[OWNED_BY] ________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'OWNED_BY'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.OWNED_BY'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.OWNED_BY'"
+
+gnomon\kernel\registry.py:110: KeyError
+______________________ test_retract_members[DEPENDS_ON] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'DEPENDS_ON'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.DEPENDS_ON'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.DEPENDS_ON'"
+
+gnomon\kernel\registry.py:110: KeyError
+_______________________ test_retract_members[DEPLOYED] ________________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'DEPLOYED'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.DEPLOYED'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.DEPLOYED'"
+
+gnomon\kernel\registry.py:110: KeyError
+______________________ test_retract_members[REPLICA_OF] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'REPLICA_OF'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.REPLICA_OF'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.REPLICA_OF'"
+
+gnomon\kernel\registry.py:110: KeyError
+_______________________ test_retract_members[MEMBER_OF] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'MEMBER_OF'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.MEMBER_OF'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.MEMBER_OF'"
+
+gnomon\kernel\registry.py:110: KeyError
+______________________ test_retract_members[ROOT_CAUSE] _______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+rel = 'ROOT_CAUSE'
+
+    @pytest.mark.parametrize("rel", RETRACT)
+    def test_retract_members(registry, rel):
+>       rule = registry.get(f"RetractFact.{rel}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RetractFact.ROOT_CAUSE'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RetractFact.ROOT_CAUSE'"
+
+gnomon\kernel\registry.py:110: KeyError
+____________________ test_register_entity_members[Service] ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+label = 'Service'
+
+    @pytest.mark.parametrize("label", ENTITIES)
+    def test_register_entity_members(registry, label):
+>       rule = registry.get(f"RegisterEntity.{label}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterEntity.Service'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterEntity.Service'"
+
+gnomon\kernel\registry.py:110: KeyError
+_____________________ test_register_entity_members[Team] ______________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+label = 'Team'
+
+    @pytest.mark.parametrize("label", ENTITIES)
+    def test_register_entity_members(registry, label):
+>       rule = registry.get(f"RegisterEntity.{label}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterEntity.Team'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterEntity.Team'"
+
+gnomon\kernel\registry.py:110: KeyError
+_____________________ test_register_entity_members[Skill] _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+label = 'Skill'
+
+    @pytest.mark.parametrize("label", ENTITIES)
+    def test_register_entity_members(registry, label):
+>       rule = registry.get(f"RegisterEntity.{label}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterEntity.Skill'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterEntity.Skill'"
+
+gnomon\kernel\registry.py:110: KeyError
+________________ test_register_entity_members[ExternalService] ________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+label = 'ExternalService'
+
+    @pytest.mark.parametrize("label", ENTITIES)
+    def test_register_entity_members(registry, label):
+>       rule = registry.get(f"RegisterEntity.{label}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterEntity.ExternalService'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterEntity.ExternalService'"
+
+gnomon\kernel\registry.py:110: KeyError
+____________________ test_register_entity_members[Deploy] _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+label = 'Deploy'
+
+    @pytest.mark.parametrize("label", ENTITIES)
+    def test_register_entity_members(registry, label):
+>       rule = registry.get(f"RegisterEntity.{label}")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterEntity.Deploy'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterEntity.Deploy'"
+
+gnomon\kernel\registry.py:110: KeyError
+_________________ test_meta_rules[RegisterRule-keys0-probes0] _________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterRule', keys = ('Rule:{p.def.name}', 'Rule:*')
+probes = ['sha_matches_def', 'sha_new', 'version_next']
+
+    @pytest.mark.parametrize(
+        ("name", "keys", "probes"),
+        [
+            ("RegisterRule", ("Rule:{p.def.name}", "Rule:*"), ["sha_matches_def", "sha_new", "version_next"]),
+            ("DeactivateRule", ("Rule:{p.name}", "Rule:*"), ["active_and_not_kernel"]),
+            ("RegisterAgent", ("Agent:*", "Agent:{p.id}:state"), ["op_valid"]),
+        ],
+    )
+    def test_meta_rules(registry, name, keys, probes):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterRule'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterRule'"
+
+gnomon\kernel\registry.py:110: KeyError
+________________ test_meta_rules[DeactivateRule-keys1-probes1] ________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'DeactivateRule', keys = ('Rule:{p.name}', 'Rule:*')
+probes = ['active_and_not_kernel']
+
+    @pytest.mark.parametrize(
+        ("name", "keys", "probes"),
+        [
+            ("RegisterRule", ("Rule:{p.def.name}", "Rule:*"), ["sha_matches_def", "sha_new", "version_next"]),
+            ("DeactivateRule", ("Rule:{p.name}", "Rule:*"), ["active_and_not_kernel"]),
+            ("RegisterAgent", ("Agent:*", "Agent:{p.id}:state"), ["op_valid"]),
+        ],
+    )
+    def test_meta_rules(registry, name, keys, probes):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'DeactivateRule'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'DeactivateRule'"
+
+gnomon\kernel\registry.py:110: KeyError
+________________ test_meta_rules[RegisterAgent-keys2-probes2] _________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterAgent', keys = ('Agent:*', 'Agent:{p.id}:state')
+probes = ['op_valid']
+
+    @pytest.mark.parametrize(
+        ("name", "keys", "probes"),
+        [
+            ("RegisterRule", ("Rule:{p.def.name}", "Rule:*"), ["sha_matches_def", "sha_new", "version_next"]),
+            ("DeactivateRule", ("Rule:{p.name}", "Rule:*"), ["active_and_not_kernel"]),
+            ("RegisterAgent", ("Agent:*", "Agent:{p.id}:state"), ["op_valid"]),
+        ],
+    )
+    def test_meta_rules(registry, name, keys, probes):
+>       rule = registry.get(name)
+               ^^^^^^^^^^^^^^^^^^
+
+tests\integration\registry\test_registry_members.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+name = 'RegisterAgent'
+
+    def get(self, name: str) -> RuleDef:
+        try:
+            return self._rules[name]
+        except KeyError:
+>           raise KeyError(f"unknown rule {name!r}") from None
+E           KeyError: "unknown rule 'RegisterAgent'"
+
+gnomon\kernel\registry.py:110: KeyError
+____________________ test_fact_types_live_in_the_registry _____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+
+    def test_fact_types_live_in_the_registry(registry):
+        from gnomon.bootstrap.genesis import build_params
+    
+>       rels = [ft["rel"] for ft in registry.fact_types()]
+                                    ^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Registry' object has no attribute 'fact_types'
+
+tests\integration\registry\test_registry_members.py:91: AttributeError
+___________________ test_nested_key_path_and_roles_binding ____________________
+
+registry = <gnomon.kernel.registry.Registry object at 0x0000000009C9C380>
+
+    def test_nested_key_path_and_roles_binding(registry):
+>       from gnomon.kernel.service import ROLES, Proposal, bind, instantiate_keys
+E       ImportError: cannot import name 'ROLES' from 'gnomon.kernel.service' (C:\myspace\hacckathons\gnomon\gnomon\kernel\service.py)
+
+tests\integration\registry\test_registry_members.py:98: ImportError
+=========================== short test summary info ===========================
+ERROR tests/integration/facts/test_fact_concurrency.py::test_50_parallel_identical_asserts[view-keys]
+ERROR tests/integration/facts/test_fact_concurrency.py::test_50_parallel_identical_asserts[no-view-keys]
+ERROR tests/integration/facts/test_facts.py::test_assert_creates_open_version[FP-OWNED_BY]
+ERROR tests/integration/facts/test_facts.py::test_assert_creates_open_version[F-DEPLOYED]
+ERROR tests/integration/facts/test_facts.py::test_assert_creates_open_version[F-REPLICA_OF]
+ERROR tests/integration/facts/test_facts.py::test_assert_creates_open_version[SP-DEPENDS_ON]
+ERROR tests/integration/facts/test_facts.py::test_assert_creates_open_version[S-MEMBER_OF]
+ERROR tests/integration/facts/test_facts.py::test_depends_on_external_service
+ERROR tests/integration/facts/test_facts.py::test_set_fact_allows_several_objects
+ERROR tests/integration/facts/test_facts.py::test_supersede_closes_old_and_copies_it[FP-OWNED_BY]
+ERROR tests/integration/facts/test_facts.py::test_supersede_closes_old_and_copies_it[F-REPLICA_OF]
+ERROR tests/integration/facts/test_facts.py::test_deployed_supersede - Assert...
+ERROR tests/integration/facts/test_facts.py::test_supersede_requires_actual_old_object[wrong-old_o]
+ERROR tests/integration/facts/test_facts.py::test_supersede_requires_actual_old_object[missing-old_o]
+ERROR tests/integration/facts/test_facts.py::test_supersede_requires_actual_old_object[same-object]
+ERROR tests/integration/facts/test_facts.py::test_supersede_requires_actual_old_object[vf-not-after]
+ERROR tests/integration/facts/test_facts.py::test_supersede_requires_actual_old_object[no-supersede-flag]
+ERROR tests/integration/facts/test_facts.py::test_supersede_without_open_version_rejected
+ERROR tests/integration/facts/test_facts.py::test_end_creates_closed_current_copy[FP]
+ERROR tests/integration/facts/test_facts.py::test_end_creates_closed_current_copy[F]
+ERROR tests/integration/facts/test_facts.py::test_end_creates_closed_current_copy[SP]
+ERROR tests/integration/facts/test_facts.py::test_end_creates_closed_current_copy[S]
+ERROR tests/integration/facts/test_facts.py::test_end_rejects_bad_vt_end[4102444800000-future]
+ERROR tests/integration/facts/test_facts.py::test_end_rejects_bad_vt_end[1791000000100-not-after-vf]
+ERROR tests/integration/facts/test_facts.py::test_end_rejects_bad_vt_end[None-missing]
+ERROR tests/integration/facts/test_facts.py::test_end_of_closed_version_rejected
+ERROR tests/integration/facts/test_facts.py::test_void_closes_without_replacement[FP]
+ERROR tests/integration/facts/test_facts.py::test_void_closes_without_replacement[F]
+ERROR tests/integration/facts/test_facts.py::test_void_closes_without_replacement[SP]
+ERROR tests/integration/facts/test_facts.py::test_void_closes_without_replacement[S]
+ERROR tests/integration/facts/test_facts.py::test_void_of_superseded_copy_keeps_projection
+ERROR tests/integration/facts/test_facts.py::test_retract_requires_current_version
+ERROR tests/integration/facts/test_facts.py::test_retract_rejects_unknown_mode
+ERROR tests/integration/facts/test_facts.py::test_retract_root_cause_copies_attributes
+ERROR tests/integration/facts/test_facts.py::test_vf_in_future_rejected[FP]
+ERROR tests/integration/facts/test_facts.py::test_vf_in_future_rejected[F] - ...
+ERROR tests/integration/facts/test_facts.py::test_vf_in_future_rejected[SP]
+ERROR tests/integration/facts/test_facts.py::test_vf_in_future_rejected[S] - ...
+ERROR tests/integration/facts/test_facts.py::test_entities_must_exist_and_be_typed[owned-by-service]
+ERROR tests/integration/facts/test_facts.py::test_entities_must_exist_and_be_typed[unknown-subject]
+ERROR tests/integration/facts/test_facts.py::test_entities_must_exist_and_be_typed[deployed-team]
+ERROR tests/integration/facts/test_facts.py::test_entities_must_exist_and_be_typed[member-of-service]
+ERROR tests/integration/facts/test_facts.py::test_entities_must_exist_and_be_typed[depends-on-from-team]
+ERROR tests/integration/facts/test_facts.py::test_duplicate_open_set_fact_rejected
+ERROR tests/integration/facts/test_facts.py::test_self_dependency_rejected[DEPENDS_ON-extra0]
+ERROR tests/integration/facts/test_facts.py::test_self_dependency_rejected[REPLICA_OF-extra1]
+ERROR tests/integration/facts/test_facts.py::test_depends_on_needs_boolean_hard
+ERROR tests/integration/facts/test_facts.py::test_deployed_requires_deploy_of_that_service
+ERROR tests/integration/facts/test_facts.py::test_assert_may_not_overlap_an_ended_version[functional]
+ERROR tests/integration/facts/test_facts.py::test_assert_may_not_overlap_an_ended_version[set]
+ERROR tests/integration/facts/test_facts.py::test_fact_rules_deny_other_roles
+ERROR tests/property/test_bitemporal_props.py::test_random_sequences_keep_i7_and_i9
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_registers_a_new_rule
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_replacing_deactivates_previous_version
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_version_must_be_next
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_sha_must_match_def_json
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_sha_must_be_new
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_cannot_reregister_genesis
+FAILED tests/integration/registry/test_meta_rules.py::test_m3_operator_only
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_deactivates_a_memory_rule
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_protects_kernel_and_registry_rules[Genesis]
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_protects_kernel_and_registry_rules[Noop]
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_protects_kernel_and_registry_rules[RegisterRule]
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_protects_kernel_and_registry_rules[DeactivateRule]
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_protects_kernel_and_registry_rules[RegisterAgent]
+FAILED tests/integration/registry/test_meta_rules.py::test_m4_rejects_inactive_or_unknown
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_register_and_deactivate
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[kernel-role]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[unknown-role]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[unknown-skill]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[duplicate-id]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[deactivate-kernel]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[deactivate-unknown]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_rejections[bad-op]
+FAILED tests/integration/registry/test_meta_rules.py::test_m6_deactivated_agent_stays_deactivated
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_registers_each_member[Service]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_registers_each_member[Team]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_registers_each_member[Skill]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_registers_each_member[ExternalService]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_deploy_needs_its_service
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_validates[criticality-0]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_validates[criticality-6]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_validates[user-facing-not-bool]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_validates[contract-criticality-9]
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_kind_prefix_separates_labels
+FAILED tests/integration/registry/test_meta_rules.py::test_m7_callers - Asser...
+FAILED tests/integration/registry/test_registry_members.py::test_core_rule_set
+FAILED tests/integration/registry/test_registry_members.py::test_every_rule_is_expanded_and_hashed
+FAILED tests/integration/registry/test_registry_members.py::test_assert_members[DEPENDS_ON]
+FAILED tests/integration/registry/test_registry_members.py::test_assert_members[DEPLOYED]
+FAILED tests/integration/registry/test_registry_members.py::test_assert_members[MEMBER_OF]
+FAILED tests/integration/registry/test_registry_members.py::test_assert_members[OWNED_BY]
+FAILED tests/integration/registry/test_registry_members.py::test_assert_members[REPLICA_OF]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[OWNED_BY]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[DEPENDS_ON]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[DEPLOYED]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[REPLICA_OF]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[MEMBER_OF]
+FAILED tests/integration/registry/test_registry_members.py::test_retract_members[ROOT_CAUSE]
+FAILED tests/integration/registry/test_registry_members.py::test_register_entity_members[Service]
+FAILED tests/integration/registry/test_registry_members.py::test_register_entity_members[Team]
+FAILED tests/integration/registry/test_registry_members.py::test_register_entity_members[Skill]
+FAILED tests/integration/registry/test_registry_members.py::test_register_entity_members[ExternalService]
+FAILED tests/integration/registry/test_registry_members.py::test_register_entity_members[Deploy]
+FAILED tests/integration/registry/test_registry_members.py::test_meta_rules[RegisterRule-keys0-probes0]
+FAILED tests/integration/registry/test_registry_members.py::test_meta_rules[DeactivateRule-keys1-probes1]
+FAILED tests/integration/registry/test_registry_members.py::test_meta_rules[RegisterAgent-keys2-probes2]
+FAILED tests/integration/registry/test_registry_members.py::test_fact_types_live_in_the_registry
+FAILED tests/integration/registry/test_registry_members.py::test_nested_key_path_and_roles_binding
+=============== 57 failed, 329 deselected, 52 errors in 10.23s ================

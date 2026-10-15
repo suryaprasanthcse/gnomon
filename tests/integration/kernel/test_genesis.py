@@ -78,11 +78,11 @@ def test_genesis_creates_kernel(genesis, ref_chain, chain_of):
     )
 
     kvs = rows(genesis, "MATCH (k:KeyVersion) RETURN k.key, k.seq, k.rw ORDER BY k.key")
-    expected_keys = sorted({"Head", "Rule:*", "Agent:*", "Skill:*", "FactType:*", "Index:*", "Rule:Genesis",
-                            "Rule:Noop"})
+    # Rule:<name> for every registered rule (DECISIONS D-14: derived from the registry, not fixed to A03's set)
+    rule_keys = [f"Rule:{r.name}" for r in reg.rules()]
+    expected_keys = sorted({"Head", "Rule:*", "Agent:*", "Skill:*", "FactType:*", "Index:*", *rule_keys})
     assert kvs == [[k, 1, "genesis"] for k in expected_keys]
-    assert r0["write_keys"] == ["Head", "Rule:*", "Rule:Genesis", "Rule:Noop", "Agent:*", "Skill:*", "FactType:*",
-                                "Index:*"]
+    assert r0["write_keys"] == ["Head", "Rule:*", *rule_keys, "Agent:*", "Skill:*", "FactType:*", "Index:*"]
 
 
 @pytest.fixture

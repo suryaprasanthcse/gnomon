@@ -42,7 +42,9 @@ def test_sha_is_sha256_of_jcs_def_json(registry):
 
 
 def test_registry_holds_genesis_only(registry):
-    assert [r.name for r in registry.rules()] == ["Genesis"]
+    # A04 registers the core rules at genesis too (DECISIONS D-14): Genesis comes first.
+    assert registry.rules()[0].name == "Genesis"
+    assert sum(r.prelude == "PG" for r in registry.rules()) == 1
     genesis = registry.get("Genesis")
     assert (genesis.version, genesis.cls, genesis.layer, genesis.prelude) == (1, "kernel", "core", "PG")
     assert genesis.caller == ("kernel",)
