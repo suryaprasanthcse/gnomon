@@ -16,10 +16,11 @@ with it. A projection edge's owner is also its fact type. Classes:
 
 from __future__ import annotations
 
+import dataclasses
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
-from gnomon.footprint.lints import IDENTITY, creation_guarded, owner, prop
+from gnomon.footprint.lints import IDENTITY, creation_guarded, fresh_roots, owner, prop
 from gnomon.footprint.parser import Footprint, extract
 from gnomon.kernel.registry import RuleDef
 
@@ -43,10 +44,25 @@ def overlap(fa: Footprint, fb: Footprint) -> set[str]:
     return out
 
 
-def guarded(element: str, f: Footprint, owners: set[str]) -> bool:
+def guarded(element: str, f: Footprint, owners: set[str], fresh: set[str] = frozenset()) -> bool:
     if prop(element) is not None:
         return any(owner(r) in owners and prop(r) is not None and prop(r) not in IDENTITY for r in f.guard_reads)
-    return any(owner(r) in owners for r in f.guard_reads) or creation_guarded(element, f, f.guard_reads)
+    return any(owner(r) in owners for r in f.guard_reads) or creation_guarded(element, f, f.guard_reads) or \
+        owner(element) in fresh
+
+
+def expand_wildcard(f: Footprint, fact_rels: Iterable[str]) -> Footprint:
+    """Replace `*` reads (an untyped relationship) by the same reads on every fact type (D-22a)."""
+    def expand(elements):
+        out = set()
+        for e in elements:
+            if owner(e) == "*":
+                out |= {rel if prop(e) is None else f"{rel}.{prop(e)}" for rel in fact_rels}
+            else:
+                out.add(e)
+        return out
+
+    return dataclasses.replace(f, reads=expand(f.reads), guard_reads=expand(f.guard_reads))
 
 
 def classify(a: RuleDef, b: RuleDef, fa: Footprint, fb: Footprint, projections: Mapping[str, str]) -> Entry:
@@ -59,16 +75,18 @@ def classify(a: RuleDef, b: RuleDef, fa: Footprint, fb: Footprint, projections: 
     bad = []
     for element in sorted(shared):
         owners = {owner(element)} | ({projections[owner(element)]} if owner(element) in projections else set())
-        if not (guarded(element, fa, owners) and guarded(element, fb, owners)):
+        if not (guarded(element, fa, owners, fresh_roots(a)) and guarded(element, fb, owners, fresh_roots(b))):
             bad.append(element)
     return Entry(*names, tuple(sorted(shared)), "unguarded" if bad else "guarded", tuple(bad))
 
 
 def build(rules: Iterable[RuleDef], fact_types: Iterable[Mapping] = ()) -> list[Entry]:
     """Every unordered pair (including each rule with itself), sorted by rule names."""
+    fact_types = list(fact_types)
     projections = {ft["projection"]: ft["rel"] for ft in fact_types if ft.get("projection")}
+    fact_rels = [ft["rel"] for ft in fact_types]
     ordered = sorted(rules, key=lambda r: r.name)
-    prints = {r.name: extract(r.body) for r in ordered}
+    prints = {r.name: expand_wildcard(extract(r.body), fact_rels) for r in ordered}
     entries = []
     for i, a in enumerate(ordered):
         for b in ordered[i:]:

@@ -23,9 +23,10 @@ def registry():
 
 
 def test_core_rule_set(registry):
+    # A06 and later register more core rules (DECISIONS D-26): the A04 set must be present, each name once.
     names = [r.name for r in registry.rules()]
     assert names[0] == "Genesis"
-    assert set(names) == CORE and len(names) == len(CORE)
+    assert CORE <= set(names) and len(names) == len(set(names))
 
 
 def test_every_rule_is_expanded_and_hashed(registry):
@@ -35,7 +36,7 @@ def test_every_rule_is_expanded_and_hashed(registry):
             assert token not in rule.body, (rule.name, token)
             assert all(token not in g["cypher"] for g in rule.guard_probes), (rule.name, token)
             assert all(token not in k for k in rule.key_templates), (rule.name, token)
-    assert len({r.sha for r in registry.rules()}) == len(CORE)
+    assert len({r.sha for r in registry.rules()}) == len(registry.rules())  # D-26
 
 
 @pytest.mark.parametrize("rel", sorted(ASSERT))

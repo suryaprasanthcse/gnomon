@@ -23,7 +23,7 @@ import pytest
 import redis
 from hypothesis import settings
 
-pytest_plugins = ["pytester", "tests.support.ir_world"]  # ir_world: A06 rule-test world (D-24)
+pytest_plugins = ["pytester"]
 
 ROOT = Path(__file__).resolve().parents[1]
 UDF_DIR = ROOT / "udf"

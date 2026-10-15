@@ -169,8 +169,7 @@ KNOWN_GOOD = {
     "RetractFact.REPLICA_OF": {"s": "svc:b", "o": "svc:c", "fid": "REPLICA_OF", "mode": "void"},
     "RetractFact.MEMBER_OF": {"s": "agent:ops-1", "o": "team:t1", "fid": "MEMBER_OF", "mode": "end",
                               "vt_end": EPOCH + 300},
-    "RetractFact.ROOT_CAUSE": {"s": "inc:i1", "o": "dep:d1", "fid": "ROOT_CAUSE", "mode": "end",
-                               "vt_end": EPOCH + 300},
+    "RetractFact.ROOT_CAUSE": {"s": "inc:i1", "o": "dep:d1", "fid": "ROOT_CAUSE", "mode": "void"},
     "RegisterEntity.Service": {"id": "web", "name": "Web", "tier": "t0", "criticality": 5, "user_facing": True},
     "RegisterEntity.Team": {"id": "sre", "name": "SRE"},
     "RegisterEntity.Skill": {"id": "dba"},
@@ -190,7 +189,7 @@ KNOWN_GOOD = {
     "Handoff": {"task": "t2", "to": "tri-9", "ttl_ms": 1_000},
     "ExpireLease": {"task": "t3"},
     "PostUpdate": {"incident": "i1", "message_id": "m9", "body": "b", "cites": [{"s": "svc:a", "fid": "OWNED_BY"}]},
-    "ProposeCause": {"incident": "i1", "cause": "dep:d1", "confidence": 50, "cites": []},
+    "ProposeCause": {"incident": "i1", "cause": "svc:a", "confidence": 50, "cites": []},
     "ResolveIncident": {"incident": "i3"},
 }
 

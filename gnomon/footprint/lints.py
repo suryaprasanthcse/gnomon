@@ -21,6 +21,7 @@ not apply to its body.
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 
@@ -71,6 +72,17 @@ def prop(element: str) -> str | None:
     return element.split(".", 1)[1] if "." in element else None
 
 
+def fresh_roots(rule: RuleDef) -> set[str]:
+    """Roots of keys whose only placeholder is {pid}: an instance created under such a key is new by construction,
+    because P0 refuses a proposal whose pid is already in the log (D-22b)."""
+    out = set()
+    for template in rule.key_templates:
+        placeholders = re.findall(r"\{([^{}]*)\}", template)
+        if placeholders and all(ph == "pid" for ph in placeholders):
+            out.add(key_templates.root(template))
+    return out
+
+
 def creation_guarded(element: str, f: Footprint, guard_reads: Iterable[str]) -> bool:
     """A created element counts as guarded when the body checks the identity of something created with it."""
     groups = [g for g in f.created if element in g]
@@ -95,7 +107,7 @@ def l1(rule: RuleDef, f: Footprint) -> list[str]:
         else:
             covered = written
             reads = [r for r in f.guard_reads if owner(r) == x]
-        if reads or (x in written and creation_guarded(x, f, f.guard_reads)):
+        if reads or (x in written and (creation_guarded(x, f, f.guard_reads) or x in fresh_roots(rule))):
             continue
         unguarded.append(f"{', '.join(covered)} ({template})")
     return [f"L1 unguarded write: {', '.join(unguarded)}"] if unguarded else []

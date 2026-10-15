@@ -75,12 +75,6 @@ def fpv_seed(db, redis_raw, golden_genesis, genesis_config):
                        agent="ops-1")
         assert out.code == "APPLIED", (rel, out)
         seed.fids[rel] = f"{pid}#0"
-    # ROOT_CAUSE is asserted by R10 (A06); seed one current version directly so RetractFact.ROOT_CAUSE can apply.
-    k.graph.query(
-        "CREATE (i:Incident:Entity {uid: 'inc:i1', id: 'i1', rw: 'seed'}) WITH i MATCH (d:Deploy {id: 'd1'}) "
-        "CREATE (i)-[:ROOT_CAUSE {fid: 'seed-rc#0', vf: $vf, vt: $inf, tf: $vf, tt: $inf, ts: 1, te: $inf, "
-        "rw: 'seed', by: 'agent:inv', confidence: 70}]->(d)", {"vf": SEED_VF, "inf": 9007199254740991})
-    seed.fids["ROOT_CAUSE"] = "seed-rc#0"
 
     # A06 rules (D-23): agents for every core role, two incidents, a live and an expired lease, an outbox.
     for aid, role, skills in [("ing-1", "ingest", []), ("dsp-1", "dispatcher", []), ("tri-9", "triage", ["ops"]),
@@ -112,6 +106,11 @@ def fpv_seed(db, redis_raw, golden_genesis, genesis_config):
                     agent="com-1")
     assert post.code == "APPLIED", post
     seed.outbox = "seed-post"
+    # A current ROOT_CAUSE version on incident i1, so RetractFact.ROOT_CAUSE can apply (R10 itself is verified too).
+    rc = k.submit("ProposeCause", {"incident": "i1", "cause": "dep:d1", "confidence": 70, "cites": []},
+                  pid="seed-rc", agent="inv-1")
+    assert rc.code == "APPLIED", rc
+    seed.fids["ROOT_CAUSE"] = "seed-rc#0"
     yield seed
     for name in redis_raw.execute_command("GRAPH.LIST"):
         if name == key or name.startswith(key + ":"):

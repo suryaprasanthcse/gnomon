@@ -23,6 +23,8 @@ from gnomon.kernel.registry import Registry, RuleDef
 INF = 9007199254740991
 ZERO64 = "0" * 64
 MODES = ("live", "replay", "sim")
+MAX_TTL_MS = 900_000  # Appendix C (D-21)
+MAX_ATTEMPTS = 5
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
@@ -127,6 +129,8 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "INF": INF,
         "ZERO64": ZERO64,
         "ROLES": list(ROLES),
+        "MAX_TTL_MS": MAX_TTL_MS,
+        "MAX_ATTEMPTS": MAX_ATTEMPTS,
     }
 
 

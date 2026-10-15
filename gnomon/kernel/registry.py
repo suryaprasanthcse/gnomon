@@ -30,7 +30,94 @@ _LIST_FIELDS = ("caller", "reads", "writes", "key_templates", "view_templates")
 _KNOWN_KEYS = {
     "name", "version", "class", "layer", "family", "caller", "prelude", "requires_decision", "gated", "evidence",
     "reads", "writes", "key_templates", "view_templates", "guard_probes", "body", "body_file", "lint_sha",
+    "guard_labels",
 }
+
+# Probes run outside the apply query, so they rebuild the kernel context: `now` the way the tick does.
+PROBE_PRELUDE = ("MATCH (h:Head) WITH h, [] AS causes, h.seq + 1 AS nseq, "
+                 "CASE WHEN $mode = 'live' THEN (CASE WHEN timestamp() > h.pt THEN timestamp() ELSE h.pt END) "
+                 "ELSE $rec_pt END AS now, 0 AS now_lc")
+_CLAUSE_WORDS = {"MATCH", "OPTIONAL", "WHERE", "WITH", "UNWIND", "CREATE", "MERGE", "SET", "DELETE", "DETACH",
+                 "REMOVE", "FOREACH", "RETURN"}
+_WRITE_WORDS = {"CREATE", "MERGE", "SET", "DELETE", "DETACH", "REMOVE", "FOREACH"}
+
+
+def _depth_change(tok) -> int:
+    if tok.kind == "op" and tok.text in "([{":
+        return 1
+    if tok.kind == "op" and tok.text in ")]}":
+        return -1
+    if tok.kind == "id" and tok.upper == "CASE":
+        return 1
+    if tok.kind == "id" and tok.upper == "END":
+        return -1
+    return 0
+
+
+def _conjuncts(toks, a: int, b: int) -> list[tuple[int, int]]:
+    """Top-level AND conjuncts of tokens a..b-1; one conjunct when OR/XOR appears at the top level."""
+    depth, cuts = 0, []
+    for i in range(a, b):
+        tok = toks[i]
+        if depth == 0 and tok.kind == "id" and tok.upper in ("OR", "XOR"):
+            return [(a, b)]
+        if depth == 0 and tok.kind == "id" and tok.upper == "AND":
+            cuts.append(i)
+        depth += _depth_change(tok)
+    bounds = [a, *cuts, b]
+    return [(bounds[0], bounds[1])] + [(bounds[n] + 1, bounds[n + 1]) for n in range(1, len(bounds) - 1)]
+
+
+def generate_probes(body: str, labels: list[str]) -> tuple[dict, ...]:
+    """One read-only probe per guard point of the body (§9 preamble; DECISIONS D-22).
+
+    Guard points are the plain MATCH clauses and the top-level WHERE conjuncts before the first write clause
+    (a WHERE that filters an OPTIONAL MATCH removes no row, so it is not one). Probe k replays the guard section
+    up to point k and returns a row only if every point up to k holds; diagnosis runs them in order and names
+    the first that returns nothing, as `G<k>:<label>`.
+    """
+    from gnomon.footprint.parser import tokenize
+
+    toks = tokenize(body)
+    starts, depth = [], 0
+    for i, tok in enumerate(toks):
+        if depth == 0 and tok.kind == "id" and tok.upper in _CLAUSE_WORDS:
+            prev = toks[i - 1].upper if i and toks[i - 1].kind == "id" else ""
+            skip = (tok.upper == "WITH" and prev in ("STARTS", "ENDS")) or (tok.upper == "MATCH" and prev == "OPTIONAL") \
+                or (tok.upper in ("CREATE", "MATCH") and prev == "ON") or (tok.upper == "DELETE" and prev == "DETACH")
+            if not skip:
+                starts.append((i, "OPTIONAL MATCH" if tok.upper == "OPTIONAL" else tok.upper))
+        depth += _depth_change(tok)
+    clauses = [(kind, i, starts[n + 1][0] if n + 1 < len(starts) else len(toks) - 1)
+               for n, (i, kind) in enumerate(starts)]
+    guard = []
+    for clause in clauses:
+        if clause[0] in _WRITE_WORDS:
+            break
+        guard.append(clause)
+
+    def span(a: int, b: int) -> str:
+        return body[toks[a].pos:toks[b - 1].end]
+
+    points, conjuncts = [], {}
+    for ci, (kind, i, j) in enumerate(guard):
+        if kind == "MATCH":
+            points.append((ci, None))
+        elif kind == "WHERE" and not (ci and guard[ci - 1][0] == "OPTIONAL MATCH"):
+            conjuncts[ci] = _conjuncts(toks, i + 1, j)
+            points += [(ci, k) for k in range(len(conjuncts[ci]))]
+    if len(points) != len(labels):
+        raise ValueError(f"body has {len(points)} guard points but {len(labels)} guard labels")
+    probes = []
+    for g, ((ci, k), label) in enumerate(zip(points, labels), 1):
+        parts = [span(i, j) for _, i, j in guard[:ci]]
+        if k is None:
+            parts.append(span(guard[ci][1], guard[ci][2]))
+        else:
+            parts.append("WHERE " + " AND ".join(span(a, b) for a, b in conjuncts[ci][:k + 1]))
+        probes.append({"name": f"G{g}:{label}",
+                       "cypher": PROBE_PRELUDE + "\n" + "\n".join(parts) + "\nRETURN 1 AS ok LIMIT 1"})
+    return tuple(probes)
 
 
 @dataclass(frozen=True)
@@ -126,6 +213,9 @@ def rule_from_mapping(spec: Mapping, base_dir: Path) -> RuleDef:
         raise ValueError(f"rule {spec.get('name')!r}: give exactly one of body and body_file")
     body = spec["body"] if "body" in spec else (base_dir / spec["body_file"]).read_text(encoding="utf-8")
     requires_decision = bool(spec.get("requires_decision", False))
+    probes = spec.get("guard_probes") or ()
+    if probes == "generate":
+        probes = generate_probes(macros.expand(body), list(spec.get("guard_labels") or ()))
     lists = {f: tuple(spec.get(f) or ()) for f in _LIST_FIELDS}
     lists["caller"] = tuple(sorted(lists["caller"]))  # §5.1: caller roles are sorted
     return RuleDef(
@@ -139,7 +229,7 @@ def rule_from_mapping(spec: Mapping, base_dir: Path) -> RuleDef:
         requires_decision=requires_decision,
         gated=bool(spec.get("gated", False)),
         evidence=bool(spec.get("evidence", requires_decision)),
-        guard_probes=tuple({"name": g["name"], "cypher": g["cypher"]} for g in spec.get("guard_probes") or ()),
+        guard_probes=tuple({"name": g["name"], "cypher": g["cypher"]} for g in probes),
         lint_sha=spec.get("lint_sha"),
         **lists,
     )

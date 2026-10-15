@@ -127,6 +127,162 @@ rules:
               verified: $p.verified, expected_health: $p.expected_health, rw: $pid})
       WITH KCTX
 
+  # ── A06 · incident-response memory and coordination rules (master §9.2, §9.5-§9.12) ──
+  - name: Observe.alert
+    version: 1
+    class: memory
+    layer: core
+    family: Observe
+    caller: [ingest]
+    prelude: P0
+    reads: ["Event", "Event.source_id", "Service", "Service.id"]
+    writes: ["Alert", "Entity", "Event", "ON", "RAISED"]
+    key_templates: ["Event:{p.source_id}", "Alert:*", "Alert:{p.source_id}:state"]
+    view_templates: []
+    guard_probes: generate
+    guard_labels: [new_event, service_exists]
+    body_file: core/observe_alert.cypher
+  - name: Observe.health
+    version: 1
+    class: memory
+    layer: core
+    family: Observe
+    caller: [ingest]
+    prelude: P0
+    reads: ["Event", "Event.source_id", "Service", "Service.health_observed_pt", "Service.id"]
+    writes: ["Entity", "Event", "Service.health", "Service.health_basis", "Service.health_observed_pt"]
+    key_templates: ["Event:{p.source_id}", "Service:{p.service}:state"]
+    view_templates: ["Service:{p.service}:state"]
+    guard_probes: generate
+    guard_labels: [new_event, service_exists, valid_health, newer_observation]
+    body_file: core/observe_health.cypher
+  - name: Observe.receipt
+    version: 1
+    class: memory
+    layer: core
+    family: Observe
+    caller: [dispatcher]
+    prelude: P0
+    reads: ["Event", "Event.source_id", "Outbox", "Outbox.attempts", "Outbox.pid", "Outbox.state"]
+    writes: ["Entity", "Event", "Outbox.attempts", "Outbox.last_seq", "Outbox.state"]
+    key_templates: ["Event:{p.source_id}", "Outbox:{p.outbox}"]
+    view_templates: ["Outbox:{p.outbox}"]
+    guard_probes: generate
+    guard_labels: [new_event, valid_outcome, outbox_exists, outbox_pending]
+    body_file: core/observe_receipt.cypher
+  - name: OpenIncident
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [triage]
+    prelude: P0
+    reads: ["Alert", "Alert.id", "Alert.signature", "Entity", "Entity.uid", "Incident", "Incident.service", "Incident.signature", "Incident.state", "ON", "Service", "Service.id", "Skill", "Skill.id", "TRIGGERED"]
+    writes: ["AFFECTS", "Entity", "Incident", "NEEDS", "PART_OF", "Skill", "TRIGGERED", "Task"]
+    key_templates: ["Incident:*", "Incident:{p.incident}:state", "Incident:{p.service}:{p.signature}", "Task:*", "Alert:{p.alert}:state"]
+    view_templates: ["Alert:{p.alert}:state", "Incident:{p.service}:{p.signature}", "Incident:*"]
+    guard_probes: generate
+    guard_labels: [alert_on_service, service_matches, signature_matches, has_tasks, untriggered, new_incident_id, new_task_ids, no_open_duplicate, skills_exist]
+    body_file: core/open_incident.cypher
+  - name: ClaimTask
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [comms, investigator, responder, triage]
+    prelude: P0
+    reads: ["Agent", "Agent.id", "HAS_SKILL", "HOLDS", "HOLDS.closed_seq", "HOLDS.until_pt", "NEEDS", "Skill", "Task", "Task.id", "Task.state"]
+    writes: ["HOLDS", "Task.state"]
+    key_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}", "Task:*"]
+    view_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}"]
+    guard_probes: generate
+    guard_labels: [skill_match, self_claim, task_open, ttl_positive, ttl_max, no_live_lease]
+    body_file: core/claim_task.cypher
+  - name: CompleteTask
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [comms, investigator, responder, triage]
+    prelude: P0
+    reads: ["Agent", "Agent.id", "HOLDS", "HOLDS.closed_seq", "HOLDS.until_pt", "Task", "Task.id", "Task.state"]
+    writes: ["HOLDS.close_reason", "HOLDS.closed_seq", "Task.done_seq", "Task.result", "Task.state"]
+    key_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}", "Task:*"]
+    view_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}"]
+    guard_probes: generate
+    guard_labels: [holds_task, lease_open, lease_live, task_claimed]
+    body_file: core/complete_task.cypher
+  - name: Handoff
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [comms, investigator, responder, triage]
+    prelude: P0
+    reads: ["Agent", "Agent.active", "Agent.id", "HAS_SKILL", "HOLDS", "HOLDS.closed_seq", "HOLDS.until_pt", "NEEDS", "Skill", "Task", "Task.id", "Task.state"]
+    writes: ["HOLDS", "HOLDS.close_reason", "HOLDS.closed_seq"]
+    key_templates: ["HOLDS:*:{p.task}"]
+    view_templates: ["HOLDS:*:{p.task}", "Agent:{p.to}:state"]
+    guard_probes: generate
+    guard_labels: [holds_task, lease_open, lease_live, task_claimed, target_skilled, target_active, target_other, ttl_positive, ttl_max]
+    body_file: core/handoff.cypher
+  - name: ExpireLease
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [scheduler]
+    prelude: P0
+    reads: ["Agent", "HOLDS", "HOLDS.closed_seq", "HOLDS.until_pt", "Task", "Task.id", "Task.state"]
+    writes: ["HOLDS.close_reason", "HOLDS.closed_seq", "Task.state"]
+    key_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}", "Task:*"]
+    view_templates: ["Task:{p.task}:state", "HOLDS:*:{p.task}"]
+    guard_probes: generate
+    guard_labels: [lease_on_task, lease_open, lease_expired, task_claimed]
+    body_file: core/expire_lease.cypher
+  - name: PostUpdate
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [comms]
+    prelude: P0
+    reads: ["*", "*.fid", "*.te", "*.vf", "*.vt", "Entity", "Entity.uid", "Incident", "Incident.id", "Incident.state"]
+    writes: ["ABOUT", "CITES", "Entity", "Message", "Outbox"]
+    key_templates: ["Message:*", "Outbox:{pid}"]
+    view_templates: ["Incident:{p.incident}:state"]
+    guard_probes: generate
+    guard_labels: [incident_exists, incident_open, has_cites, cites_live]
+    body_file: core/post_update.cypher
+  - name: ProposeCause
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [investigator]
+    prelude: P0
+    reads: ["*", "*.fid", "*.te", "*.vf", "*.vt", "Deploy", "Entity", "Entity.uid", "Incident", "Incident.id", "Incident.state", "ROOT_CAUSE", "ROOT_CAUSE.te", "ROOT_CAUSE.vt", "Service"]
+    writes: ["ROOT_CAUSE"]
+    key_templates: ["ROOT_CAUSE:inc:{p.incident}:*", "ROOT_CAUSE:*:{p.cause}", "ROOT_CAUSE:*"]
+    view_templates: ["Incident:{p.incident}:state", "ROOT_CAUSE:inc:{p.incident}:*"]
+    guard_probes: generate
+    guard_labels: [incident_and_cause_exist, incident_open, cause_typed, confidence_min, confidence_max, not_already_current, cites_live]
+    body_file: core/propose_cause.cypher
+  - name: ResolveIncident
+    version: 1
+    class: memory
+    layer: core
+    family: null
+    caller: [human, investigator]
+    prelude: P0
+    reads: ["AFFECTS", "Incident", "Incident.id", "Incident.state", "PART_OF", "ROOT_CAUSE", "ROOT_CAUSE.te", "ROOT_CAUSE.vt", "Service", "Service.health", "Service.mode", "Task", "Task.state"]
+    writes: ["Incident.resolved_seq", "Incident.state"]
+    key_templates: ["Incident:{p.incident}:state", "Incident:*"]
+    view_templates: ["Incident:{p.incident}:state", "Task:*", "ROOT_CAUSE:inc:{p.incident}:*"]
+    guard_probes: generate
+    guard_labels: [incident_affects, incident_open, service_ok, service_normal, all_tasks_done, root_cause_present]
+    body_file: core/resolve_incident.cypher
+
 families:
   # §9.3 R2. Shapes: FP functional+projected, F functional, SP set+projected, S set.
   - family: AssertFact
@@ -163,12 +319,14 @@ families:
       - member: OWNED_BY
         reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "Service", "Team"]
         writes: ["OWNED_BY", "OWNED_BY.te", "OWNED_BY.tt", "OWNER_NOW"]
+        reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "Service", "Team"]
         section: FP
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Team", <PROJ>: OWNER_NOW}
       - member: DEPENDS_ON
         reads: ["DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.vt", "Entity", "Entity.uid", "ExternalService", "Service"]
         writes: ["DEPENDS_ON", "DEP_NOW"]
+        reads: ["DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.vt", "Entity", "Entity.uid", "ExternalService", "Service"]
         section: SP
         probes: set
         substitutions: {<SPRED>: "s:Service", <OPRED>: "(o:Service OR o:ExternalService)", <PROJ>: DEP_NOW,
@@ -176,18 +334,21 @@ families:
       - member: DEPLOYED
         reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Deploy", "Entity", "Entity.id", "Entity.service", "Entity.uid", "Service"]
         writes: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.tt"]
+        reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Deploy", "Entity", "Entity.id", "Entity.service", "Entity.uid", "Service"]
         section: F
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Deploy", <EXTRA>: "AND o.service = s.id"}
       - member: REPLICA_OF
         reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt", "Service"]
         writes: ["REPLICA_OF", "REPLICA_OF.te", "REPLICA_OF.tt"]
+        reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt", "Service"]
         section: F
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Service", <EXTRA>: "AND s <> o"}
       - member: MEMBER_OF
         reads: ["Agent", "Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.te", "MEMBER_OF.vt", "Team"]
         writes: ["MEMBER_OF"]
+        reads: ["Agent", "Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.te", "MEMBER_OF.vt", "Team"]
         section: S
         probes: set
         substitutions: {<SPRED>: "s:Agent", <OPRED>: "o:Team"}
@@ -214,33 +375,39 @@ families:
       - member: OWNED_BY
         reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "OWNER_NOW.fid"]
         writes: ["OWNED_BY", "OWNED_BY.te", "OWNED_BY.tt", "OWNER_NOW"]
+        reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "OWNER_NOW.fid"]
         section: PROJECTED
         probes: all
         substitutions: {<PROJ>: "OWNER_NOW"}
       - member: DEPENDS_ON
         reads: ["DEPENDS_ON", "DEPENDS_ON.fid", "DEPENDS_ON.hard", "DEPENDS_ON.te", "DEPENDS_ON.vf", "DEPENDS_ON.vt", "DEP_NOW", "DEP_NOW.fid", "Entity", "Entity.uid"]
         writes: ["DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.tt", "DEP_NOW"]
+        reads: ["DEPENDS_ON", "DEPENDS_ON.fid", "DEPENDS_ON.hard", "DEPENDS_ON.te", "DEPENDS_ON.vf", "DEPENDS_ON.vt", "DEP_NOW", "DEP_NOW.fid", "Entity", "Entity.uid"]
         section: PROJECTED
         probes: all
         substitutions: {<PROJ>: "DEP_NOW", <ATTR_COPY>: ", hard: cur.hard"}
       - member: DEPLOYED
         reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Entity", "Entity.uid"]
         writes: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.tt"]
+        reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Entity", "Entity.uid"]
         section: PLAIN
         probes: all
       - member: REPLICA_OF
         reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt"]
         writes: ["REPLICA_OF", "REPLICA_OF.te", "REPLICA_OF.tt"]
+        reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt"]
         section: PLAIN
         probes: all
       - member: MEMBER_OF
         reads: ["Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.fid", "MEMBER_OF.te", "MEMBER_OF.vf", "MEMBER_OF.vt"]
         writes: ["MEMBER_OF", "MEMBER_OF.te", "MEMBER_OF.tt"]
+        reads: ["Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.fid", "MEMBER_OF.te", "MEMBER_OF.vf", "MEMBER_OF.vt"]
         section: PLAIN
         probes: all
       - member: ROOT_CAUSE
         reads: ["Entity", "Entity.uid", "ROOT_CAUSE", "ROOT_CAUSE.by", "ROOT_CAUSE.confidence", "ROOT_CAUSE.fid", "ROOT_CAUSE.te", "ROOT_CAUSE.vf", "ROOT_CAUSE.vt"]
         writes: ["ROOT_CAUSE", "ROOT_CAUSE.te", "ROOT_CAUSE.tt"]
+        reads: ["Entity", "Entity.uid", "ROOT_CAUSE", "ROOT_CAUSE.by", "ROOT_CAUSE.confidence", "ROOT_CAUSE.fid", "ROOT_CAUSE.te", "ROOT_CAUSE.vf", "ROOT_CAUSE.vt"]
         section: PLAIN
         probes: all
         substitutions: {<ATTR_COPY>: ", by: cur.by, confidence: cur.confidence"}
@@ -267,6 +434,7 @@ families:
       - member: Service
         reads: ["Entity", "Entity.uid"]
         writes: ["Entity", "Service"]
+        reads: ["Entity", "Entity.uid"]
         probes: all
         substitutions:
           <KIND>: svc
@@ -275,16 +443,19 @@ families:
       - member: Team
         reads: ["Entity", "Entity.uid"]
         writes: ["Entity", "Team"]
+        reads: ["Entity", "Entity.uid"]
         probes: all
         substitutions: {<KIND>: team, <PROPS>: ", name: $p.name"}
       - member: Skill
         reads: ["Entity", "Entity.uid"]
         writes: ["Entity", "Skill"]
+        reads: ["Entity", "Entity.uid"]
         probes: all
         substitutions: {<KIND>: skill}
       - member: ExternalService
         reads: ["Entity", "Entity.uid"]
         writes: ["Entity", "ExternalService"]
+        reads: ["Entity", "Entity.uid"]
         layer: T-D
         probes: all
         substitutions:

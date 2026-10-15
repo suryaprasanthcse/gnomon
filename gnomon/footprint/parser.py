@@ -39,9 +39,10 @@ class ParseError(ValueError):
 
 @dataclass(frozen=True)
 class Tok:
-    kind: str  # id, kw-able id, str, num, param, op, eof
+    kind: str  # id, str, num, param, op, eof
     text: str
     pos: int
+    end: int = -1  # offset just past the token in the source (for source spans)
 
     @property
     def upper(self) -> str:
@@ -80,36 +81,36 @@ def tokenize(text: str) -> list[Tok]:
                     j += 1
             if j >= n:
                 raise ParseError(f"unterminated string at {i}")
-            toks.append(Tok("str", "".join(out), i))
+            toks.append(Tok("str", "".join(out), i, j + 1))
             i = j + 1
         elif c == "`":
             j = text.find("`", i + 1)
             if j < 0:
                 raise ParseError(f"unterminated identifier at {i}")
-            toks.append(Tok("id", text[i + 1:j], i))
+            toks.append(Tok("id", text[i + 1:j], i, j + 1))
             i = j + 1
         elif c == "$":
             m = _IDENT.match(text, i + 1)
             if not m:
                 raise ParseError(f"bad parameter at {i}")
-            toks.append(Tok("param", m.group(0), i))
+            toks.append(Tok("param", m.group(0), i, m.end()))
             i = m.end()
         elif c.isdigit():
             m = _NUMBER.match(text, i)
-            toks.append(Tok("num", m.group(0), i))
+            toks.append(Tok("num", m.group(0), i, m.end()))
             i = m.end()
         elif m := _IDENT.match(text, i):
-            toks.append(Tok("id", m.group(0), i))
+            toks.append(Tok("id", m.group(0), i, m.end()))
             i = m.end()
         else:
             for op in _OPS:
                 if text.startswith(op, i):
-                    toks.append(Tok("op", op, i))
+                    toks.append(Tok("op", op, i, i + len(op)))
                     i += len(op)
                     break
             else:
                 raise ParseError(f"unexpected character {c!r} at {i}")
-    toks.append(Tok("eof", "", n))
+    toks.append(Tok("eof", "", n, n))
     return toks
 
 
@@ -156,6 +157,7 @@ class Clause:
     sets: list[tuple[str, E, E]] = field(default_factory=list)  # SET: (op, target, value)
     var: str = ""
     body: list[Clause] = field(default_factory=list)  # FOREACH
+    distinct: bool = False  # WITH / RETURN DISTINCT
 
 
 class _Parser:
@@ -281,7 +283,7 @@ class _Parser:
 
     def projection(self, kind: str) -> list[Clause]:
         c = Clause(kind)
-        self.accept("DISTINCT")
+        c.distinct = self.accept("DISTINCT")
         while True:
             if self.accept("*"):
                 c.items.append((E("star"), "*"))
@@ -373,6 +375,8 @@ class _Parser:
                 props = self.map_items()
             self.take("]")
         self.take("->", "-")
+        if not types:
+            types = ["*"]  # untyped: any relationship; the matrix reads `*` as any fact type (D-22a)
         return RelPat(var, types, props, var_length)
 
     def map_items(self) -> list[tuple[str, E]]:
@@ -668,6 +672,7 @@ class _Analyzer:
         self.parts = 0
         self.groups: dict[int, set[str]] = {}
         self.next_group = 0
+        self.merged: dict[int, int] = {}  # absorbed group -> the group it joined
         self.multi = False
 
     # ── recording
@@ -806,7 +811,9 @@ class _Analyzer:
                 if unique and (idx in determined) != (idx + 1 in determined):
                     determined |= {idx, idx + 1}
                     changed = True
-        single = len(determined) == len(part.nodes) and all(rel_unique)
+        # One row when every named node is pinned down; parallel edges between them are the guards' business
+        # (e.g. I6 for HOLDS), and anonymous nodes add no variables (D-22c).
+        single = all(idx in determined for idx, n in enumerate(part.nodes) if n.var)
         self.f.matches.append(MatchInfo(clause, _describe(part), anchored, single))
         if not single:
             self.multi = True
@@ -856,11 +863,16 @@ class _Analyzer:
                 self.f.picks.append(Pick(alias, pick, counts.get(t.part), t.anchored))
         for e in c.exprs:
             self.visit(e, env)
-        if aggregated:
+        if aggregated or c.distinct:
             self.multi = False
         return new
 
     c_return = c_with
+
+    def find(self, gid: int) -> int:
+        while gid in self.merged:
+            gid = self.merged[gid]
+        return gid
 
     def new_group(self, members: set[str]) -> int:
         self.next_group += 1
@@ -875,7 +887,8 @@ class _Analyzer:
         for n in part.nodes:
             existing = n.var in env and env[n.var].kind == "node" and not n.labels
             if existing:
-                node_groups.append(env[n.var].created)
+                created = env[n.var].created
+                node_groups.append(self.find(created) if created >= 0 else -1)
                 continue
             if merge:
                 for label in n.labels:
@@ -896,11 +909,12 @@ class _Analyzer:
         for idx, r in enumerate(part.rels):
             for _, v in r.props:
                 self.visit(v, env)
-            ends = [g for g in (node_groups[idx], node_groups[idx + 1]) if g >= 0]
+            ends = list(dict.fromkeys(self.find(g) for g in (node_groups[idx], node_groups[idx + 1]) if g >= 0))
             if ends:
                 gid = ends[0]
                 for other in ends[1:]:
                     self.groups[gid] |= self.groups.pop(other, set())
+                    self.merged[other] = gid
             else:
                 gid = self.new_group(set())
             self.groups[gid] |= set(r.types)

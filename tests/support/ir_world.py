@@ -1,4 +1,4 @@
-"""Incident-response world (A06, shared pytest plugin registered in tests/conftest.py; D-24): agents for every core role, services, a fact to cite, and a replay clock.
+"""Incident-response world (A06; imported by the conftests of tests/integration/rules, tests/concurrency and tests/property, D-24): agents for every core role, services, a fact to cite, and a replay clock.
 
 Every proposal runs in replay mode at an explicit pt (`IR.clock`), so `now`, lease expiry and probe
 diagnosis are deterministic (contract C8). `IR.delta` reports the exact graph change of one proposal,

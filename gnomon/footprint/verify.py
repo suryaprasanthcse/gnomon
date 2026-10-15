@@ -26,7 +26,7 @@ from gnomon.kernel.service import KernelService, Proposal
 
 KERNEL_LOG_LABELS = frozenset({"Head", "Rewrite", "KeyVersion"})
 KERNEL_LOG_TYPES = frozenset({"CAUSED_BY"})
-IDENT_PROPS = ("id", "uid", "name", "key")
+IDENT_PROPS = ("id", "uid", "name", "key", "pid")
 KEY_ALIASES = {"Index": {"IndexEntry", "ConstraintEntry"}}
 
 
@@ -90,21 +90,26 @@ def diff(before: dict, after: dict) -> list[Change]:
     return changes
 
 
+def _names(key: str, root: str, values) -> bool:
+    """`<root>:*`, or `<root>:<v>` / `<root>:<v>:…` for one of the instance's identity values (uids keep their ':')."""
+    if key in (root, f"{root}:*"):
+        return True
+    return any(key == f"{root}:{v}" or key.startswith(f"{root}:{v}:") for v in map(str, values))
+
+
 def _key_covers(key: str, change: Change, projections: Mapping[str, str]) -> bool:
-    segments = key.split(":")
-    roots = {segments[0]} | KEY_ALIASES.get(segments[0], set())
-    first = segments[1] if len(segments) > 1 else "*"
+    root = key.split(":", 1)[0]
+    roots = {root} | KEY_ALIASES.get(root, set())
     if change.kind == "node":
-        return bool(roots & set(change.name)) and (first == "*" or first in map(str, change.ident.values()))
+        return bool(roots & set(change.name)) and _names(key, root, change.ident.values())
     etype = change.name[0]
     if etype in roots or projections.get(etype) in roots:
-        second = segments[2] if len(segments) > 2 else "*"
-        return (first == "*" or first in map(str, change.src.values())) and \
-            (second in ("*", "state") or second in map(str, change.dst.values()))
-    # a structural edge (HAS_SKILL) is covered by a key of the node it hangs from
-    if change.src_labels:
-        return bool(roots & set(change.src_labels)) and (first == "*" or first in map(str, change.src.values()))
-    return first != "*" and first in map(str, change.src.values())
+        return _names(key, root, change.src.values()) or \
+            any(key == f"{root}:*:{v}" for v in map(str, change.dst.values()))
+    # a structural edge (HAS_SKILL, ON, CITES…) is covered by a key of the node it hangs from
+    if change.src_labels and not roots & set(change.src_labels):
+        return False
+    return _names(key, root, change.src.values()) and (bool(change.src_labels) or key != f"{root}:*")
 
 
 def check(rule: RuleDef, write_keys: Iterable[str], changes: Iterable[Change],
