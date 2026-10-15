@@ -1,0 +1,55 @@
+(* GNOMON constrained Cypher dialect: the language of rule bodies, segments and guard probes.
+   Implemented by gnomon/footprint/parser.py (hand-written recursive descent; DECISIONS D-16).
+   Keywords are case-insensitive. Comments: // to end of line, /* … */. *)
+
+body          = { clause } ;
+clause        = match | where | with | return | unwind | create | merge | set | delete | remove | foreach ;
+
+match         = [ "OPTIONAL" ] "MATCH" pattern [ "WHERE" expr ] ;
+where         = "WHERE" expr ;
+with          = "WITH" projection [ "WHERE" expr ] ;
+return        = "RETURN" projection ;
+projection    = [ "DISTINCT" ] item { "," item } [ "ORDER" "BY" expr [ dir ] { "," expr [ dir ] } ]
+                [ "SKIP" expr ] [ "LIMIT" expr ] ;
+item          = "*" | expr [ "AS" name ] ;                  (* a non-variable item needs AS *)
+dir           = "ASC" | "DESC" | "ASCENDING" | "DESCENDING" ;
+unwind        = "UNWIND" expr "AS" name ;
+create        = "CREATE" pattern ;
+merge         = "MERGE" part { "ON" ( "CREATE" | "MATCH" ) "SET" set_item { "," set_item } } ;
+set           = "SET" set_item { "," set_item } ;
+set_item      = postfix ( "=" | "+=" ) expr | name label { label } ;
+delete        = [ "DETACH" ] "DELETE" expr { "," expr } ;
+remove        = "REMOVE" postfix { "," postfix } ;
+foreach       = "FOREACH" "(" name "IN" expr "|" clause { clause } ")" ;
+
+pattern       = part { "," part } ;
+part          = [ name "=" ] node { rel node } ;
+node          = "(" [ name ] { label } [ map | param ] ")" ;
+label         = ":" name ;
+rel           = ( "-" | "<-" ) [ "[" [ name ] [ ":" name { "|" [ ":" ] name } ] [ "*" [ int ] [ ".." [ int ] ] ]
+                [ map ] "]" ] ( "->" | "-" ) ;
+
+expr          = or ;
+or            = xor { "OR" xor } ;
+xor           = and { "XOR" and } ;
+and           = not { "AND" not } ;
+not           = "NOT" not | comparison ;
+comparison    = additive { ( "=" | "<>" | "<" | ">" | "<=" | ">=" | "=~" | "IN" | "CONTAINS"
+                           | "STARTS" "WITH" | "ENDS" "WITH" ) additive | "IS" [ "NOT" ] "NULL" } ;
+additive      = multiplicative { ( "+" | "-" ) multiplicative } ;
+multiplicative= power { ( "*" | "/" | "%" ) power } ;
+power         = unary { "^" unary } ;
+unary         = ( "+" | "-" ) unary | postfix ;
+postfix       = atom { "." name | "[" [ expr ] [ ".." [ expr ] ] "]" | label { label } } ;   (* label test: var only *)
+atom          = number | string | param | "TRUE" | "FALSE" | "NULL" | "(" expr ")" | list | comprehension
+              | map | case | call | quantifier | reduce | name ;
+list          = "[" [ expr { "," expr } ] "]" ;
+comprehension = "[" name "IN" expr [ "WHERE" expr ] [ "|" expr ] "]" ;
+map           = "{" [ key ":" expr { "," key ":" expr } ] "}" ;
+case          = "CASE" [ expr ] { "WHEN" expr "THEN" expr } [ "ELSE" expr ] "END" ;
+call          = [ name "." ] name "(" [ "DISTINCT" ] [ "*" | expr { "," expr } ] ")" ;
+quantifier    = ( "any" | "all" | "none" | "single" ) "(" name "IN" expr "WHERE" expr ")" ;
+reduce        = "reduce" "(" name "=" expr "," name "IN" expr "|" expr ")" ;
+param         = "$" name ;
+key           = name | string ;
+name          = letter { letter | digit | "_" } | "`" { any character but "`" } "`" ;

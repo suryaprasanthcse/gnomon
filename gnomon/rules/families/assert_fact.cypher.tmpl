@@ -15,7 +15,8 @@ WHERE overlaps = 0
   AND ((n = 0 AND $p.supersede = false)
     OR ($p.supersede = true AND n = 1 AND old.vf < $p.vf AND old_o <> o AND old_o.uid = $p.old_o))
 OPTIONAL MATCH (s)-[pn:<PROJ>]->()
-WITH KCTX, s, o, old, old_o, head(collect(pn)) AS old_pn
+WITH KCTX, s, o, old, old_o, count(pn) AS n_pn, head(collect(pn)) AS old_pn
+WHERE n_pn <= 1
 FOREACH (_ IN CASE WHEN old IS NULL THEN [] ELSE [1] END |
   SET old.te = nseq, old.tt = now
   CREATE (s)-[:<REL> {fid: $pid + '#e', prev_fid: old.fid, vf: old.vf, vt: $p.vf,

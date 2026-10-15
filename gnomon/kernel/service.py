@@ -8,12 +8,13 @@ KERNEL_ERROR with nothing written (platform fact S4).
 
 from __future__ import annotations
 
-import re
 from collections.abc import Mapping, Sequence
+import dataclasses
 from dataclasses import dataclass, field
 
 import redis
 
+from gnomon.footprint import keys as key_templates
 from gnomon.kernel import composer, diagnosis
 from gnomon.kernel.jcs import JcsError, canonicalize
 from gnomon.kernel.outcomes import Code, Outcome
@@ -25,11 +26,6 @@ MODES = ("live", "replay", "sim")
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
-
-_PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
-_FIELD = r"[A-Za-z_]\w*"
-_SCALAR = re.compile(rf"p\.({_FIELD}(?:\.{_FIELD})*)")
-_LIST = re.compile(rf"p\.({_FIELD})\[\](?:\.({_FIELD}))?")
 
 
 class SchemaRejected(ValueError):
@@ -50,62 +46,12 @@ class Proposal:
     rec_lc: int | None = None
 
 
-def _render(value: object) -> str:
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    return str(value)
-
-
 def instantiate_keys(templates: Sequence[str], p: Mapping, pid: str) -> list[str]:
-    """Key templates (§5.4) → keys. Segments: literal, `*`, {pid}, {p.f}, {p.f.g}, {p.list[]}, {p.list[].f}.
-
-    A missing or null value yields no key; list placeholders yield one key per non-null element.
-    Keys keep template order, then list order, without duplicates.
-    """
-    keys: list[str] = []
-    for template in templates:
-        if _PLACEHOLDER.sub("", template).count("{") or _PLACEHOLDER.sub("", template).count("}"):
-            raise ValueError(f"bad key template {template!r}: unbalanced braces")
-        # Each placeholder becomes a list of alternatives; a list placeholder may appear once per template.
-        pieces: list[list[str] | str] = []
-        position, lists = 0, 0
-        for match in _PLACEHOLDER.finditer(template):
-            pieces.append(template[position:match.start()])
-            pieces.append(_values(template, match.group(1), p, pid))
-            lists += bool(_LIST.fullmatch(match.group(1)))
-            position = match.end()
-        pieces.append(template[position:])
-        if lists > 1:
-            raise ValueError(f"bad key template {template!r}: more than one list placeholder")
-        expansions = [""]
-        for piece in pieces:
-            if isinstance(piece, str):
-                expansions = [e + piece for e in expansions]
-            else:
-                expansions = [e + v for e in expansions for v in piece]
-        for key in expansions:
-            if key not in keys:
-                keys.append(key)
-    return keys
-
-
-def _values(template: str, placeholder: str, p: Mapping, pid: str) -> list[str]:
-    if placeholder == "pid":
-        return [pid]
-    if scalar := _SCALAR.fullmatch(placeholder):
-        value: object = p
-        for part in scalar.group(1).split("."):  # nested paths such as {p.def.name} (D-12)
-            value = value.get(part) if isinstance(value, Mapping) else None
-        return [] if value is None else [_render(value)]
-    if listed := _LIST.fullmatch(placeholder):
-        items = p.get(listed.group(1)) or []
-        if not isinstance(items, (list, tuple)):
-            raise SchemaRejected(f"key template {template!r}: p.{listed.group(1)} is not a list")
-        attr = listed.group(2)
-        if attr is None:
-            return [_render(v) for v in items if v is not None]
-        return [_render(v[attr]) for v in items if isinstance(v, Mapping) and v.get(attr) is not None]
-    raise ValueError(f"bad key template {template!r}: unknown placeholder {{{placeholder}}}")
+    """Write keys from the pinned key templates and $p only (§7.3); see gnomon.footprint.keys (D-18)."""
+    try:
+        return key_templates.instantiate(templates, p, pid)
+    except key_templates.KeyValueError as exc:
+        raise SchemaRejected(str(exc)) from exc
 
 
 def _is_nat(value: object) -> bool:
@@ -150,6 +96,34 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
     }
 
 
+class LintRejected(SchemaRejected):
+    """A RegisterRule definition that fails L1–L8 (§5.5)."""
+
+    def __init__(self, results: list[dict]) -> None:
+        super().__init__("lint failed")
+        self.results = results
+
+
+def _lint_registration(proposal: Proposal) -> Proposal:
+    """§9.13: lint an M3 definition before proposing it and stamp the report hash into def.lint_sha (D-18)."""
+    from gnomon.footprint.lints import lint, rule_from_definition
+    from gnomon.footprint.parser import ParseError
+
+    p = proposal.p
+    if not isinstance(p, Mapping) or not isinstance(p.get("def"), Mapping):
+        raise SchemaRejected("RegisterRule params need a def map")
+    try:
+        report = lint(rule_from_definition(p["def"]))
+    except ParseError as exc:
+        raise SchemaRejected(f"definition does not parse: {exc}") from exc
+    except (KeyError, TypeError, ValueError) as exc:
+        raise SchemaRejected(f"definition is incomplete: {exc}") from exc
+    if not report.ok:
+        raise LintRejected(report.as_dict()["results"])
+    stamped = {**p, "def": {**p["def"], "lint_sha": report.sha}}
+    return dataclasses.replace(proposal, p=stamped)
+
+
 @dataclass
 class KernelService:
     graph: object
@@ -165,7 +139,11 @@ class KernelService:
 
     def submit(self, proposal: Proposal) -> Outcome:
         try:
+            if proposal.rule == "RegisterRule":
+                proposal = _lint_registration(proposal)
             rule, params = self._prepare(proposal)
+        except LintRejected as exc:
+            return Outcome(Code.SCHEMA_REJECTED, detail={"reason": "lint failed", "lints": exc.results})
         except SchemaRejected as exc:
             return Outcome(Code.SCHEMA_REJECTED, detail={"reason": str(exc)})
         query = self._queries.get(rule.sha)

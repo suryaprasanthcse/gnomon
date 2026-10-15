@@ -30,8 +30,8 @@ rules:
     requires_decision: false
     gated: false
     evidence: false
-    reads: []
-    writes: [Rule, FactType, Skill, Agent, HAS_SKILL, IndexEntry, ConstraintEntry]
+    reads: ["Skill", "Skill.id"]
+    writes: ["Agent", "ConstraintEntry", "Entity", "FactType", "HAS_SKILL", "IndexEntry", "Rule", "Skill"]
     key_templates: ["Head", "Rule:*", "Rule:{p.rules[].name}", "Agent:*", "Skill:*", "FactType:*", "Index:*"]
     view_templates: []
     # The PG checks, in PG order, as read-only probes (diagnosis D8 names the first that fails).
@@ -58,8 +58,8 @@ rules:
     layer: core
     caller: [operator]
     prelude: P0
-    reads: [Rule]
-    writes: [Rule]
+    reads: ["Rule", "Rule.active", "Rule.name", "Rule.sha", "Rule.version"]
+    writes: ["Rule", "Rule.active", "Rule.deactivated_seq"]
     key_templates: ["Rule:{p.def.name}", "Rule:*"]
     guard_probes:
       - name: sha_matches_def
@@ -76,8 +76,8 @@ rules:
     layer: core
     caller: [operator]
     prelude: P0
-    reads: [Rule]
-    writes: [Rule.active]
+    reads: ["Rule", "Rule.active", "Rule.class", "Rule.name", "Rule.version"]
+    writes: ["Rule.active", "Rule.deactivated_seq"]
     key_templates: ["Rule:{p.name}", "Rule:*"]
     guard_probes:
       - name: active_and_not_kernel
@@ -90,8 +90,8 @@ rules:
     layer: core
     caller: [operator]
     prelude: P0
-    reads: [Agent, Skill]
-    writes: [Agent, HAS_SKILL, Agent.active]
+    reads: ["Agent", "Agent.active", "Agent.id", "Agent.role", "Skill", "Skill.id"]
+    writes: ["Agent", "Agent.active", "Agent.deactivated_seq", "Entity", "HAS_SKILL"]
     key_templates: ["Agent:*", "Agent:{p.id}:state"]
     guard_probes:
       - name: op_valid
@@ -106,8 +106,8 @@ rules:
     family: RegisterEntity
     caller: [operator, ingest]
     prelude: P0
-    reads: [Service, Entity.uid]
-    writes: [Deploy]
+    reads: ["Entity", "Entity.uid", "Service", "Service.id"]
+    writes: ["Deploy", "Entity"]
     key_templates: ["Deploy:*", "Deploy:{p.id}:state"]
     guard_probes:
       - name: service_exists
@@ -138,8 +138,6 @@ families:
       layer: core
       caller: [operator, ingest, investigator]
       prelude: P0
-      reads: ["<REL>", Entity.uid]
-      writes: ["<REL>"]
       key_templates: ["<REL>:{p.s}:*", "<REL>:*:{p.o}", "<REL>:*", "<REL>:*:{p.old_o}"]
     substitutions: {<EXTRA>: "", <ATTRS>: "", <PROJ>: ""}
     guard_probes:
@@ -163,25 +161,33 @@ families:
           cypher: "MATCH (s:Entity {uid: $p.s}), (o:Entity {uid: $p.o}) OPTIONAL MATCH (s)-[cur:<REL>]->(o) WHERE cur.te = $INF AND (cur.vt = $INF OR cur.vt > $p.vf) WITH count(cur) AS n WHERE n = 0 RETURN n"
     members:
       - member: OWNED_BY
+        reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "Service", "Team"]
+        writes: ["OWNED_BY", "OWNED_BY.te", "OWNED_BY.tt", "OWNER_NOW"]
         section: FP
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Team", <PROJ>: OWNER_NOW}
-        writes: [OWNED_BY, OWNER_NOW]
       - member: DEPENDS_ON
+        reads: ["DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.vt", "Entity", "Entity.uid", "ExternalService", "Service"]
+        writes: ["DEPENDS_ON", "DEP_NOW"]
         section: SP
         probes: set
         substitutions: {<SPRED>: "s:Service", <OPRED>: "(o:Service OR o:ExternalService)", <PROJ>: DEP_NOW,
                         <EXTRA>: "AND $p.hard IN [true, false]", <ATTRS>: ", hard: $p.hard"}
-        writes: [DEPENDS_ON, DEP_NOW]
       - member: DEPLOYED
+        reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Deploy", "Entity", "Entity.id", "Entity.service", "Entity.uid", "Service"]
+        writes: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.tt"]
         section: F
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Deploy", <EXTRA>: "AND o.service = s.id"}
       - member: REPLICA_OF
+        reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt", "Service"]
+        writes: ["REPLICA_OF", "REPLICA_OF.te", "REPLICA_OF.tt"]
         section: F
         probes: functional
         substitutions: {<SPRED>: "s:Service", <OPRED>: "o:Service", <EXTRA>: "AND s <> o"}
       - member: MEMBER_OF
+        reads: ["Agent", "Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.te", "MEMBER_OF.vt", "Team"]
+        writes: ["MEMBER_OF"]
         section: S
         probes: set
         substitutions: {<SPRED>: "s:Agent", <OPRED>: "o:Team"}
@@ -196,8 +202,6 @@ families:
       layer: core
       caller: [operator, ingest, investigator]
       prelude: P0
-      reads: ["<REL>", Entity.uid]
-      writes: ["<REL>"]
       key_templates: ["<REL>:{p.s}:*", "<REL>:*:{p.o}", "<REL>:*"]
     substitutions: {<ATTR_COPY>: "", <PROJ>: ""}
     guard_probes:
@@ -207,12 +211,39 @@ families:
         - name: mode_valid
           cypher: "MATCH (h:Head) MATCH (s:Entity {uid: $p.s})-[cur:<REL> {fid: $p.fid}]->(o:Entity) WITH cur, <NOW> AS now WHERE $p.mode = 'void' OR ($p.mode = 'end' AND cur.vt = $INF AND cur.vf < $p.vt_end AND $p.vt_end <= now) RETURN cur.fid"
     members:
-      - {member: OWNED_BY, section: PROJECTED, probes: all, substitutions: {<PROJ>: OWNER_NOW}, writes: [OWNED_BY, OWNER_NOW]}
-      - {member: DEPENDS_ON, section: PROJECTED, probes: all, substitutions: {<PROJ>: DEP_NOW, <ATTR_COPY>: ", hard: cur.hard"}, writes: [DEPENDS_ON, DEP_NOW]}
-      - {member: DEPLOYED, section: PLAIN, probes: all}
-      - {member: REPLICA_OF, section: PLAIN, probes: all}
-      - {member: MEMBER_OF, section: PLAIN, probes: all}
-      - {member: ROOT_CAUSE, section: PLAIN, probes: all, substitutions: {<ATTR_COPY>: ", by: cur.by, confidence: cur.confidence"}}
+      - member: OWNED_BY
+        reads: ["Entity", "Entity.uid", "OWNED_BY", "OWNED_BY.fid", "OWNED_BY.te", "OWNED_BY.vf", "OWNED_BY.vt", "OWNER_NOW", "OWNER_NOW.fid"]
+        writes: ["OWNED_BY", "OWNED_BY.te", "OWNED_BY.tt", "OWNER_NOW"]
+        section: PROJECTED
+        probes: all
+        substitutions: {<PROJ>: "OWNER_NOW"}
+      - member: DEPENDS_ON
+        reads: ["DEPENDS_ON", "DEPENDS_ON.fid", "DEPENDS_ON.hard", "DEPENDS_ON.te", "DEPENDS_ON.vf", "DEPENDS_ON.vt", "DEP_NOW", "DEP_NOW.fid", "Entity", "Entity.uid"]
+        writes: ["DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.tt", "DEP_NOW"]
+        section: PROJECTED
+        probes: all
+        substitutions: {<PROJ>: "DEP_NOW", <ATTR_COPY>: ", hard: cur.hard"}
+      - member: DEPLOYED
+        reads: ["DEPLOYED", "DEPLOYED.fid", "DEPLOYED.te", "DEPLOYED.vf", "DEPLOYED.vt", "Entity", "Entity.uid"]
+        writes: ["DEPLOYED", "DEPLOYED.te", "DEPLOYED.tt"]
+        section: PLAIN
+        probes: all
+      - member: REPLICA_OF
+        reads: ["Entity", "Entity.uid", "REPLICA_OF", "REPLICA_OF.fid", "REPLICA_OF.te", "REPLICA_OF.vf", "REPLICA_OF.vt"]
+        writes: ["REPLICA_OF", "REPLICA_OF.te", "REPLICA_OF.tt"]
+        section: PLAIN
+        probes: all
+      - member: MEMBER_OF
+        reads: ["Entity", "Entity.uid", "MEMBER_OF", "MEMBER_OF.fid", "MEMBER_OF.te", "MEMBER_OF.vf", "MEMBER_OF.vt"]
+        writes: ["MEMBER_OF", "MEMBER_OF.te", "MEMBER_OF.tt"]
+        section: PLAIN
+        probes: all
+      - member: ROOT_CAUSE
+        reads: ["Entity", "Entity.uid", "ROOT_CAUSE", "ROOT_CAUSE.by", "ROOT_CAUSE.confidence", "ROOT_CAUSE.fid", "ROOT_CAUSE.te", "ROOT_CAUSE.vf", "ROOT_CAUSE.vt"]
+        writes: ["ROOT_CAUSE", "ROOT_CAUSE.te", "ROOT_CAUSE.tt"]
+        section: PLAIN
+        probes: all
+        substitutions: {<ATTR_COPY>: ", by: cur.by, confidence: cur.confidence"}
 
   # §9.16 M7 (Deploy has its own body under `rules`).
   - family: RegisterEntity
@@ -224,8 +255,6 @@ families:
       layer: core
       caller: [operator, ingest]
       prelude: P0
-      reads: [Entity.uid]
-      writes: ["<Label>"]
       key_templates: ["<Label>:*", "<Label>:{p.id}:state"]
     substitutions: {<VALID>: "", <PROPS>: ""}
     guard_probes:
@@ -236,18 +265,26 @@ families:
           cypher: "WITH 1 AS ok WHERE true <VALID> RETURN ok"
     members:
       - member: Service
+        reads: ["Entity", "Entity.uid"]
+        writes: ["Entity", "Service"]
         probes: all
         substitutions:
           <KIND>: svc
           <VALID>: "AND $p.criticality >= 1 AND $p.criticality <= 5 AND $p.user_facing IN [true, false]"
           <PROPS>: ", name: $p.name, tier: $p.tier, criticality: $p.criticality, user_facing: $p.user_facing, health: 'ok', mode: 'normal'"
       - member: Team
+        reads: ["Entity", "Entity.uid"]
+        writes: ["Entity", "Team"]
         probes: all
         substitutions: {<KIND>: team, <PROPS>: ", name: $p.name"}
       - member: Skill
+        reads: ["Entity", "Entity.uid"]
+        writes: ["Entity", "Skill"]
         probes: all
         substitutions: {<KIND>: skill}
       - member: ExternalService
+        reads: ["Entity", "Entity.uid"]
+        writes: ["Entity", "ExternalService"]
         layer: T-D
         probes: all
         substitutions:
