@@ -1,0 +1,16 @@
+# Lint fixture (LintL3Pass). Never registered; used only by tests/unit/footprint/test_lints.py.
+name: LintL3Pass
+version: 1
+class: memory
+layer: core
+caller: [triage]
+prelude: P0
+reads: [Task, Task.id, Task.state]
+writes: [Task.state]
+key_templates: ["Task:{p.task}:state"]
+body: |
+  MATCH (t:Task {id: $p.task})
+  WHERE t.state = 'open'
+  WITH KCTX, t
+  SET t.state = 'claimed'
+  WITH KCTX

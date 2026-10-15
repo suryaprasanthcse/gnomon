@@ -30,13 +30,14 @@ def rule_rows(k, name):
 # ── M3 · RegisterRule ───────────────────────────────────────────────────────
 
 def test_m3_registers_a_new_rule(genesis):
-    noop = genesis.registry.get("Noop")
-    ping = dataclasses.replace(noop, name="Ping", cls="memory")
+    # D-19: sample rules derive from RegisterEntity.Team, which passes the M3 lints (Noop does not).
+    team = genesis.registry.get("RegisterEntity.Team")
+    ping = dataclasses.replace(team, name="Ping", cls="memory")
     out = m3(genesis, ping, pid="m3-ping")
     assert out.code == "APPLIED", out
     assert rule_rows(genesis, "Ping") == [[1, ping.sha, True, out.seq, None]]
     stored = genesis.read("MATCH (r:Rule {name: 'Ping'}) RETURN r.body, r.class, r.caller, r.guard_probes_json, r.rw")
-    assert stored == [[ping.body, "memory", ["kernel"], ping.to_param()["guard_probes_json"], "m3-ping"]]
+    assert stored == [[ping.body, "memory", ["ingest", "operator"], ping.to_param()["guard_probes_json"], "m3-ping"]]
     assert genesis.read("MATCH (r:Rewrite {id: 'm3-ping'}) RETURN r.write_keys") == [[["Rule:Ping", "Rule:*"]]]
 
 
@@ -44,33 +45,36 @@ def test_m3_replacing_deactivates_previous_version(genesis):
     from gnomon.kernel.registry import Registry
     from gnomon.kernel.service import KernelHandle
 
-    noop1 = genesis.registry.get("Noop")
-    noop2 = dataclasses.replace(noop1, version=2)
-    out = m3(genesis, noop2, pid="m3-noop2")
+    team1 = genesis.registry.get("RegisterEntity.Team")
+    team2 = dataclasses.replace(team1, version=2)
+    out = m3(genesis, team2, pid="m3-team2")
     assert out.code == "APPLIED", out
-    assert rule_rows(genesis, "Noop") == [[1, noop1.sha, False, 1, out.seq], [2, noop2.sha, True, out.seq, None]]
+    assert rule_rows(genesis, "RegisterEntity.Team") == [[1, team1.sha, False, 1, out.seq],
+                                                         [2, team2.sha, True, out.seq, None]]
 
-    assert genesis.submit("Noop", {"note": "old"}, pid="n-old").code == "RULE_PINNED"
-    rules = [noop2 if r.name == "Noop" else r for r in genesis.registry.rules()]
+    old = genesis.submit("RegisterEntity.Team", {"id": "old", "name": "Old"}, pid="t-old", agent="ops-1")
+    assert old.code == "RULE_PINNED"
+    rules = [team2 if r.name == "RegisterEntity.Team" else r for r in genesis.registry.rules()]
     k2 = KernelHandle(genesis.graph, Registry(rules))
-    assert k2.submit("Noop", {"note": "new"}, pid="n-new").code == "APPLIED"
+    assert k2.submit("RegisterEntity.Team", {"id": "new", "name": "New"}, pid="t-new", agent="ops-1").code == \
+        "APPLIED"
 
 
 def test_m3_version_must_be_next(genesis):
-    noop = genesis.registry.get("Noop")
-    assert guard(m3(genesis, dataclasses.replace(noop, version=3), pid="m3-v3")) == "version_next"
-    assert guard(m3(genesis, dataclasses.replace(noop, name="Fresh", version=2), pid="m3-f2")) == "version_next"
+    team = genesis.registry.get("RegisterEntity.Team")
+    assert guard(m3(genesis, dataclasses.replace(team, version=3), pid="m3-v3")) == "version_next"
+    assert guard(m3(genesis, dataclasses.replace(team, name="Fresh", version=2), pid="m3-f2")) == "version_next"
 
 
 def test_m3_sha_must_match_def_json(genesis):
-    ping = dataclasses.replace(genesis.registry.get("Noop"), name="Ping")
+    ping = dataclasses.replace(genesis.registry.get("RegisterEntity.Team"), name="Ping")
     assert guard(m3(genesis, ping, pid="m3-bad", sha="f" * 64)) == "sha_matches_def"
     assert guard(m3(genesis, ping, pid="m3-bad2", def_json=ping.def_json + " ")) == "sha_matches_def"
     assert rule_rows(genesis, "Ping") == []
 
 
 def test_m3_sha_must_be_new(genesis):
-    assert guard(m3(genesis, genesis.registry.get("Noop"), pid="m3-same")) == "sha_new"
+    assert guard(m3(genesis, genesis.registry.get("RegisterEntity.Team"), pid="m3-same")) == "sha_new"
 
 
 def test_m3_cannot_reregister_genesis(genesis):
@@ -80,7 +84,7 @@ def test_m3_cannot_reregister_genesis(genesis):
 
 
 def test_m3_operator_only(genesis):
-    ping = dataclasses.replace(genesis.registry.get("Noop"), name="Ping")
+    ping = dataclasses.replace(genesis.registry.get("RegisterEntity.Team"), name="Ping")
     assert m3(genesis, ping, pid="m3-k", agent="kernel").code == "CALLER_DENIED"
 
 
