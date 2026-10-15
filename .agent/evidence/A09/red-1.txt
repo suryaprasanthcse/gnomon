@@ -1,0 +1,26 @@
+      9 E       ModuleNotFoundError: No module named 'gnomon.agents'
+      2 E   ModuleNotFoundError: No module named 'gnomon.ops'
+      2 E   ModuleNotFoundError: No module named 'gnomon.agents'
+      1 FAILED tests/unit/test_harness_smoke.py::test_deferred_fixtures_fail_with_module_name
+      1 FAILED tests/e2e/test_proof_p1.py::test_v0_double_claims_and_k5a_fails_while_v1_has_one_winner
+      1 FAILED tests/e2e/test_cli_run.py::test_gk_run_is_deterministic_and_replays_a_recording
+      1 FAILED tests/e2e/test_cli_run.py::test_gk_proof_accepts_only_the_core_proofs
+      1 ERROR tests/integration/ops/test_scheduler.py
+      1 ERROR tests/integration/ops/test_outbox.py
+      1 ERROR tests/integration/ops/test_generator_and_infra.py
+      1 ERROR tests/integration/ops/test_agent_loop.py
+      1 ERROR tests/e2e/test_proof_p5.py::test_replay_into_a_fresh_graph_gives_an_equal_state_hash
+      1 ERROR tests/e2e/test_proof_p5.py::test_edited_params_are_named_by_k1 - Module...
+      1 ERROR tests/e2e/test_proof_p5.py::test_an_out_of_band_edit_is_named_by_k4 - M...
+      1 ERROR tests/e2e/test_proof_p4.py::test_why_chain_crosses_four_agents - Module...
+      1 ERROR tests/e2e/test_proof_p4.py::test_time_travel_on_a_service_with_a_backdated_ownership_change
+      1 ERROR tests/e2e/test_proof_p3.py::test_the_replayed_proposal_is_a_duplicate
+      1 ERROR tests/e2e/test_proof_p3.py::test_one_delivery_per_outbox_pid - ModuleNo...
+      1 ERROR tests/e2e/test_proof_p3.py::test_a_killed_agent_loses_nothing - ModuleN...
+      1 ERROR tests/e2e/test_core_scenario.py
+      1 E   ModuleNotFoundError: No module named 'gnomon.sim'
+      1 E       SystemExit: 2
+      1 E       KeyError: 'n'
+      1 E       AttributeError: module 'gnomon.cli' has no attribute 'PROOFS'
+      1 E               argparse.ArgumentError: argument command: invalid choice: 'run' (choose from replay, audit, why)
+      1 4 failed, 6 passed, 13 errors in 8.04s

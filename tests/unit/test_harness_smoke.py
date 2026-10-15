@@ -81,5 +81,5 @@ def test_deferred_fixtures_fail_with_module_name(request):
     # A03 installed `genesis` (a KernelHandle on a GRAPH.COPY of golden_genesis); DECISIONS D-11.
     handle = request.getfixturevalue("genesis")
     assert handle.head()["seq"] == 1
-    with pytest.raises(RuntimeError, match="A09"):
-        request.getfixturevalue("recorded_llm")
+    # A09 installed `recorded_llm`: a RecordedLLM replaying tests/fixtures/llm/core.json; DECISIONS D-38.
+    assert type(request.getfixturevalue("recorded_llm")).__name__ == "RecordedLLM"

@@ -272,7 +272,7 @@ def clock() -> SteppableClock:
 
 @pytest.fixture
 def recorded_llm():
-    raise RuntimeError(
-        "the recorded_llm fixture is installed by module A09 (responses replayed from tests/fixtures/llm/ "
-        "by prompt hash); it is not available at gate H0"
-    )
+    """The Core scenario's model responses, replayed by prompt hash from tests/fixtures/llm/core.json (A09)."""
+    from gnomon.agents.recorded import RecordedLLM
+
+    return RecordedLLM.load(ROOT / "tests" / "fixtures" / "llm" / "core.json")
