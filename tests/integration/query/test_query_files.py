@@ -54,5 +54,5 @@ def test_s23_no_property_projection_after_an_aggregate_in_one_clause(d, n):
         items = [i.strip() for i in re.split(r",(?![^()\[\]{}]*[)\]}])", match.group(1)) if i.strip()]
         agg = [k for k, i in enumerate(items) if re.search(r"\b(count|sum|collect|min|max|avg)\s*\(", i)]
         if agg:
-            later = items[agg[0] + 1:]
+            later = [i for i in items[agg[0] + 1:] if i not in [items[k] for k in agg]]  # another aggregate is fine
             assert not [i for i in later if re.search(r"[A-Za-z_]\w*\.\w", i)], (match.group(0), later)
