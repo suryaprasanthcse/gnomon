@@ -1,0 +1,46 @@
+{
+  "gate": "SHIP",
+  "module": "A17",
+  "status": "green",
+  "commit": "4bedf5f9d8d9255a31ed1d44a45d2934007a9cf6",
+  "utc": "2026-10-16T15:46:42Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a",
+    "gate_g1b",
+    "gate_g1c",
+    "gate_g2a",
+    "gate_g2b",
+    "gate_g3",
+    "gate_g4a",
+    "gate_g4b",
+    "gate_ta",
+    "gate_tb",
+    "gate_tc",
+    "gate_td",
+    "gate_te",
+    "gate_tf",
+    "gate_assure",
+    "gate_ship"
+  ],
+  "tests": {
+    "passed": 1466,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 1537.445
+  },
+  "coverage": {},
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": true,
+  "failures": [],
+  "forbidden": []
+}
