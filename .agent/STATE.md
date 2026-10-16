@@ -1,6 +1,6 @@
 # STATE
-current_module:        A16 (MCP surface prep)  status: provisional (A14 TE and A15 TF approved D-69..D-73, gates not run; tests/integration/mcp 40 passed; ASSURE gate not started)
-last_green_gate:       TD (gates TC and TD both green); TE and TF provisional, not gate-run
+current_module:        A16          status: green (gate ASSURE; D-69..D-76 approved)
+last_green_gate:       ASSURE (1440 passed, 0 failed; gates TE and TF are covered by its cumulative set but have no gates/TE.json or TF.json of their own)
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -42,7 +42,7 @@ kernel_sha:            5711add3b4c184d96b5353682708996c7f4dc02ca3d5f542e9e265e92
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         [core, T-A, T-B, T-C, T-D, T-E, T-F]
 open_questions:        0 (see QUESTIONS.md; D-69..D-73 approved by Surya Prasanth R)
-resume_point:          wave 4 written (A14 and A15, one commit); run `python scripts/gate.py TE` and `TF` on this tree, re-run the executive, audit, mcp and ops suites that the change touches, then the human checkpoints; next module A16 (assurance sweep)
+resume_point:          none; A14, A15 and A16 done; next module A17 (gate SHIP: README, compose, demo scripts, video, AI disclosure)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -60,4 +60,4 @@ module_table:          | module | gate | status | commit |
                        | A13    | TD   | green  | 26234eb, 2de3246 |
                        | A14    | TE   | provisional | b405f98 |
                        | A15    | TF   | provisional | b405f98 |
-                       | A16    | MCP surface (prep for ASSURE) | provisional | see git log: feat(wave-4) approve D-69..D-73 |
+                       | A16    | ASSURE | green  | eb13c80, 1372cf3, d28913f |
