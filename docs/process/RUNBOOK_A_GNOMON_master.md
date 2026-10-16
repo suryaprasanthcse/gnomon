@@ -908,7 +908,7 @@ out-of-band index? 5 What does the optimizer refuse to touch?
 ### A13 · T-D Multi-tenant federation · gate TD
 
 ```text
-MODULE A13 · GATE TD · DEPENDS: G4b   (parallel-safe with A12 on a separate worktree)
+MODULE A13 · GATE TD · DEPENDS: TB   (built on TB, D-59; was G4b, parallel-safe with A12)
 ORRERY: barrier
 
 CAPSULE: (as A00). Build federation: the t:_sys registry graph (S0–S2), tenant anchors, channels,
