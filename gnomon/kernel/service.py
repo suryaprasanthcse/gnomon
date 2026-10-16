@@ -27,6 +27,9 @@ MODES = ("live", "replay", "sim")
 MAX_TTL_MS = 900_000  # Appendix C (D-21)
 MAX_ATTEMPTS = 5
 APPROVAL_TTL_MS = 900_000  # Appendix C: R16 bound
+MAX_SKEW_MS = 60_000  # Appendix C: P2 and P3 refuse a sender or receiver clock further ahead than this
+NOTICE_MAX = 4_000  # Appendix C: the longest SendNotice body
+MESSAGE_PRELUDES = ("P2", "P3")
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
@@ -48,6 +51,7 @@ class Proposal:
     mode: str = "live"
     rec_pt: int | None = None
     rec_lc: int | None = None
+    m: Mapping | None = None  # the federation message a P2/P3 rule applies (master §6.5)
 
 
 def wire_text(query: str) -> str:
@@ -84,10 +88,10 @@ def wire_text(query: str) -> str:
     return "\n".join(line.rstrip() for line in "".join(out).splitlines() if line.strip()) + "\n"
 
 
-def instantiate_keys(templates: Sequence[str], p: Mapping, pid: str) -> list[str]:
-    """Write keys from the pinned key templates and $p only (§7.3); see gnomon.footprint.keys (D-18)."""
+def instantiate_keys(templates: Sequence[str], p: Mapping, pid: str, m: Mapping | None = None) -> list[str]:
+    """Write keys from the pinned key templates, $p and (federation preludes) $m only (§7.3); see gnomon.footprint.keys."""
     try:
-        return key_templates.instantiate(templates, p, pid)
+        return key_templates.instantiate(templates, p, pid, m)
     except key_templates.KeyValueError as exc:
         raise SchemaRejected(str(exc)) from exc
 
@@ -124,6 +128,10 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
             raise SchemaRejected(f"attach is not JSON: {exc}") from exc
         if not isinstance(decision, dict):
             raise SchemaRejected("attach must be the decision envelope (a JSON object)")
+    message = None
+    attach = proposal.attach
+    if rule.prelude in MESSAGE_PRELUDES:
+        message, attach = _bind_message(rule, proposal)
     out = {
         "rule": rule.name,
         "rule_sha": rule.sha,
@@ -131,10 +139,10 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "pid": proposal.pid,
         "p": dict(proposal.p),
         "params_json": params_json,
-        "attach": proposal.attach,
+        "attach": attach,
         "read_seq": proposal.read_seq,
         "view_keys": list(proposal.view_keys),
-        "write_keys": instantiate_keys(rule.key_templates, proposal.p, proposal.pid),
+        "write_keys": instantiate_keys(rule.key_templates, proposal.p, proposal.pid, message),
         "mode": proposal.mode,
         "rec_pt": proposal.rec_pt,
         "rec_lc": proposal.rec_lc,
@@ -144,10 +152,28 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "MAX_TTL_MS": MAX_TTL_MS,
         "MAX_ATTEMPTS": MAX_ATTEMPTS,
         "APPROVAL_TTL_MS": APPROVAL_TTL_MS,
+        "MAX_SKEW_MS": MAX_SKEW_MS,
+        "NOTICE_MAX": NOTICE_MAX,
     }
     if decision is not None:
         out["d"] = decision
+    if message is not None:
+        out["m"] = message
     return out
+
+
+def _bind_message(rule: RuleDef, proposal: Proposal) -> tuple[dict, str]:
+    """`$m` and `$attach` of a P2/P3 rule: the message, and by default its canonical JSON (the relay's `$attach`)."""
+    message = proposal.m
+    if not isinstance(message, Mapping):
+        raise SchemaRejected(f"rule {rule.name!r} applies a federation message: params need m, a map")
+    if rule.prelude == "P2" and not isinstance(message.get("fields"), (list, tuple)):
+        raise SchemaRejected("a received message needs fields, the list its digest covers")
+    try:
+        attach = proposal.attach if proposal.attach is not None else canonicalize(message)
+    except JcsError as exc:
+        raise SchemaRejected(f"the message is not canonical JSON: {exc}") from exc
+    return dict(message), attach
 
 
 class LintRejected(SchemaRejected):
@@ -235,10 +261,10 @@ class KernelHandle:
 
     def submit(self, rule: str, p: object = None, *, pid: str, agent: str = "kernel", read_seq: int | None = None,
                view_keys: Sequence[str] = (), attach: str | None = None, mode: str = "live",
-               rec_pt: int | None = None, rec_lc: int | None = None) -> Outcome:
+               rec_pt: int | None = None, rec_lc: int | None = None, m: Mapping | None = None) -> Outcome:
         if read_seq is None:
             read_seq = self.head().get("seq", 0)
         return self.service.submit(Proposal(
             rule=rule, p={} if p is None else p, pid=pid, agent=agent, read_seq=read_seq, view_keys=tuple(view_keys),
-            attach=attach, mode=mode, rec_pt=rec_pt, rec_lc=rec_lc,
+            attach=attach, mode=mode, rec_pt=rec_pt, rec_lc=rec_lc, m=m,
         ))

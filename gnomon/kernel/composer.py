@@ -5,9 +5,11 @@
 
     decision (P0)       P0 · P1 · BODY · Q0 · E0  P1 is spliced into P0 at its add-on mark, E0 returns the Decision
 
-The add-ons P1/E0 (decisions) are installed by A10; P2/P3 (federation, A13) are not yet, and asking for one
-raises SegmentNotInstalled. This file, the segments and the Kernel UDF library form `kernel_src`,
-whose sha Genesis pins as Head.kernel_sha.
+    federation (P2)     P0 · P2 · BODY · Q0 · RET  the tick is T2, Kernel.recv on the message's (s_pt, s_lc)
+    federation (P3)     P0 · P3 · BODY · Q0 · RET  the tick is T3, Kernel.recv on the receipt's (r_pt, r_lc)
+
+The add-ons P1/E0 (decisions, A10) and P2/P3 (federation, A13) are spliced into P0 at its add-on mark. This file,
+the segments and the Kernel UDF library form `kernel_src`, whose sha Genesis pins as Head.kernel_sha.
 """
 
 from __future__ import annotations
@@ -20,21 +22,18 @@ from gnomon.kernel.registry import RuleDef
 from gnomon.udf import loader
 
 SEGMENT_DIR = Path(__file__).resolve().parent / "segments"
-INSTALLED = ("PG", "P0", "P1", "Q0", "E0", "RET")
-ADD_ONS = ("P2", "P3")
+INSTALLED = ("PG", "P0", "P1", "P2", "P3", "Q0", "E0", "RET")
+SPLICED = ("P1", "P2", "P3")
 T0 = "Kernel.tick(h.pt, h.lc, timestamp(), $mode, $rec_pt, $rec_lc)"
+T2 = "Kernel.recv(h.pt, h.lc, timestamp(), $m.s_pt, $m.s_lc, $mode, $rec_pt, $rec_lc)"
+T3 = "Kernel.recv(h.pt, h.lc, timestamp(), $m.r_pt, $m.r_lc, $mode, $rec_pt, $rec_lc)"
+TICKS = {"P0": T0, "P2": T2, "P3": T3}
 TICK = "<TICK>"
 ADD_ON_MARK = "//-- add-on segment (P1 decision checks; P2/P3 federation) is inserted here --"
 
 
-class SegmentNotInstalled(LookupError):
-    """A segment that a later module installs."""
-
-
 @cache
 def segment(name: str) -> str:
-    if name in ADD_ONS:
-        raise SegmentNotInstalled(f"segment not installed: {name}")
     if name not in INSTALLED:
         raise ValueError(f"unknown segment {name!r}")
     return (SEGMENT_DIR / f"{name.lower()}.cypher").read_text(encoding="utf-8")
@@ -67,15 +66,16 @@ def compose(rule: RuleDef, sim: bool = False) -> str:
     for name in names:
         if name == "BODY":
             parts.append(rule.body)
-        elif name == "P1":
+        elif name in SPLICED:
             continue  # spliced into P0 below, between the tick and the apply variables
         else:
             text = segment(name)
             if name == "P0":
-                if "P1" in names:
+                spliced = [segment(n) for n in names if n in SPLICED]
+                if spliced:
                     head, tail = text.split(ADD_ON_MARK)
-                    text = head + segment("P1") + tail
-                text = text.replace(TICK, T0)
+                    text = head + "".join(spliced) + tail
+                text = text.replace(TICK, TICKS[rule.prelude])
             parts.append(text)
     return "\n".join(part.rstrip("\n") for part in parts) + "\n"
 

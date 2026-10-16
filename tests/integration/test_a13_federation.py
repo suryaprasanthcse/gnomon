@@ -252,7 +252,7 @@ def test_message_params_are_bound_from_m_and_attach_is_its_canonical_json(fed):
     from gnomon.kernel.service import Proposal, bind
 
     rule = {r.name: r for r in layer_rules("TD")}["ReceiveMessage.notice"]
-    m = {"id": "A/n", "origin_tenant": "A", "chan_seq": 1, "kind": "notice"}
+    m = {"id": "A/n", "origin_tenant": "A", "chan_seq": 1, "kind": "notice", "fields": []}
     params = bind(rule, Proposal(rule=rule.name, p={"attach_sha": "x"}, pid="rx:A/n", agent=RELAY, read_seq=0, m=m,
                                  mode="replay", rec_pt=EPOCH + 1, rec_lc=0))
     assert params["m"] == m and params["attach"] == jcs(m)
@@ -764,10 +764,10 @@ def test_f5_bounded_drift_a_quarantined_sender_never_drags_the_receiver_clock(fe
     fed.open_all()
     wall = int(time.time() * 1000)
     fed.sub("A", "SendNotice", {"peer": "B", "incident": "i", "body": "future"}, TRIAGE, pid="n1", at=wall + 3_600_000)
-    fed.notice("A", "C", "present", pid="n2")
+    fed.notice("C", "B", "present", pid="n2")  # another sender, on its own channel: its clock is not ahead
     relay = fed.relay(mode="live")
     assert relay.deliver("A", "B").stopped == "SKEW_QUARANTINED"
-    assert relay.deliver("A", "C").stopped is None
+    assert relay.deliver("C", "B").stopped is None
     for t in ("B", "C"):
         assert fed.k[t].head()["pt"] <= int(time.time() * 1000) + MAX_SKEW_MS
     assert relay.quarantined[("A", "B")]["code"] == "SKEW_QUARANTINED"

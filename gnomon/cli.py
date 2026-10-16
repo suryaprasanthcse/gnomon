@@ -3,6 +3,7 @@
     python -m gnomon.cli replay --graph t:<tenant> [--until S] [--target KEY]
     python -m gnomon.cli audit  --graph t:<tenant> [--checks K1,K4]
     python -m gnomon.cli why    --graph t:<tenant> --uid <entity uid>
+    python -m gnomon.cli fedlog --graphs A=t:a,B=t:b[,...] [--from-pt PT] [--to-pt PT]
     python -m gnomon.cli run    --graph t:<tenant> [--seed 7] [--no-crash] [--record FILE | --replay FILE]
     python -m gnomon.cli proof  P1|P2|P3|P4|P5
     python -m gnomon.cli approve|veto --graph t:<tenant> --aid <aid> --decision-sha <sha> --agent <human agent>
@@ -11,6 +12,7 @@
 Each prints one JSON document and exits 0 on success, 1 on divergence, a failed audit, an unknown entity, an
 unresolved scenario or a failed proof. `run` bootstraps the tenant (it must be empty) and runs the Core scenario
 (master §11.4); `--record` stores the model responses by prompt hash, `--replay` answers only from such a file.
+`fedlog` merges the logs of the tenant graphs by (pt, lc, tenant, seq) (master §17.7).
 `approve` and `veto` propose R17 ApproveDecision as a human agent for exactly the decision sha given (the tenant must
 have T-A activated); `--at PT` records the proposal at that time (replay mode) instead of the wall clock.
 `proof` runs the executable proof scenario for one Core row of §26 (the pytest module tests/e2e/test_proof_pN.py).
@@ -49,6 +51,11 @@ def _parser() -> argparse.ArgumentParser:
             sub.add_argument("--checks", help="comma-separated, e.g. K1,K4 (default: K1-K6)")
         else:
             sub.add_argument("--uid", required=True)
+    fedlog = commands.add_parser("fedlog")
+    fedlog.add_argument("--url", default=os.environ.get("GNOMON_FALKORDB_URL", DEFAULT_URL))
+    fedlog.add_argument("--graphs", required=True, help="tenant=graph key pairs, comma separated")
+    fedlog.add_argument("--from-pt", type=int)
+    fedlog.add_argument("--to-pt", type=int)
     run = commands.add_parser("run")
     run.add_argument("--url", default=os.environ.get("GNOMON_FALKORDB_URL", DEFAULT_URL))
     run.add_argument("--graph", required=True)
@@ -102,6 +109,17 @@ def _decide(args, db) -> tuple[int, dict]:
                                        "seq": out.seq, "detail": out.detail}
 
 
+def _fedlog(args, db) -> tuple[int, dict]:
+    from gnomon.federation import fedlog
+
+    pairs = [item.split("=", 1) for item in args.graphs.split(",") if item]
+    if not pairs or any(len(p) != 2 or not all(p) for p in pairs):
+        return 1, {"error": "--graphs takes tenant=graph pairs, e.g. A=t:a,B=t:b"}
+    entries = fedlog.merge({tenant: db.select_graph(key) for tenant, key in pairs}, from_pt=args.from_pt,
+                           to_pt=args.to_pt)
+    return 0, {"count": len(entries), "entries": [e.as_dict() for e in entries]}
+
+
 def _run_proof(args) -> tuple[int, dict]:
     import subprocess
 
@@ -142,6 +160,8 @@ def main(argv: list[str] | None = None) -> int:
             code, out = _run_core(args, db, client)
         elif args.command in ("approve", "veto"):
             code, out = _decide(args, db)
+        elif args.command == "fedlog":
+            code, out = _fedlog(args, db)
         else:
             code, out = _run(args, db, client)
     finally:

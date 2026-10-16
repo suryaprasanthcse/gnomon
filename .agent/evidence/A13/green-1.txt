@@ -1,0 +1,5 @@
+# A13 GREEN run 1: tests/integration/test_a13_federation.py + tests/unit/kernel (176 passed); full suite excl. A13 before fixture regen: 1225 passed, 1 failed (core scenario state hash, D-58), after regen 5/5 passed
+........................................................................ [ 40%]
+........................................................................ [ 81%]
+................................                                         [100%]
+176 passed in 105.13s (0:01:45)

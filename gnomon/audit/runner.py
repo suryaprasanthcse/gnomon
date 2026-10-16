@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 import redis
 
-from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6, k7
+from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6, k7, k9
 
 CHECKS = ("K1", "K2", "K3", "K4", "K5", "K6")
 OPTIONAL_CHECKS = ("K7",)  # selectable by name; part of the default set once a layer with decisions is active
@@ -18,6 +18,9 @@ WHERE w.id = e.rw
 OPTIONAL MATCH chain = (w)-[:CAUSED_BY*1..8]->(:Rewrite)
 WITH e, w, collect([n IN nodes(chain) | n.seq]) AS causes
 RETURN e.uid AS entity, w.seq AS created_at, w.rule AS rule, w.agent AS agent, causes"""
+
+
+FEDERATION_CHECKS = (*k9.NAMES, "K1")  # K9a-f over the federation; K1 is each ledger's own hash chain
 
 
 @dataclass(frozen=True)
@@ -59,6 +62,26 @@ def audit(db, client: redis.Redis, key: str, checks: Iterable[str] | None = None
         if name in selected:
             results.update((r.name, r) for r in runs[name]())
     return AuditReport(key, results)
+
+
+def audit_federation(db, client: redis.Redis, keys: dict[str, str], sys_key: str,
+                     checks: Iterable[str] | None = None) -> AuditReport:
+    """K9a-K9f over the tenant graphs `keys` (tenant id -> graph key) and the registry graph `sys_key` (master §17.8).
+
+    The default set also re-verifies every ledger's hash chain as `K1@<tenant>` (and `K1@_sys`), so one report says
+    that each log is intact, that the logs agree on every message that crossed between them, and that the registry vouches
+    for every tenant."""
+    selected = set(FEDERATION_CHECKS if checks is None else checks)
+    unknown = selected - set(FEDERATION_CHECKS)
+    if unknown:
+        raise ValueError(f"unknown checks {sorted(unknown)}; known: {', '.join(FEDERATION_CHECKS)}")
+    graphs = {tenant: db.select_graph(key) for tenant, key in keys.items()}
+    sys_graph = db.select_graph(sys_key)
+    results: dict[str, CheckResult] = {r.name: r for r in k9.check(graphs, sys_graph, selected)}
+    if "K1" in selected:
+        for tenant, graph in {**graphs, "_sys": sys_graph}.items():
+            results[f"K1@{tenant}"] = CheckResult(f"K1@{tenant}", k1.check(graph).findings)
+    return AuditReport("federation", results)
 
 
 def why_entity(graph, uid: str) -> dict | None:

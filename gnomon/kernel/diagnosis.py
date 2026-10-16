@@ -1,10 +1,10 @@
 """Diagnosis of a zero-row apply (master §6.10): read-only probes, run in order; the first that fails names it.
 
 D1 RULE_PINNED · D2 CALLER_DENIED · D3 DUPLICATE / PID_CONFLICT · D4 INVALID_VIEW · D5 REJECTED_STALE ·
-D6 REJECTED_DECISION (decision rules: the P1 checks, one sub-reason each) ·
+D6 REJECTED_DECISION (decision rules: the P1 checks, one sub-reason each) · D7 (federation rules) ·
 D8 REJECTED_GUARD (the rule's guard probes, in order) · D9 INDETERMINATE (everything passes now).
 Genesis (prelude PG) has no rule, agent or log yet, so it goes straight to its guard probes.
-D6 and D7 belong to decision and federation rules (A10, A13).
+D7 OUT_OF_ORDER / CORRUPT / SKEW_QUARANTINED (federation rules: the P2/P3 checks, in P2/P3 order).
 """
 
 from __future__ import annotations
@@ -38,6 +38,10 @@ D6_CITE = (
     "MATCH (cs:Entity {uid: $s})-[cf]-() "
     "WHERE cf.fid = $fid AND cf.te = $INF AND cf.vf <= now AND now < cf.vt RETURN count(DISTINCT cf.fid) AS live"
 )
+D7_CHANNEL = "MATCH (c:Channel {key: 'in:' + $m.origin_tenant}) RETURN c.next_seq AS next_seq"
+D7_DIGEST = "RETURN Kernel.digest($m.fields) = $m.digest AS ok"
+D7_ATTACH = "RETURN Kernel.sha256($attach) = $p.attach_sha AS ok"
+D7_WALL = "RETURN timestamp() AS wall"
 STALE_FIELDS = ("key", "changed_at", "by_rewrite", "by_agent", "by_rule")
 
 
@@ -75,6 +79,30 @@ def decision_reason(graph, rule: RuleDef, params: dict) -> str | None:
     return None
 
 
+def federation_outcome(graph, rule: RuleDef, params: dict) -> Outcome | None:
+    """D7: the first P2/P3 check that fails, as its outcome; None when every check holds."""
+    m = params["m"]
+
+    def rows(cypher: str) -> list:
+        return graph.ro_query(cypher, params).result_set
+
+    if rule.prelude == "P2":
+        channel = rows(D7_CHANNEL)
+        if not channel:
+            return Outcome(Code.REJECTED_GUARD, detail={"guard": "P2:channel_exists", "channel": "in:" + m["origin_tenant"]})
+        if channel[0][0] != m["chan_seq"]:
+            return Outcome(Code.OUT_OF_ORDER, detail={"next_seq": channel[0][0], "chan_seq": m["chan_seq"]})
+        if rows(D7_DIGEST)[0][0] is not True:
+            return Outcome(Code.CORRUPT, detail={"reason": "digest", "id": m.get("id")})
+    if rows(D7_ATTACH)[0][0] is not True:
+        return Outcome(Code.CORRUPT, detail={"reason": "attach_sha", "id": m.get("id")})
+    field = "s_pt" if rule.prelude == "P2" else "r_pt"
+    if params["mode"] == "live" and m[field] > rows(D7_WALL)[0][0] + params["MAX_SKEW_MS"]:
+        return Outcome(Code.SKEW_QUARANTINED, detail={field: m[field], "max_skew_ms": params["MAX_SKEW_MS"],
+                                                      "id": m.get("id")})
+    return None
+
+
 def diagnose(graph, rule: RuleDef, params: dict) -> Outcome:
     def rows(cypher: str) -> list:
         return graph.ro_query(cypher, params).result_set
@@ -102,6 +130,10 @@ def diagnose(graph, rule: RuleDef, params: dict) -> Outcome:
             reason = decision_reason(graph, rule, params)
             if reason is not None:
                 return Outcome(Code.REJECTED_DECISION, detail={"reason": reason})
+        if rule.prelude in ("P2", "P3"):
+            refusal = federation_outcome(graph, rule, params)
+            if refusal is not None:
+                return refusal
     for probe in rule.guard_probes:
         if not rows(probe["cypher"]):
             return Outcome(Code.REJECTED_GUARD, detail={"guard": probe["name"]})

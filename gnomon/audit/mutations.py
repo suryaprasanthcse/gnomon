@@ -1,4 +1,5 @@
-"""Mutation suite MU1–MU18 (master §21.2, Core rows) and MU19–MU21 (T-A rows, `LAYER_MUTATIONS`).
+"""Mutation suite MU1–MU18 (master §21.2, Core rows), MU19–MU21 (T-A rows, `LAYER_MUTATIONS`), MU22–MU23 (T-B rows) and
+MU26–MU31 (T-D rows, `FEDERATION_MUTATIONS`: each corrupts one tenant graph of a federation, K9 and K4 catch it).
 
 Each mutation corrupts a scratch copy (`t:<tenant>:replay:…`) out of band, dropping a constraint first where
 one would block it, and names the checks that must detect it. Targets are found in the graph itself, so a
@@ -250,8 +251,66 @@ TB_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
 )}
 
 
+def _received(graph) -> str:
+    """The first received message (lowest chan_seq of the first in-channel)."""
+    return _row(graph, "MATCH (x:XMsg) WHERE x.chan STARTS WITH 'in:' RETURN x.id ORDER BY x.chan, x.chan_seq LIMIT 1",
+                what="received XMsg")[0]
+
+
+def mu26(graph, client, key):
+    graph.query("MATCH (x:XMsg {id: $id}) DETACH DELETE x", {"id": _received(graph)})
+
+
+def mu27(graph, client, key):
+    mid = _received(graph)
+    client.execute_command("GRAPH.CONSTRAINT", "DROP", key, "UNIQUE", "NODE", "XMsg", "PROPERTIES", "1", "id")
+    graph.query("MATCH (x:XMsg {id: $id}) WITH x LIMIT 1 CREATE (y:XMsg) SET y = properties(x)", {"id": mid})
+
+
+def mu28(graph, client, key):
+    mid = _row(graph, "MATCH (x:XMsg) WHERE x.chan STARTS WITH 'in:' AND x.kind = 'notice' RETURN x.id "
+                      "ORDER BY x.chan, x.chan_seq LIMIT 1", what="received notice")[0]
+    graph.query("MATCH (x:XMsg {id: $id}) SET x.body = x.body + ' (tampered)'", {"id": mid})
+
+
+def mu29(graph, client, key):
+    mid = _row(graph, "MATCH (x:XMsg) WHERE x.chan STARTS WITH 'out:' AND x.state = 'delivered' RETURN x.id "
+                      "ORDER BY x.chan, x.chan_seq LIMIT 1", what="delivered XMsg")[0]
+    graph.query("MATCH (x:XMsg {id: $id}) SET x.r_pt = x.s_pt - 1", {"id": mid})
+
+
+def mu30(graph, client, key):
+    mid = _row(graph, "MATCH (x:XMsg) WHERE x.chan STARTS WITH 'out:' AND x.state = 'queued' RETURN x.id "
+                      "ORDER BY x.chan, x.chan_seq LIMIT 1", what="queued XMsg")[0]
+    graph.query("MATCH (x:XMsg {id: $id}) DETACH DELETE x", {"id": mid})
+
+
+def mu31(graph, client, key):
+    from gnomon.federation import sys as fsys
+    from gnomon.kernel.jcs import canonicalize
+
+    text = _row(graph, "MATCH (h:Head) WHERE h.sys_anchor IS NOT NULL RETURN h.sys_anchor", what="sys anchor")[0]
+    anchor = fsys.parse_anchor(text)
+    if anchor is None:
+        raise MutationNotApplicable("the sys anchor is not a map")
+    digest = anchor["sys_hash"]
+    anchor["sys_hash"] = ("0" if digest[0] != "0" else "1") + digest[1:]
+    graph.query("MATCH (h:Head) SET h.sys_anchor = $anchor", {"anchor": canonicalize(anchor)})
+
+
+# T-D rows (§21.2): corruptions of the message ledger, caught by K9 across graphs and by K4 inside the corrupted one.
+FEDERATION_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
+    Mutation("MU26", "Delete a received XMsg in the receiver", ("K9b", "K9c", "K4"), mu26),
+    Mutation("MU27", "Forge a duplicate received XMsg", ("K9b", "K9c"), mu27),
+    Mutation("MU28", "Tamper a received XMsg.body", ("K9e", "K4"), mu28),
+    Mutation("MU29", "Set a delivered XMsg.r_pt below its s_pt", ("K9d", "K4"), mu29),
+    Mutation("MU30", "Delete a queued XMsg in the sender", ("K9a", "K4"), mu30),
+    Mutation("MU31", "Edit Head.sys_anchor", ("K9f", "K4"), mu31),
+)}
+
+
 def apply_mutation(db, client: redis.Redis, key: str, mu: str) -> Mutation:
     """Applies mutation `mu` to graph `key` (a scratch copy) and returns it."""
-    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS}[mu]
+    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS, **FEDERATION_MUTATIONS}[mu]
     mutation.apply(db.select_graph(key), client, key)
     return mutation

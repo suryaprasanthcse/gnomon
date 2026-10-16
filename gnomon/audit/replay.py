@@ -21,7 +21,7 @@ import redis
 from gnomon.bootstrap import ddl
 from gnomon.kernel import composer, diagnosis
 from gnomon.kernel.registry import RuleDef
-from gnomon.kernel.service import Proposal, SchemaRejected, bind, wire_text
+from gnomon.kernel.service import MESSAGE_PRELUDES, Proposal, SchemaRejected, bind, wire_text
 
 
 class Divergence(RuntimeError):
@@ -77,10 +77,11 @@ def rule_from_node(props: Mapping) -> RuleDef:
 
 def recorded_params(rule: RuleDef, r: Mapping) -> dict:
     """Query parameters for a recorded rewrite: the kernel constants from `bind`, the recorded inputs verbatim."""
+    message = json.loads(r["attach"]) if rule.prelude in MESSAGE_PRELUDES else None  # the relay's $attach is JCS($m)
     params = bind(rule, Proposal(
         rule=r["rule"], p=json.loads(r["params"]), pid=r["id"], agent=r["agent"], read_seq=r["read_seq"],
         view_keys=tuple(r.get("view_keys") or ()), attach=r.get("attach"), mode="replay", rec_pt=r["pt"],
-        rec_lc=r["lc"],
+        rec_lc=r["lc"], m=message,
     ))
     params.update(rule=r["rule"], rule_sha=r["rule_sha"], params_json=r["params"],
                   write_keys=list(r.get("write_keys") or ()))

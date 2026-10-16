@@ -592,3 +592,173 @@ layers:
       guard_probes: generate
       guard_labels: [has_deploy, mode_diverted, cur_te, cur_vt, verified, incident_exists, incident_open]
       body_file: titan/restore_service.cypher
+  TD:
+    - name: OpenChannel
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [operator, relay]
+      prelude: P0
+      reads: ["Channel", "Channel.key"]
+      writes: ["Channel"]
+      key_templates: ["Channel:{p.dir}:{p.peer}"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_new, dir_valid, peer_not_self]
+      body_file: titan/open_channel.cypher
+    - name: SendNotice
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [comms, triage]
+      prelude: P0
+      reads: ["Channel", "Channel.key", "Channel.next_seq"]
+      writes: ["Channel.next_seq", "XMsg"]
+      key_templates: ["Channel:out:{p.peer}"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_exists, body_size_ok]
+      body_file: titan/send_notice.cypher
+    - name: PublishHealth
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P0
+      reads: ["CONSUMES_NOW", "Channel", "Channel.key", "Channel.next_seq", "Channel.peer", "Consumer", "Consumer.tenant", "Service", "Service.health", "Service.id", "Service.mode", "Service.published_state"]
+      writes: ["Channel.next_seq", "Service.published_state", "XMsg"]
+      key_templates: ["Service:{p.svc}:published", "Channel:out:{p.peers[]}"]
+      view_templates: ["Service:{p.svc}:state", "CONSUMES:*:svc:{p.svc}"]
+      guard_probes: generate
+      guard_labels: [service_exists, has_consumers, peers_match, state_changed, channel_scan, channel_keys, channels_exist]
+      body_file: titan/publish_health.cypher
+    - name: ReceiveMessage.notice
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P2
+      reads: ["Channel", "Channel.key"]
+      writes: ["Channel.next_seq", "Outbox", "XMsg"]
+      key_templates: ["Channel:in:{m.origin_tenant}", "Outbox:{pid}"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_exists]
+      body_file: titan/receive_notice.cypher
+    - name: ReceiveMessage.health
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P2
+      reads: ["Channel", "Channel.key", "ExternalService", "ExternalService.health_s_pt", "ExternalService.remote_id", "ExternalService.tenant"]
+      writes: ["Channel.next_seq", "ExternalService.health", "ExternalService.health_s_pt", "ExternalService.health_seq", "ExternalService.remote_mode", "ExternalService.rw", "XMsg"]
+      key_templates: ["Channel:in:{m.origin_tenant}", "ExternalService:{m.svc}:state"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_exists, external_unique]
+      body_file: titan/receive_health.cypher
+    - name: ReceiveMessage.subscribe
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P2
+      reads: ["CONSUMES", "CONSUMES.te", "CONSUMES.vt", "Channel", "Channel.key", "Entity", "Entity.uid", "Service", "Service.id"]
+      writes: ["CONSUMES", "CONSUMES_NOW", "Channel.next_seq", "Consumer", "Entity", "XMsg"]
+      key_templates: ["Channel:in:{m.origin_tenant}", "CONSUMES:*:svc:{m.provider_svc}", "CONSUMES:*", "Consumer:*"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_exists]
+      body_file: titan/receive_subscribe.cypher
+    - name: ReceiveMessage.unsubscribe
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P2
+      reads: ["CONSUMES", "CONSUMES.fid", "CONSUMES.hard", "CONSUMES.te", "CONSUMES.vf", "CONSUMES.vt", "CONSUMES_NOW", "CONSUMES_NOW.fid", "Channel", "Channel.key", "Entity", "Entity.uid", "Service", "Service.id"]
+      writes: ["CONSUMES", "CONSUMES.te", "CONSUMES.tt", "CONSUMES_NOW", "Channel.next_seq", "XMsg"]
+      key_templates: ["Channel:in:{m.origin_tenant}", "CONSUMES:*:svc:{m.provider_svc}", "CONSUMES:*", "Consumer:*"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [channel_exists]
+      body_file: titan/receive_unsubscribe.cypher
+    - name: AckMessage
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [relay]
+      prelude: P3
+      reads: ["XMsg", "XMsg.chan", "XMsg.digest", "XMsg.id", "XMsg.state"]
+      writes: ["XMsg.acked_seq", "XMsg.r_lc", "XMsg.r_pt", "XMsg.r_rw", "XMsg.r_seq", "XMsg.state"]
+      key_templates: ["XMsg:{m.id}:state"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [message_exists, queued, chan_matches, digest_matches]
+      body_file: titan/ack_message.cypher
+    - name: SendSubscription
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [operator, relay]
+      prelude: P0
+      reads: ["Channel", "Channel.key", "Channel.next_seq", "DEP_NOW", "DEP_NOW.hard", "DEP_NOW.subscribed_seq", "ExternalService", "ExternalService.id", "ExternalService.remote_id", "ExternalService.tenant", "Service", "Service.criticality", "Service.id"]
+      writes: ["Channel.next_seq", "DEP_NOW.subscribed_seq", "XMsg"]
+      key_templates: ["Channel:out:{p.peer}", "DEPENDS_ON:svc:{p.consumer_svc}:*"]
+      view_templates: ["DEPENDS_ON:svc:{p.consumer_svc}:*"]
+      guard_probes: generate
+      guard_labels: [dependency_live, unsubscribed, peer_matches, channel_exists]
+      body_file: titan/send_subscription.cypher
+    - name: SendUnsubscription
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [operator, relay]
+      prelude: P0
+      reads: ["Channel", "Channel.key", "Channel.next_seq", "DEPENDS_ON", "DEPENDS_ON.te", "DEPENDS_ON.vt", "Entity", "Entity.remote_id", "Entity.tenant", "Entity.uid", "ExternalService", "Service", "Service.id", "XMsg", "XMsg.chan", "XMsg.chan_seq", "XMsg.consumer_svc", "XMsg.kind", "XMsg.provider_svc", "XMsg.state"]
+      writes: ["Channel.next_seq", "XMsg"]
+      key_templates: ["Channel:out:{p.peer}"]
+      view_templates: ["DEPENDS_ON:svc:{p.consumer_svc}:*"]
+      guard_probes: generate
+      guard_labels: [consumer_exists, external_exists, is_external, peer_matches, no_live_dependency, subscription_outstanding, channel_exists]
+      body_file: titan/send_unsubscription.cypher
+  SYS:
+    - name: RegisterTenant
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [operator]
+      prelude: P0
+      reads: ["Tenant", "Tenant.id"]
+      writes: ["Tenant"]
+      key_templates: ["Tenant:{p.id}", "Tenant:*"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [new_tenant, not_sys]
+      body_file: titan/register_tenant.cypher
+    - name: PeerTenants
+      version: 1
+      class: federation
+      layer: titan
+      family: null
+      caller: [operator]
+      prelude: P0
+      reads: ["Peering", "Peering.key", "Tenant", "Tenant.id"]
+      writes: ["Peering"]
+      key_templates: ["Peering:{p.a}:{p.b}", "Peering:*"]
+      view_templates: []
+      guard_probes: generate
+      guard_labels: [tenants_exist, tenants_active, ordered_pair, peering_new, kinds_nonempty]
+      body_file: titan/peer_tenants.cypher
