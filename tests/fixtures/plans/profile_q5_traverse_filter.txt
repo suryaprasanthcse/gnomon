@@ -1,0 +1,7 @@
+Sort | Records produced: 49, Execution time: 0.021 ms
+    Project | Records produced: 49, Execution time: 0.033 ms
+        Cartesian Product | Records produced: 49, Execution time: 0.028 ms
+            Node By Label Scan | (h:Head) | Records produced: 1, Execution time: 0.006 ms
+            Filter | Records produced: 49, Execution time: 0.512 ms
+                Conditional Traverse | (t)<-[f:OWNED_BY]-(s:Service) | Records produced: 6000, Execution time: 1.205 ms
+                    Node By Label Scan | (t:Team) | Records produced: 30, Execution time: 0.011 ms
