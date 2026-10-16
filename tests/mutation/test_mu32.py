@@ -79,6 +79,7 @@ def test_mu32_refuses_a_graph_with_no_open_task(db, redis_raw, golden_genesis, t
         apply_mutation(db, redis_raw, tenant, "MU32")
 
 
+@pytest.mark.timeout(1500)  # five worlds are built in one test (setup alone is minutes under -n 4); the default is 300 s
 def test_the_complete_suite_mu1_to_mu32_runs_and_every_mutation_is_caught(
         request, db, redis_raw, scenario, xw_private, make_ow, aw):
     from gnomon.executive import scoring
