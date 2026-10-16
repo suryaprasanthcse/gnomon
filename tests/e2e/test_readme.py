@@ -87,7 +87,7 @@ def test_the_ai_disclosure_is_generated_from_the_ledger():
     for model in set(re.findall(r"\| (claude-[\w.-]+) \|", ledger)):
         assert model in block
     rows = gen.parse(ledger)
-    assert {r["module"] for r in rows} >= {f"A{n:02d}" for n in range(0, 17)}
+    assert {m for r in rows for m in re.findall(r"A\d\d", r["module"])} >= {f"A{n:02d}" for n in range(0, 17)}
 
 
 def test_the_disclosure_generator_is_deterministic_and_ignores_the_ship_rows():

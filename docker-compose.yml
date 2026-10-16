@@ -1,10 +1,11 @@
 # FalkorDB only, pinned by digest at A01 (gate G0); see .agent/FACTS.md.
 # AOF with appendfsync always: a commit is acknowledged only once fsynced (master §25.2).
+# The host port is GNOMON_PORT (default 6379); the demo scripts and the clean-install test read GNOMON_FALKORDB_URL.
 services:
   falkordb:
     image: falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
     ports:
-      - "6379:6379"
+      - "${GNOMON_PORT:-6379}:6379"
     environment:
       REDIS_ARGS: "--appendonly yes --appendfsync always"
     volumes:
