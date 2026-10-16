@@ -1,3 +1,8 @@
-k7/replay/determinism subset (9 tests):
-.........                                                                [100%]
-9 passed, 53 deselected in 1013.86s (0:16:53)
+Gate run (scripts/gate.py TC --provisional, commit a55d392): 1185 passed, 1 failed in 1387 s; the failure
+(test_a_decision_to_drop_an_unused_optimizer_index_is_trialled_logged_and_executed) was gnomon/optimizer/verify.py
+raising KeyError on a hand-built index decision; fixed (hand-built decisions are skipped by the index K7 step) and the
+test re-run alone: 1 passed. Not re-run as a whole after the fix.
+test_a12_optimizer.py in isolation before the gate: 52 passed (engine, reconciler, K8, rules), then 9 passed
+(K7 for index decisions, replay equality, determinism); proof C passed inside the gate run.
+Gate record is RED: coverage gnomon/audit 84.01% < 90%, because gate TC's DAG (G0..TA) does not run the gate_tb tests
+that cover gnomon/audit/k7_resim.py (62 uncovered statements). Other coverage: optimizer 92.2%, ops 97.5%, query 88.0%.

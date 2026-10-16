@@ -68,6 +68,8 @@ def check(graph, db, client) -> list[dict]:
     manager = BranchManager(db, client, graph.name)
     for did, rewrite, seq, attach in graph.ro_query(INDEX_DECISIONS).result_set:
         d = json.loads(attach)
+        if "measurements" not in d:
+            continue  # a decision the optimizer did not make (hand-built): steps 1 and 8 of k7.py cover it
 
         def find(problem: str, **detail) -> None:
             findings.append({"problem": problem, "id": did, "rewrite": rewrite, **detail})
