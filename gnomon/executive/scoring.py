@@ -66,20 +66,23 @@ def _service_keys(uid: str) -> list[str]:
             f"DEPLOYED:{uid}:*", f"REPLICA_OF:*:{uid}"]
 
 
-def _federated_keys(uid: str) -> list[str]:
+def _federated_keys(uid: str, remote: str | None = None) -> list[str]:
     """The T-D/T-E keys of a region node (§15.8, §18): a Consumer's subscription and its tenant's inbound channel, an
     ExternalService proxy's state and the dependencies on it, and for a Service the subscriptions to it."""
     kind, _, rest = uid.partition(":")
     if kind == "cons":
         return [f"CONSUMES:{uid}:*", f"Channel:in:{rest.split('/', 1)[0]}"]
     if kind == "ext":
-        return [f"ExternalService:{rest}:state", f"DEPENDS_ON:*:{uid}"]
+        # X3.health writes `ExternalService:{m.svc}:state`, with the provider's own service id (the proxy's remote_id),
+        # which is not the proxy's id in general; both are cited (D-75).
+        named = {f"ExternalService:{rest}:state"} | ({f"ExternalService:{remote}:state"} if remote else set())
+        return [*sorted(named), f"DEPENDS_ON:*:{uid}"]
     if kind == "svc":
         return [f"CONSUMES:*:{uid}"]
     return []
 
 
-def footprint(base: Mapping, incident: str, federation: bool = False) -> list[str]:
+def footprint(base: Mapping, incident: str, federation: bool = False, remotes: Mapping[str, str] | None = None) -> list[str]:
     """The simulation footprint (§15.8): everything in the base region a change could touch, plus the incident. With
     `federation` it also holds the consumer, channel and proxy keys, so a subscription that lands mid-decision makes the
     decision stale (§18)."""
@@ -88,7 +91,7 @@ def footprint(base: Mapping, incident: str, federation: bool = False) -> list[st
         if uid.startswith("svc:"):
             keys.update(_service_keys(uid))
         if federation:
-            keys.update(_federated_keys(uid))
+            keys.update(_federated_keys(uid, (remotes or {}).get(uid)))
     return sorted(keys)
 
 

@@ -343,7 +343,12 @@ class QueryService:
                                   agent=session.agent, view_keys=[f"Channel:out:{peer}"], mode=self.mode,
                                   rec_pt=rec_pt, rec_lc=0 if rec_pt is not None else None)
 
-    def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
+    def why(self, uid: str | None = None, pid: str | None = None, did: str | None = None) -> dict | None:
+        if sum(x is not None for x in (uid, pid, did)) > 1:
+            raise QueryError("why takes one of uid, pid or did")
+        if did is not None:
+            _check_str("did", did)
+            return self._why_decision(did)
         from gnomon.audit.runner import why_entity
 
         if uid is not None:
@@ -357,6 +362,19 @@ class QueryService:
             return None
         pid_, seq, rule, agent, causes = rows[0]
         return {"pid": pid_, "seq": seq, "rule": rule, "agent": agent, "causes": sorted(c for c in causes if c)}
+
+    def _why_decision(self, did: str) -> dict | None:
+        """WHY-decision (§21.3): the committing rewrite's provenance with the decision's id and its approval, if any."""
+        rows = self.kernel.graph.ro_query(
+            "MATCH (d:Decision {id: $did})-[:COMMITTED_AS]->(r:Rewrite) OPTIONAL MATCH (a:Approval)-[:APPROVES]->(d) "
+            "RETURN r.id, a.aid, a.verdict ORDER BY a.aid", {"did": did}).result_set
+        if not rows:
+            return None
+        found = self.why(pid=rows[0][0])
+        if found is None:
+            return None
+        approvals = [{"aid": aid, "verdict": verdict} for _, aid, verdict in rows if aid is not None]
+        return {"did": did, **found, "approvals": approvals}
 
     # ── propose (§10.1 rules 3-4, §10.3)
     def propose(self, session: Session, rule: str, *, pid: str, tuple_index: int | None = None,

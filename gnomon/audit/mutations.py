@@ -1,5 +1,7 @@
-"""Mutation suite MU1–MU18 (master §21.2, Core rows), MU19–MU21 (T-A rows, `LAYER_MUTATIONS`), MU22–MU23 (T-B rows) and
-MU26–MU31 (T-D rows, `FEDERATION_MUTATIONS`: each corrupts one tenant graph of a federation, K9 and K4 catch it).
+"""Mutation suite MU1–MU18 (master §21.2, Core rows), MU19–MU21 (T-A rows, `LAYER_MUTATIONS`), MU22–MU23 (T-B rows),
+MU24–MU25 (T-C rows), MU26–MU31 (T-D rows, `FEDERATION_MUTATIONS`: each corrupts one tenant graph of a federation, K9
+and K4 catch it) and MU32 (`ASSURE_MUTATIONS`: the race the lints refuse, forced onto a scratch copy). `all_mutations()`
+is the whole catalogue in order.
 
 Each mutation corrupts a scratch copy (`t:<tenant>:replay:…`) out of band, dropping a constraint first where
 one would block it, and names the checks that must detect it. Targets are found in the graph itself, so a
@@ -351,8 +353,58 @@ TC_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
 )}
 
 
+# The seeded demo bug of master §26 P1: a claim with no lease guard and no task-state guard.
+CLAIM_V0_BODY = """MATCH (t:Task {id: $p.task}), (a:Agent {id: $agent})
+WITH KCTX, t, a
+CREATE (a)-[:HOLDS {from_seq: nseq, until_pt: now + $p.ttl, from_agent: $agent, rw: $pid}]->(t)
+SET t.state = 'claimed'
+WITH KCTX"""
+MU32_CLAIMS = 50
+
+
+def mu32(graph, client, key):
+    """Register ClaimTask_v0 (no lease guard). Lint L1 refuses it at registration, so it is forced onto the scratch
+    copy as a Rule node and 50 claims on one open task are applied: every one succeeds and K5a sees 50 open leases."""
+    from gnomon.footprint.lints import lint
+    from gnomon.kernel import macros
+    from gnomon.kernel.registry import Registry, RuleDef, load_registry
+    from gnomon.kernel.service import KernelHandle
+
+    v0 = RuleDef(
+        name="ClaimTask_v0", version=1, cls="memory", layer="core", caller=("investigator", "triage"), prelude="P0",
+        body=macros.expand(CLAIM_V0_BODY), reads=("Agent", "Agent.id", "Task", "Task.id"), writes=("HOLDS", "Task.state"),
+        key_templates=("HOLDS:*:{p.task}", "Task:{p.task}:state", "Task:*"))
+    if next(r for r in lint(v0).results if r.id == "L1").ok:
+        raise RuntimeError("lint L1 no longer refuses ClaimTask_v0: the premise of MU32 is gone")
+    task = _row(graph, "MATCH (t:Task) WHERE t.state = 'open' RETURN t.id ORDER BY t.id LIMIT 1", what="open task")[0]
+    agents = [a for (a,) in graph.ro_query("MATCH (a:Agent) WHERE a.role IN ['investigator', 'triage'] "
+                                           "RETURN a.id ORDER BY a.id").result_set]
+    if not agents:
+        raise MutationNotApplicable("no investigator or triage agent to claim with")
+    graph.query("CREATE (:Rule {name: $n, sha: $s, version: 1, active: true, caller: $c})",
+                {"n": v0.name, "s": v0.sha, "c": list(v0.caller)})
+    core = load_registry()
+    handle = KernelHandle(graph, Registry([*core.rules(), v0], core.fact_types()))
+    pt = handle.head()["pt"]
+    for i in range(MU32_CLAIMS):
+        handle.submit(v0.name, {"task": task, "ttl": 60_000}, pid=f"mu32-{i:02d}", agent=agents[i % len(agents)],
+                      mode="replay", rec_pt=pt + 10 * (i + 1), rec_lc=0)
+
+
+# The assurance row (§21.2): a race the lints refuse, forced past them.
+ASSURE_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
+    Mutation("MU32", "Register ClaimTask_v0 (no lease guard)", ("K5a",), mu32),
+)}
+
+
+def all_mutations() -> dict[str, Mutation]:
+    """MU1-MU32 in catalogue order."""
+    merged = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS, **TC_MUTATIONS, **FEDERATION_MUTATIONS, **ASSURE_MUTATIONS}
+    return dict(sorted(merged.items(), key=lambda kv: int(kv[0][2:])))
+
+
 def apply_mutation(db, client: redis.Redis, key: str, mu: str) -> Mutation:
     """Applies mutation `mu` to graph `key` (a scratch copy) and returns it."""
-    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS, **FEDERATION_MUTATIONS, **TC_MUTATIONS}[mu]
+    mutation = all_mutations()[mu]
     mutation.apply(db.select_graph(key), client, key)
     return mutation

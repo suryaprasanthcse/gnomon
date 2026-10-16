@@ -144,6 +144,17 @@ def candidate_rows(results: Sequence[Result], vetoed: set[str]) -> list[dict]:
     return rows
 
 
+REMOTES = "MATCH (x:ExternalService) WHERE x.uid IN $uids RETURN x.uid, x.remote_id ORDER BY x.uid"
+
+
+def remotes_of(graph, region: Sequence[str]) -> dict[str, str]:
+    """{proxy uid: remote_id} for the ExternalService nodes of a region: the id X3.health keys its writes by (D-75)."""
+    uids = [u for u in region if u.startswith("ext:")]
+    if not uids:
+        return {}
+    return {uid: remote for uid, remote in graph.ro_query(REMOTES, {"uids": uids}).result_set if remote}
+
+
 def digest(fields: Sequence[object]) -> str:
     """Kernel.digest (§8.2): SHA-256 over the length-prefixed fields; used for footprint_digest."""
     out = []

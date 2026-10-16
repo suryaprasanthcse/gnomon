@@ -85,8 +85,8 @@ class Tools:
     def dependency_path(self, source: str, target: str, max_len: int, asof: int | None = None, asof_seq: int | None = None) -> dict | None:
         return self._topology(asof, asof_seq).dependency_path(source, target, max_len)
 
-    def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
-        return self.qs.why(uid=uid, pid=pid)
+    def why(self, uid: str | None = None, pid: str | None = None, did: str | None = None) -> dict | None:
+        return self.qs.why(uid=uid, pid=pid, did=did)
 
     def optimizer_status(self) -> dict:
         return self.qs.optimizer_status()

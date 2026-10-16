@@ -214,7 +214,8 @@ class Executive:
         winner_result = next(r for r in d.run.results if r.k == d.winner["k"])
         algo = f"{self.library}.blastRadius"
         evidence, cites = ([], []) if winner_result.out is None else scoring.evidence(d.base_output, winner_result.out, algo)
-        footprint = scoring.footprint(d.base_output, d.incident, self.federation)
+        remotes = engine.remotes_of(self.db.select_graph(d.base.key), d.base_output["region"]) if self.federation else {}
+        footprint = scoring.footprint(d.base_output, d.incident, self.federation, remotes)
         d.view_keys = sorted(set(d.keys) | set(footprint))
         d.at("ENVELOPE")
         d.envelope = envelope.seal({

@@ -101,9 +101,10 @@ def create_server(qs: QueryService, agent: str, executive=None, asof=None, *, op
         return dumps(tools.dependency_path(source, target, max_len, asof, asof_seq))
 
     @server.tool()
-    def why(uid: str | None = None, pid: str | None = None) -> str:
-        """Provenance: the rewrite that last wrote an entity (uid) or one proposal's rewrite (pid), with its causes."""
-        return dumps(tools.why(uid, pid))
+    def why(uid: str | None = None, pid: str | None = None, did: str | None = None) -> str:
+        """Provenance: the rewrite that last wrote an entity (uid), one proposal's rewrite (pid) or a decision's
+        committing rewrite (did), with its causes."""
+        return dumps(tools.why(uid, pid, did))
 
     if executive is not None:
         @server.tool()

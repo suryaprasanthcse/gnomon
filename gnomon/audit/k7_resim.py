@@ -93,7 +93,8 @@ def resimulate(graph, db, client) -> list[dict]:
             backing = [r for (r,) in graph.ro_query(VETOES, {"did": did}).result_set]
             if any(vetoed_rules.count(r) > backing.count(r) for r in set(vetoed_rules)):
                 find("veto_unbacked", rules=vetoed_rules)
-            footprint = scoring.footprint(run.base_out, incident, federation)
+            remotes = engine.remotes_of(base_graph, run.base_out["region"]) if federation else {}
+            footprint = scoring.footprint(run.base_out, incident, federation, remotes)
             if engine.digest(footprint) != d["footprint_digest"]:
                 find("footprint_mismatch")
             channels = envelope.channel_positions(base_graph) if federation else {}
