@@ -1,0 +1,23 @@
+$ C:\myspace\hacckathons\gnomon\.venv\Scripts\python.exe -m pytest -m gate_h0 or gate_g0 or gate_g1a or gate_g1b or gate_g1c or gate_g2a or gate_g2b or gate_g3 or gate_g4a or gate_g4b or gate_ta or gate_tb or gate_tc or gate_td or gate_te or gate_tf or gate_assure --strict-markers -p no:randomly --junitxml=C:\myspace\hacckathons\gnomon\.agent\evidence\ASSURE\junit.xml -n 4
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\myspace\hacckathons\gnomon
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, hypothesis-6.169.3, cov-7.1.0, timeout-2.4.0, xdist-3.8.0
+timeout: 300.0s
+timeout method: thread
+timeout func_only: False
+created: 4/4 workers
+4 workers [1440 items]
+
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................................................................ [ 25%]
+........................................................................ [ 30%]
+........................................................................ [ 35%]
+........................................................................ [ 40%]
+........................................................................ [ 45%]
+...................................................................
