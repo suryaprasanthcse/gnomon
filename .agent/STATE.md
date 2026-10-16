@@ -1,6 +1,6 @@
 # STATE
-current_module:        A11          status: provisional
-last_green_gate:       TA
+current_module:        A11          status: green
+last_green_gate:       TB
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -41,7 +41,7 @@ kernel_sha:            e7814dc32adf336e663a0963fff0ea838b8fb28b7de354f59880071f1
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         [core, T-A, T-B]
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; TB provisional (1226 passed), awaiting the explain-back sign-off (docs/explain/A11.md); next module A12 (gate TC) or A13 (gate TD)
+resume_point:          none; TB complete (1226 passed); next module A12 (gate TC) or A13 (gate TD)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -54,4 +54,4 @@ module_table:          | module | gate | status | commit |
                        | A08    | G4a  | green  | 54a8899, 4e74d22 |
                        | A09    | G4b  | green  | 757b1c4, a0156eb |
                        | A10    | TA   | green  | e301de4, f6f365f |
-                       | A11    | TB   | provisional | 68f8890, af50fdb |
+                       | A11    | TB   | green  | 68f8890, af50fdb |
