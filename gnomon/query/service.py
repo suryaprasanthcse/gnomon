@@ -321,6 +321,28 @@ class QueryService:
         _, rows = self._run("algorithms", "al_path", {"from": source, "to": target, "max_len": max_len})
         return {"nodes": rows[0][0], "fids": rows[0][1]} if rows else None
 
+    def optimizer_status(self) -> dict:
+        """The physical index catalogue as the optimizer sees it (T-C, §20): every IndexEntry with its state, and how
+        many are in flight or were created by the optimizer. Advisory: no read id, nothing to cite."""
+        rows = self.kernel.read("MATCH (e:IndexEntry) RETURN e.key, e.label, e.prop, e.state, e.origin, e.op, "
+                                "e.requested_seq, e.settled_seq ORDER BY e.key")
+        names = ("key", "label", "prop", "state", "origin", "op", "requested_seq", "settled_seq")
+        entries = [dict(zip(names, r)) for r in rows]
+        return {"indexes": entries,
+                "in_flight": sum(1 for e in entries if e["state"] in ("requested", "retiring")),
+                "optimizer_owned": sum(1 for e in entries if e["origin"] != "genesis")}
+
+    def send_notice(self, session: Session, peer: str, incident: str, body: str, pid: str) -> Outcome:
+        """X1 SendNotice as the calling agent (T-D, §20): queues a notice on the channel out:<peer>."""
+        for name, value in (("peer", peer), ("incident", incident), ("pid", pid)):
+            _check_str(name, value)
+        if not isinstance(body, str) or not 0 < len(body) <= TEXT_MAX:
+            raise QueryError(f"body must be a string of 1 to {TEXT_MAX} characters")
+        rec_pt = self.clock() if self.mode != "live" and self.clock else None
+        return self.kernel.submit("SendNotice", {"peer": peer, "incident": incident, "body": body}, pid=pid,
+                                  agent=session.agent, view_keys=[f"Channel:out:{peer}"], mode=self.mode,
+                                  rec_pt=rec_pt, rec_lc=0 if rec_pt is not None else None)
+
     def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
         from gnomon.audit.runner import why_entity
 

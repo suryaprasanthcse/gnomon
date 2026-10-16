@@ -26,6 +26,7 @@ class Tools:
     session: Session
     executive: object | None = None
     asof: object | None = None  # (at=, seq=) -> the as-of scratch graph (gnomon.temporal.asof.AsofGraphs), T-F
+    fed: Mapping | None = None  # tenant -> graph of the federation, for fedlog (T-D)
 
     def whoami(self) -> dict:
         info = self.qs.agent_info(self.session.agent)
@@ -86,6 +87,24 @@ class Tools:
 
     def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
         return self.qs.why(uid=uid, pid=pid)
+
+    def optimizer_status(self) -> dict:
+        return self.qs.optimizer_status()
+
+    def send_notice(self, peer: str, incident: str, body: str, pid: str) -> dict:
+        out = self.qs.send_notice(self.session, peer, incident, body, pid)
+        return {"outcome": out.code.value, "pid": pid, "seq": out.seq, "detail": out.detail}
+
+    def fedlog(self, from_pt: int | None = None, to_pt: int | None = None) -> dict:
+        from gnomon.federation import fedlog
+
+        if self.fed is None:
+            raise QueryError("no federation is attached to this server")
+        for name, value in (("from_pt", from_pt), ("to_pt", to_pt)):
+            if value is not None and (not isinstance(value, int) or isinstance(value, bool) or value < 0):
+                raise QueryError(f"{name} must be a non-negative integer")
+        entries = fedlog.merge(self.fed, from_pt=from_pt, to_pt=to_pt)
+        return {"count": len(entries), "entries": [e.as_dict() for e in entries]}
 
     # ── T-B (master §20): present only when the server was given an Executive
     def _executive(self):

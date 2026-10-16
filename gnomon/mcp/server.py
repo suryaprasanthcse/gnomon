@@ -6,6 +6,7 @@ Tool results are JSON text, so every tool answers with one content block whateve
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Any, Literal
 
 from mcp.server.mcpserver import MCPServer
@@ -14,10 +15,11 @@ from gnomon.mcp.tools import Tools
 from gnomon.query.service import QueryError, QueryService, dumps
 
 
-def create_server(qs: QueryService, agent: str, executive=None, asof=None) -> MCPServer:
+def create_server(qs: QueryService, agent: str, executive=None, asof=None, *, optimizer: bool = False,
+                  federation: Mapping[str, object] | None = None) -> MCPServer:
     if qs.agent_info(agent) is None:
         raise QueryError(f"agent {agent!r} is not registered")
-    tools = Tools(qs, qs.session(agent), executive, asof)
+    tools = Tools(qs, qs.session(agent), executive, asof, federation)
     server = MCPServer("gnomon")
 
     @server.tool()
@@ -121,4 +123,33 @@ def create_server(qs: QueryService, agent: str, executive=None, asof=None) -> MC
             """A committed decision: its candidates with scores, its evidence and the rewrite that committed it."""
             return dumps(tools.decision(did))
 
+    if optimizer:
+        @server.tool()
+        def optimizer_status() -> str:
+            """The physical index catalogue: each index with its state and origin, how many changes are in flight and
+            how many indexes the optimizer created. Advisory."""
+            return dumps(tools.optimizer_status())
+
+    if _has_rule(qs, "SendNotice"):
+        @server.tool()
+        def send_notice(peer: str, incident: str, body: str, pid: str) -> str:
+            """Queue a notice about an incident for a peer tenant (comms and triage agents only). pid is your unique
+            proposal id; the relay delivers the notice in order. Write."""
+            return dumps(tools.send_notice(peer, incident, body, pid))
+
+    if federation is not None:
+        @server.tool()
+        def fedlog(from_pt: int | None = None, to_pt: int | None = None) -> str:
+            """The federated log: every attached tenant's rewrites in one happens-before order, optionally bounded by
+            physical time. Advisory."""
+            return dumps(tools.fedlog(from_pt, to_pt))
+
     return server
+
+
+def _has_rule(qs: QueryService, rule: str) -> bool:
+    try:
+        qs.kernel.registry.get(rule)
+    except KeyError:
+        return False
+    return True
