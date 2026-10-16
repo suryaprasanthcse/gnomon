@@ -20,8 +20,10 @@ from tests.support.ir_world import AGENTS, IR
 
 ROOT = Path(__file__).resolve().parents[2]
 INF = 9007199254740991
-N_SERVICES = 1500
+N_SERVICES = 1000
 N_TEAMS = 20
+VERSIONS = 4  # ownership versions per service: 1 + 2 * 3 = 7 OWNED_BY edges each
+SPAN = N_SERVICES * VERSIONS * 1_000  # width of the valid-from range of the golden facts
 VF0 = 1_791_000_000_000 - 1_000_000_000  # valid-from of the first ownership fact
 VF_STEP = 1_000
 WINDOW_MS = 600_000  # the optimizer window the tests use
@@ -51,9 +53,13 @@ def golden_opt(db, redis_raw, golden_genesis):
     for i in range(N_SERVICES):
         w.ok("RegisterEntity.Service", {"id": f"s{i}", "name": f"s{i}", "tier": "t1", "criticality": 3,
                                         "user_facing": True}, "ops-1")
-    for i in range(N_SERVICES):
-        w.ok("AssertFact.OWNED_BY", {"s": f"svc:s{i}", "o": f"team:t{i % N_TEAMS}", "vf": VF0 + i * VF_STEP,
-                                     "supersede": False}, "ops-1")
+    for j in range(VERSIONS):
+        for i in range(N_SERVICES):
+            p = {"s": f"svc:s{i}", "o": f"team:t{(i + j) % N_TEAMS}", "vf": VF0 + (j * N_SERVICES + i) * VF_STEP,
+                 "supersede": j > 0}
+            if j:
+                p["old_o"] = f"team:t{(i + j - 1) % N_TEAMS}"
+            w.ok("AssertFact.OWNED_BY", p, "ops-1")
     yield Golden(key, w.clock)
     _delete_tenant_graphs(redis_raw, key)
 
@@ -106,7 +112,7 @@ class OW:
         from gnomon.kernel.service import KernelService
         from gnomon.optimizer import scorer
 
-        rules = layer_rules("TC")
+        rules = [*layer_rules("TA"), *layer_rules("TC")]  # T-A (decisions, scorers) is the base T-C stands on
         self.k.registry = self.k.registry.with_rules(*rules)
         self.k.service = KernelService(self.k.graph, self.k.registry)
         for rule in rules:
@@ -117,11 +123,11 @@ class OW:
                    "ops-1")
 
     # ── workload
-    def reads(self, n: int, width: int = 50_000) -> None:
+    def reads(self, n: int, width: int = 20_000) -> None:
         """n real Q5 reads through the query service (telemetry on)."""
         session = self.qs.session("inv-1")
         for i in range(n):
-            lo = VF0 + ((self.q5_runs + i) * 7_000) % (N_SERVICES * VF_STEP - width)
+            lo = VF0 + ((self.q5_runs + i) * 7_000) % (SPAN - width)
             self.qs.as_of(session, "Q5", {"T1": lo, "T2": lo + width})
         self.q5_runs += n
 
@@ -135,22 +141,24 @@ class OW:
 
         text = wire_text(Q5_FILE.read_text(encoding="utf-8"))
         for i in range(n):
-            lo = VF0 + (i * 7_000) % (N_SERVICES * VF_STEP - 50_000)
-            self.telemetry.record(text, {"INF": INF, "T1": lo, "T2": lo + 50_000}, ms, 49, "inv-1")
+            lo = VF0 + (i * 7_000) % (SPAN - 20_000)
+            self.telemetry.record(text, {"INF": INF, "T1": lo, "T2": lo + 20_000}, ms, 49, "inv-1")
 
     def reassign_owners(self, n: int) -> None:
         """n real OWNED_BY hand-overs inside the optimizer window (the write mix of the cost model)."""
         for i in range(n):
-            self.ir.ok("AssertFact.OWNED_BY", {"s": f"svc:s{i}", "o": f"team:t{(i + 1) % N_TEAMS}",
-                                               "vf": self.ir.clock - 1_000, "supersede": True,
-                                               "old_o": f"team:t{i % N_TEAMS}"}, "ops-1")
+            now_owner = self.k.read("MATCH (s:Service {id: $s})-[f:OWNED_BY]->(t:Team) WHERE f.te = $INF AND f.vt = $INF "
+                                    "RETURN t.id", {"s": f"s{i}", "INF": INF})[0][0]
+            nxt = f"t{(int(now_owner[1:]) + 1) % N_TEAMS}"
+            self.ir.ok("AssertFact.OWNED_BY", {"s": f"svc:s{i}", "o": f"team:{nxt}", "vf": self.ir.clock - 1_000,
+                                               "supersede": True, "old_o": f"team:{now_owner}"}, "ops-1")
 
     # ── actors
     def optimizer(self, **kw):
         from gnomon.optimizer.engine import Optimizer
 
         kw.setdefault("config", self.cfg)
-        return Optimizer(self.db, self.client, self.k, agent=OPT, mode="replay", clock=self.now, **kw)
+        return Optimizer(self.db, self.client, self.k, agent=OPT, mode="replay", clock=self.tick, **kw)
 
     def reconciler(self, **kw):
         from gnomon.ops.reconciler import Reconciler

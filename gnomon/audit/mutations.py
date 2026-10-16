@@ -250,8 +250,50 @@ TB_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
 )}
 
 
+def _drop_index(graph, entity: str, label: str, prop: str) -> None:
+    from gnomon.ops.reconciler import drop_statement
+
+    graph.query(drop_statement(entity, label, prop))
+
+
+def mu24(graph, client, key):
+    """Drop an optimizer index out of band: the log says it is operational, the server has none."""
+    entity, label, prop = _row(graph, "MATCH (x:IndexEntry) WHERE x.origin = 'optimizer' AND x.state = 'operational' "
+                                      "RETURN x.entity, x.label, x.prop ORDER BY x.key LIMIT 1", what="optimizer index")
+    _drop_index(graph, entity, label, prop)
+
+
+OUT_OF_BAND_INDEXES = (("node", "Service", "tier"), ("node", "Service", "name"), ("node", "Team", "name"),
+                       ("edge", "OWNED_BY", "vt"), ("edge", "DEPENDS_ON", "vt"))
+
+
+def mu25(graph, client, key):
+    """Create an index nobody logged and wait until the server reports it operational."""
+    import time
+
+    from gnomon.ops.reconciler import create_statement
+
+    logged = {k for (k,) in graph.ro_query("MATCH (x:IndexEntry) RETURN x.key").result_set}
+    from gnomon.audit.k8 import physical_indexes
+
+    existing = logged | set(physical_indexes(graph))
+    pick = next((i for i in OUT_OF_BAND_INDEXES if ":".join(i) not in existing), None)
+    if pick is None:
+        raise MutationNotApplicable("every candidate index already exists")
+    graph.query(create_statement(*pick))
+    while physical_indexes(graph).get(":".join(pick)) != "OPERATIONAL":
+        time.sleep(0.05)
+
+
+# T-C rows (§21.2): the physical catalogue drifts from the logged one, so the graph hash does not change.
+TC_MUTATIONS: dict[str, Mutation] = {m.id: m for m in (
+    Mutation("MU24", "Drop an optimizer index out of band", ("K8",), mu24),
+    Mutation("MU25", "Create an index out of band", ("K8",), mu25),
+)}
+
+
 def apply_mutation(db, client: redis.Redis, key: str, mu: str) -> Mutation:
     """Applies mutation `mu` to graph `key` (a scratch copy) and returns it."""
-    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS}[mu]
+    mutation = {**MUTATIONS, **LAYER_MUTATIONS, **TB_MUTATIONS, **TC_MUTATIONS}[mu]
     mutation.apply(db.select_graph(key), client, key)
     return mutation

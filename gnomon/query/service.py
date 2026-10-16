@@ -116,12 +116,15 @@ def _ids_of_rows(rows: Sequence[Mapping]) -> set[str]:
 class QueryService:
     """Reads for one tenant graph. In `replay` and `sim` mode proposals take their time from `clock` (contract C8)."""
 
-    def __init__(self, kernel: KernelHandle, *, mode: str = "live", clock: Callable[[], int] | None = None) -> None:
+    def __init__(self, kernel: KernelHandle, *, mode: str = "live", clock: Callable[[], int] | None = None,
+                 telemetry=None) -> None:
         if mode != "live" and clock is None:
             raise ValueError(f"mode {mode!r} needs a clock")
         self.kernel = kernel
         self.mode = mode
         self.clock = clock
+        self.telemetry = telemetry  # optional workload telemetry (§16.2): one entry per agent read
+        self._last: tuple | None = None
         self._read_ids = itertools.count(1)
         self._texts: dict[tuple[str, str], str] = {}
 
@@ -137,7 +140,9 @@ class QueryService:
 
     def _run(self, directory: str, name: str, params: Mapping | None = None) -> tuple[list[str], list[list]]:
         full = {"INF": INF, "CAUSE_WINDOW_MS": CAUSE_WINDOW_MS, **(params or {})}
-        result = self.kernel.graph.ro_query(self._text(directory, name), full)
+        text = self._text(directory, name)
+        result = self.kernel.graph.ro_query(text, full)
+        self._last = (text, full, result.run_time_ms, len(result.result_set))
         names = [h[1] if isinstance(h, (list, tuple)) else h for h in result.header]
         return names, result.result_set
 
@@ -158,6 +163,9 @@ class QueryService:
     def _record(self, session: Session, kind: str, seq: int, keys: Sequence[str], ids: set[str], rows=(), **extra) -> Read:
         read = Read(read_id=f"rd-{next(self._read_ids)}", read_seq=seq, kind=kind, keys=tuple(sorted(set(keys))),
                     ids=frozenset(ids), rows=list(rows), **extra)
+        if self.telemetry is not None and self._last is not None:
+            text, params, internal_ms, n_rows = self._last
+            self.telemetry.record(text, params, internal_ms, n_rows, session.agent)
         return session.record(read)
 
     # ── binding reads (§10.4, §4.3)

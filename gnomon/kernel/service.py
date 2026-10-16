@@ -27,6 +27,8 @@ MODES = ("live", "replay", "sim")
 MAX_TTL_MS = 900_000  # Appendix C (D-21)
 MAX_ATTEMPTS = 5
 APPROVAL_TTL_MS = 900_000  # Appendix C: R16 bound
+OPT_INDEX_BUDGET = 24  # Appendix C: M1 (IndexChange) optimizer-index budget
+OPT_COOLDOWN_MS = 3_600_000  # Appendix C: M1 cooldown of a settled index key
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
@@ -144,6 +146,8 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "MAX_TTL_MS": MAX_TTL_MS,
         "MAX_ATTEMPTS": MAX_ATTEMPTS,
         "APPROVAL_TTL_MS": APPROVAL_TTL_MS,
+        "OPT_INDEX_BUDGET": OPT_INDEX_BUDGET,
+        "OPT_COOLDOWN_MS": OPT_COOLDOWN_MS,
     }
     if decision is not None:
         out["d"] = decision
