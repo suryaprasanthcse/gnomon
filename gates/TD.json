@@ -2,8 +2,8 @@
   "gate": "TD",
   "module": "A13",
   "status": "green",
-  "commit": "4728ca34814dc4ec5f2b875ada783638f25895cc",
-  "utc": "2026-10-16T04:14:35Z",
+  "commit": "5b424acff0372ea858f1510f9b1c367cefd9005f",
+  "utc": "2026-10-16T07:53:01Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -18,19 +18,20 @@
     "gate_g4b",
     "gate_ta",
     "gate_tb",
+    "gate_tc",
     "gate_td"
   ],
   "tests": {
-    "passed": 1282,
+    "passed": 1344,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 413.816
+    "duration_s": 1615.225
   },
   "coverage": {
-    "gnomon/kernel": 0.9663,
+    "gnomon/kernel": 0.9686,
     "gnomon/federation": 0.887,
-    "gnomon/ops": 1.0,
-    "gnomon/audit": 0.9183
+    "gnomon/ops": 0.9747,
+    "gnomon/audit": 0.9201
   },
   "tdd": {
     "batches": 1,

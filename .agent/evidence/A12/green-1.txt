@@ -1,0 +1,5 @@
+Cumulative run including the TB tests (markers gate_h0 .. gate_ta, gate_tb, gate_tc; pytest -n 4, commit 7b6e1ea + verify fix):
+  1288 passed, 0 failed, 0 skipped in 1394.8 s   (.agent/evidence/TC/junit-with-tb.xml)
+  coverage: audit 93.1%, optimizer 93.0%, ops 97.5%, query 88.4%   (.agent/evidence/TC/coverage-with-tb.json)
+scripts/gate.py TC cannot include the TB tests (the runbook DAG makes TC depend on TA only), so gates/TC.json still holds the
+script's own record from commit a55d392: 1185 passed, 1 failed (fixed afterwards, re-run alone: passed), audit coverage 84.0%.

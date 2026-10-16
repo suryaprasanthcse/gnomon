@@ -7,10 +7,10 @@ from dataclasses import dataclass
 
 import redis
 
-from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6, k7, k9
+from gnomon.audit import CheckResult, k1, k2, k3, k4, k5, k6, k7, k8, k9
 
 CHECKS = ("K1", "K2", "K3", "K4", "K5", "K6")
-OPTIONAL_CHECKS = ("K7",)  # selectable by name; part of the default set once a layer with decisions is active
+OPTIONAL_CHECKS = ("K7", "K8")  # selectable by name; part of the default set once a layer with decisions is active
 
 WHY_ENTITY = """MATCH (e:Entity {uid: $uid})
 MATCH (w:Rewrite)
@@ -56,6 +56,7 @@ def audit(db, client: redis.Redis, key: str, checks: Iterable[str] | None = None
         "K5": lambda: k5.check(graph),
         "K6": lambda: [k6.check(graph)],
         "K7": lambda: [k7.check(graph, db=db, client=client)],
+        "K8": lambda: [k8.check(graph)],
     }
     results: dict[str, CheckResult] = {}
     for name in (*CHECKS, *OPTIONAL_CHECKS):

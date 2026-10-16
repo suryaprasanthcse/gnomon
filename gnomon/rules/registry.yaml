@@ -762,3 +762,35 @@ layers:
       guard_probes: generate
       guard_labels: [tenants_exist, tenants_active, ordered_pair, peering_new, kinds_nonempty]
       body_file: titan/peer_tenants.cypher
+  TC:
+    - name: IndexChange
+      version: 1
+      class: meta
+      layer: titan
+      family: null
+      caller: [optimizer]
+      prelude: P0
+      requires_decision: true
+      gated: false
+      evidence: true
+      reads: ["Head", "Head.tenant", "IndexEntry", "IndexEntry.key", "IndexEntry.origin", "IndexEntry.settled_pt", "IndexEntry.state", "OPT_INDEX"]
+      writes: ["IndexEntry", "IndexEntry.op", "IndexEntry.requested_seq", "IndexEntry.rw", "IndexEntry.state", "OPT_INDEX"]
+      key_templates: ["Index:{p.key}", "Index:*"]
+      view_templates: ["Index:{p.key}", "Index:*"]
+      guard_probes: generate
+      guard_labels: [head_exists, head_current, none_in_flight, op_valid, entity_valid, key_matches, state_allows_op]
+      body_file: titan/index_change.cypher
+    - name: IndexSettled
+      version: 1
+      class: meta
+      layer: titan
+      family: null
+      caller: [reconciler]
+      prelude: P0
+      reads: ["IndexEntry", "IndexEntry.key", "IndexEntry.state"]
+      writes: ["IndexEntry.ddl_ms", "IndexEntry.detail", "IndexEntry.settled_pt", "IndexEntry.settled_seq", "IndexEntry.state"]
+      key_templates: ["Index:{p.key}", "Index:*"]
+      view_templates: ["Index:{p.key}"]
+      guard_probes: generate
+      guard_labels: [key_exists, state_outcome_compatible]
+      body_file: titan/index_settled.cypher

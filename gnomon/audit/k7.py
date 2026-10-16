@@ -3,7 +3,8 @@
 Step 1: for every `(Decision)-[:COMMITTED_AS]->(Rewrite)`, the envelope in `attach` hashes to its own sha and to the
 `decision_sha` in the rewrite's params, and the Decision, Candidate and Evidence nodes equal the parts of the envelope.
 Step 8 (I11): every rewrite of an action-class rule has exactly one Decision and every Decision exactly one
-`COMMITTED_AS`. Steps 2-7 (re-simulation of an Executive decision, k7_resim.py) run when `db` and `client` are given.
+`COMMITTED_AS`. Steps 2-7 (re-simulation of an Executive decision, k7_resim.py; re-derivation of an index decision, gnomon/optimizer/verify.py)
+run when `db` and `client` are given.
 """
 
 from __future__ import annotations
@@ -93,6 +94,9 @@ def check(graph, *, db=None, client=None) -> CheckResult:
         from gnomon.audit.k7_resim import resimulate
 
         findings += resimulate(graph, db, client)
+        from gnomon.optimizer.verify import check as check_index_decisions  # §16.14: kind `index`
+
+        findings += check_index_decisions(graph, db, client)
     shas = [sha for (sha,) in graph.ro_query(ACTION_SHAS).result_set]
     if shas:
         for rewrite, n in graph.ro_query(ACTION_REWRITES, {"shas": shas}).result_set:

@@ -30,6 +30,8 @@ APPROVAL_TTL_MS = 900_000  # Appendix C: R16 bound
 MAX_SKEW_MS = 60_000  # Appendix C: P2 and P3 refuse a sender or receiver clock further ahead than this
 NOTICE_MAX = 4_000  # Appendix C: the longest SendNotice body
 MESSAGE_PRELUDES = ("P2", "P3")
+OPT_INDEX_BUDGET = 24  # Appendix C: M1 (IndexChange) optimizer-index budget
+OPT_COOLDOWN_MS = 3_600_000  # Appendix C: M1 cooldown of a settled index key
 # Appendix C: the closed role set, bound as $ROLES for M6 (DECISIONS D-12).
 ROLES = ("kernel", "operator", "ingest", "triage", "investigator", "comms", "responder", "human", "scheduler",
          "dispatcher", "executive", "optimizer", "reconciler", "relay")
@@ -154,6 +156,8 @@ def bind(rule: RuleDef, proposal: Proposal) -> dict:
         "APPROVAL_TTL_MS": APPROVAL_TTL_MS,
         "MAX_SKEW_MS": MAX_SKEW_MS,
         "NOTICE_MAX": NOTICE_MAX,
+        "OPT_INDEX_BUDGET": OPT_INDEX_BUDGET,
+        "OPT_COOLDOWN_MS": OPT_COOLDOWN_MS,
     }
     if decision is not None:
         out["d"] = decision

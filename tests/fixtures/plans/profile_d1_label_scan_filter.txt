@@ -1,0 +1,3 @@
+Project | Records produced: 40, Execution time: 0.021 ms
+    Filter | Records produced: 40, Execution time: 0.312 ms
+        Node By Label Scan | (s:Service) | Records produced: 1500, Execution time: 0.402 ms

@@ -862,7 +862,7 @@ HUMAN CHECKPOINT
 ### A12 · T-C Self-Optimizing Engine · gate TC
 
 ```text
-MODULE A12 · GATE TC · DEPENDS: TA   (parallel-safe with A13 on a separate worktree)
+MODULE A12 · GATE TC · DEPENDS: TB   (A13 now depends on TB too; see DECISIONS D-59 and D-67)
 ORRERY: barrier
 
 CAPSULE: (as A00). Build the optimizer: workload telemetry, PROFILE/EXPLAIN plan parsing,
@@ -908,7 +908,7 @@ out-of-band index? 5 What does the optimizer refuse to touch?
 ### A13 · T-D Multi-tenant federation · gate TD
 
 ```text
-MODULE A13 · GATE TD · DEPENDS: TB   (built on TB, D-59; was G4b, parallel-safe with A12)
+MODULE A13 · GATE TD · DEPENDS: TC   (built on TB, D-59; was G4b, parallel-safe with A12) (D-68: TC is merged, so TD's test set must cover the code TC added to shared packages)
 ORRERY: barrier
 
 CAPSULE: (as A00). Build federation: the t:_sys registry graph (S0–S2), tenant anchors, channels,
