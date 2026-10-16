@@ -1,4 +1,4 @@
-"""Segment composition (master §6.1): segment order by rule kind, T0 substitution; P1/E0 installed by A10, P2/P3 not yet."""
+"""Segment composition (master §6.1): segment order by rule kind, T0 substitution; P1/E0 installed by A10, P2/P3 by A13."""
 
 import dataclasses
 from pathlib import Path
@@ -66,16 +66,18 @@ def test_every_composed_query_ticks_exactly_once(genesis, noop):
 
 
 @pytest.mark.parametrize(
-    ("change", "segment"),
-    [({"prelude": "P2"}, "P2"), ({"prelude": "P3"}, "P3")],
+    ("change", "segment", "tick"),
+    [({"prelude": "P2"}, "P2", "Kernel.recv(h.pt, h.lc, timestamp(), $m.s_pt, $m.s_lc, $mode, $rec_pt, $rec_lc)"),
+     ({"prelude": "P3"}, "P3", "Kernel.recv(h.pt, h.lc, timestamp(), $m.r_pt, $m.r_lc, $mode, $rec_pt, $rec_lc)")],
     ids=["federation-receive", "federation-ack"],
 )
-def test_add_on_segments_are_not_installed(noop, change, segment):
+def test_federation_segments_are_installed_and_replace_the_tick(noop, change, segment, tick):
     from gnomon.kernel import composer
 
     rule = dataclasses.replace(noop, **change)
-    with pytest.raises(composer.SegmentNotInstalled, match=f"segment not installed: {segment}"):
-        composer.compose(rule)
+    assert composer.plan(rule) == ["P0", segment, "BODY", "Q0", "RET"]
+    text = composer.compose(rule)
+    assert composer.segment(segment) in text and tick in text and "Kernel.tick(" not in text and "<TICK>" not in text
 
 
 def test_decision_is_p0_p1_body_q0_e0(noop):

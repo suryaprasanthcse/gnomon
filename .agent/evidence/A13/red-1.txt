@@ -1,0 +1,65 @@
+# A13 RED run 1: uv run pytest tests/integration/test_a13_federation.py tests/unit/kernel/test_compose_order.py (failure causes, counted)
+# 4 failed, 11 passed, 53 errors: gnomon.federation does not exist; segments P2/P3 and layer TD are not installed
+     53 E       ModuleNotFoundError: No module named 'gnomon.federation'
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_federation_segments_are_installed_and_replace_the_tick[federation-receive]
+      1 FAILED tests/unit/kernel/test_compose_order.py::test_federation_segments_are_installed_and_replace_the_tick[federation-ack]
+      1 FAILED tests/integration/test_a13_federation.py::test_the_federation_mutation_catalogue_is_mu26_to_mu31
+      1 FAILED tests/integration/test_a13_federation.py::test_p2_and_p3_are_installed_and_ticked_with_recv
+      1 ERROR tests/integration/test_a13_federation.py::test_x5_guards - ModuleNotFou...
+      1 ERROR tests/integration/test_a13_federation.py::test_x4_guards_an_ack_only_for_a_queued_message_with_the_same_digest
+      1 ERROR tests/integration/test_a13_federation.py::test_x2_publish_health_fans_out_to_every_consumer_tenant
+      1 ERROR tests/integration/test_a13_federation.py::test_x2_guards - ModuleNotFou...
+      1 ERROR tests/integration/test_a13_federation.py::test_x1_send_notice_queues_a_digested_message_and_advances_the_channel
+      1 ERROR tests/integration/test_a13_federation.py::test_x1_guards - ModuleNotFou...
+      1 ERROR tests/integration/test_a13_federation.py::test_x0_open_channel - Module...
+      1 ERROR tests/integration/test_a13_federation.py::test_why_follows_a_received_message_back_across_graphs
+      1 ERROR tests/integration/test_a13_federation.py::test_unsubscribe_x6_closes_the_current_fact_and_its_projection
+      1 ERROR tests/integration/test_a13_federation.py::test_tenant_r0_records_a_sys_anchor_that_k9f_verifies
+      1 ERROR tests/integration/test_a13_federation.py::test_sys_genesis_carries_only_s1_s2_m3_m4_m6
+      1 ERROR tests/integration/test_a13_federation.py::test_subscription_flow_x5_x3_creates_the_consumer_and_its_current_fact
+      1 ERROR tests/integration/test_a13_federation.py::test_s2_peer_tenants_guards
+      1 ERROR tests/integration/test_a13_federation.py::test_s1_register_tenant_guards
+      1 ERROR tests/integration/test_a13_federation.py::test_relay_keeps_no_durable_state_and_a_new_relay_finds_nothing_to_do
+      1 ERROR tests/integration/test_a13_federation.py::test_relay_delivers_a_notice_in_order_and_acks_it
+      1 ERROR tests/integration/test_a13_federation.py::test_random_interleavings_across_three_tenants_hold_f1_to_f5_and_audit_clean[7]
+      1 ERROR tests/integration/test_a13_federation.py::test_random_interleavings_across_three_tenants_hold_f1_to_f5_and_audit_clean[21]
+      1 ERROR tests/integration/test_a13_federation.py::test_proof_d_federation_ordering_across_graphs_that_share_nothing
+      1 ERROR tests/integration/test_a13_federation.py::test_private_tenant_state_never_enters_a_relay_channel
+      1 ERROR tests/integration/test_a13_federation.py::test_p3_quarantines_an_ack_stamped_in_the_future
+      1 ERROR tests/integration/test_a13_federation.py::test_p2_without_an_open_channel_is_a_named_guard_not_a_crash
+      1 ERROR tests/integration/test_a13_federation.py::test_p2_refuses_out_of_order_corrupt_and_forged_attach
+      1 ERROR tests/integration/test_a13_federation.py::test_p2_quarantines_a_sender_whose_clock_runs_ahead_in_live_mode
+      1 ERROR tests/integration/test_a13_federation.py::test_message_params_are_bound_from_m_and_attach_is_its_canonical_json
+      1 ERROR tests/integration/test_a13_federation.py::test_k9_passes_on_a_busy_federation
+      1 ERROR tests/integration/test_a13_federation.py::test_k9_is_idempotent_over_redelivery_and_a_second_audit_changes_nothing
+      1 ERROR tests/integration/test_a13_federation.py::test_k9_each_tenant_graph_still_passes_k1_to_k6_and_replays_to_the_same_hash
+      1 ERROR tests/integration/test_a13_federation.py::test_fedlog_linearizes_happens_before_with_the_cli
+      1 ERROR tests/integration/test_a13_federation.py::test_federation_mutations_refuse_a_graph_that_has_nothing_to_corrupt
+      1 ERROR tests/integration/test_a13_federation.py::test_f5_bounded_drift_a_quarantined_sender_never_drags_the_receiver_clock
+      1 ERROR tests/integration/test_a13_federation.py::test_f4_the_federated_log_linearizes_happens_before
+      1 ERROR tests/integration/test_a13_federation.py::test_f3_causality_in_live_mode_receiver_hlc_exceeds_sender_hlc
+      1 ERROR tests/integration/test_a13_federation.py::test_f3_a_sender_ahead_of_the_receivers_wall_clock_still_gets_a_strictly_greater_receipt
+      1 ERROR tests/integration/test_a13_federation.py::test_f2_exactly_once_each_message_is_one_receipt
+      1 ERROR tests/integration/test_a13_federation.py::test_f1_fifo_without_gaps_even_when_deliveries_are_interleaved_with_sends
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU31]
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU30]
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU29]
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU28]
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU27]
+      1 ERROR tests/integration/test_a13_federation.py::test_each_federation_mutation_is_detected_by_its_predicted_checks[MU26]
+      1 ERROR tests/integration/test_a13_federation.py::test_duplicate_delivery_reports_duplicate_before_order_is_checked
+      1 ERROR tests/integration/test_a13_federation.py::test_chaos_out_of_order_attempt_resyncs_from_the_receivers_next_seq
+      1 ERROR tests/integration/test_a13_federation.py::test_chaos_corrupted_digest_quarantines_one_channel_and_the_others_keep_flowing
+      1 ERROR tests/integration/test_a13_federation.py::test_an_isolated_provider_reads_as_down_at_the_consumer
+      1 ERROR tests/integration/test_a13_federation.py::test_an_existing_subscription_arriving_again_is_a_noop
+      1 ERROR tests/integration/test_a13_federation.py::test_a_tenant_cannot_write_another_tenants_channel_state_through_a_message
+      1 ERROR tests/integration/test_a13_federation.py::test_a_subscription_racing_a_publish_makes_the_publish_stale
+      1 ERROR tests/integration/test_a13_federation.py::test_a_subscription_for_an_unknown_service_is_consumed_as_unroutable_not_rejected
+      1 ERROR tests/integration/test_a13_federation.py::test_a_stale_health_message_is_consumed_as_superseded_and_an_unknown_service_as_unroutable
+      1 ERROR tests/integration/test_a13_federation.py::test_a_crash_between_receive_and_ack_resumes_from_xmsg_states
+      1 ERROR tests/integration/test_a13_federation.py::test_a_crash_before_the_ack_lands_leaves_exactly_one_receipt_after_two_resumes
+      1 E       ImportError: cannot import name 'FEDERATION_MUTATIONS' from 'gnomon.audit.mutations' (C:\myspace\hacckathons\gnomon\gnomon\audit\mutations.py)
+      1 E           gnomon.kernel.composer.SegmentNotInstalled: segment not installed: P3
+      1 E           gnomon.kernel.composer.SegmentNotInstalled: segment not installed: P2
+      1 E           KeyError: "unknown layer 'TD'"
+      1 4 failed, 11 passed, 53 errors in 3.50s
