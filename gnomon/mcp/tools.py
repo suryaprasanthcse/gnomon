@@ -25,6 +25,7 @@ class Tools:
     qs: QueryService
     session: Session
     executive: object | None = None
+    asof: object | None = None  # (at=, seq=) -> the as-of scratch graph (gnomon.temporal.asof.AsofGraphs), T-F
 
     def whoami(self) -> dict:
         info = self.qs.agent_info(self.session.agent)
@@ -53,23 +54,35 @@ class Tools:
                               cite_reads=cite_reads or [])
         return {"outcome": out.code.value, "pid": pid, "seq": out.seq, "detail": out.detail}
 
-    def neighborhood(self, svc: str, depth: int) -> dict:
-        return self.qs.neighborhood(svc, depth)
+    def _topology(self, asof: int | None, asof_seq: int | None) -> QueryService:
+        """The service an advisory algorithm runs on: the live graph, or with `asof` (valid time T) or `asof_seq`
+        (belief after rewrite S) the scratch graph whose projections reflect then (master §19.2)."""
+        if asof is None and asof_seq is None:
+            return self.qs
+        if self.asof is None:
+            raise QueryError("as-of projections are not available on this server")
+        try:
+            return self.qs.over(self.asof(at=asof, seq=asof_seq))
+        except ValueError as exc:
+            raise QueryError(str(exc)) from exc
 
-    def rank_critical(self, k: int) -> list:
-        return self.qs.rank_critical(k)
+    def neighborhood(self, svc: str, depth: int, asof: int | None = None, asof_seq: int | None = None) -> dict:
+        return self._topology(asof, asof_seq).neighborhood(svc, depth)
 
-    def brokers(self, k: int, sampling: int) -> list:
-        return self.qs.brokers(k, sampling)
+    def rank_critical(self, k: int, asof: int | None = None, asof_seq: int | None = None) -> list:
+        return self._topology(asof, asof_seq).rank_critical(k)
 
-    def failure_domains(self) -> list:
-        return self.qs.failure_domains()
+    def brokers(self, k: int, sampling: int, asof: int | None = None, asof_seq: int | None = None) -> list:
+        return self._topology(asof, asof_seq).brokers(k, sampling)
 
-    def communities(self) -> list:
-        return self.qs.communities()
+    def failure_domains(self, asof: int | None = None, asof_seq: int | None = None) -> list:
+        return self._topology(asof, asof_seq).failure_domains()
 
-    def dependency_path(self, source: str, target: str, max_len: int) -> dict | None:
-        return self.qs.dependency_path(source, target, max_len)
+    def communities(self, asof: int | None = None, asof_seq: int | None = None) -> list:
+        return self._topology(asof, asof_seq).communities()
+
+    def dependency_path(self, source: str, target: str, max_len: int, asof: int | None = None, asof_seq: int | None = None) -> dict | None:
+        return self._topology(asof, asof_seq).dependency_path(source, target, max_len)
 
     def why(self, uid: str | None = None, pid: str | None = None) -> dict | None:
         return self.qs.why(uid=uid, pid=pid)

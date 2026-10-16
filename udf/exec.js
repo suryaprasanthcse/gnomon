@@ -1,10 +1,12 @@
-// Exec · the blast-radius scorer (master §15.5, §15.6). Read-only; every step is integer arithmetic and every
+// Exec · the blast-radius scorer (master §15.5, §15.6, §18). Read-only; every step is integer arithmetic and every
 // iteration runs in uid or fid order, so two runs on equal graphs produce byte-identical output.
 //
 //   Exec.blastRadius(seed, hops, cfg) -> { version, region, sources, impacted, teams, owner_edges }
 //
 // The graph it reads: Service nodes (uid, criticality, health, mode), DEP_NOW edges a -> b ("a depends on b", fid,
-// hard) and OWNER_NOW edges to Team nodes (fid). Federation (CONSUMES_NOW, ExternalService) arrives with T-D/T-E.
+// hard) and OWNER_NOW edges to Team nodes (fid). With cfg.federation === true (scorer v2, T-E) CONSUMES_NOW edges join
+// the region and the dependents: a Consumer (uid 'cons:...') is a leaf weighted by its subscribed criticality, and an
+// ExternalService proxy weighs its contract_criticality. Without it the output is the v1 output, bit for bit.
 
 // The whole library sits in one function scope: UDF libraries share the server's global scope, so a bare
 // `function attr` here would replace the Kernel library's `attr` (and `edgesOf`, `fail`) for every rewrite.
@@ -25,8 +27,16 @@ function cmp(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
-function edgesOf(node, direction, type) {
-  return node.getNeighbors({ direction: direction, types: [type], returnType: 'edges' });
+function edgesOf(node, direction, types) {
+  return node.getNeighbors({ direction: direction, types: types, returnType: 'edges' });
+}
+
+function isConsumer(node) {
+  return String(attr(node, 'uid')).indexOf('cons:') === 0;
+}
+
+function isExternal(node) {
+  return String(attr(node, 'uid')).indexOf('ext:') === 0;
 }
 
 function otherEnd(edge, node) {
@@ -60,6 +70,13 @@ function propagate(sev, mode, hard) {
 }
 
 function blastRadius(seed, hops, cfg) {
+  var fed = cfg !== null && cfg !== undefined && cfg.federation === true;
+  var REGION_TYPES = fed ? ['DEP_NOW', 'CONSUMES_NOW'] : ['DEP_NOW'];
+  var DEPENDENT_TYPES = REGION_TYPES;
+  // crit(Service) = criticality; crit(Consumer) = its subscribed criticality; crit(ExternalService) = contract_criticality
+  function crit(node) {
+    return fed && isExternal(node) ? attr(node, 'contract_criticality') : attr(node, 'criticality');
+  }
   if (!Number.isInteger(hops) || hops < 1 || hops > 8) {
     fail('hops must be an integer between 1 and 8, got ' + hops);
   }
@@ -75,7 +92,7 @@ function blastRadius(seed, hops, cfg) {
     frontier.sort(function (a, b) { return cmp(attr(a, 'uid'), attr(b, 'uid')); });
     for (var fi = 0; fi < frontier.length; fi++) {
       var n = frontier[fi];
-      var edges = edgesOf(n, 'outgoing', 'DEP_NOW').concat(edgesOf(n, 'incoming', 'DEP_NOW')).sort(byFid);
+      var edges = edgesOf(n, 'outgoing', REGION_TYPES).concat(edgesOf(n, 'incoming', REGION_TYPES)).sort(byFid);
       for (var ei = 0; ei < edges.length; ei++) {
         var m = otherEnd(edges[ei], n);
         var uid = attr(m, 'uid');
@@ -90,7 +107,7 @@ function blastRadius(seed, hops, cfg) {
     frontier = next;
   }
   // 2 - sources: region nodes whose effective state is not ok
-  var sources = region.filter(function (x) { return state0(x) !== 'ok'; });
+  var sources = region.filter(function (x) { return !isConsumer(x) && state0(x) !== 'ok'; });
   sources.sort(function (a, b) { return cmp(attr(a, 'uid'), attr(b, 'uid')); });
   // 3 - impact: label-correcting propagation to dependents, bounded by `hops` levels, within the region
   var best = {};
@@ -98,7 +115,7 @@ function blastRadius(seed, hops, cfg) {
   for (var si = 0; si < sources.length; si++) {
     var s = sources[si];
     var sev0 = state0(s);
-    best[attr(s, 'uid')] = { sev: sev0, d: 0, w: attr(s, 'criticality') * SEV[sev0] * W, soft: false,
+    best[attr(s, 'uid')] = { sev: sev0, d: 0, w: crit(s) * SEV[sev0] * W, soft: false,
                              parent: null, parent_fid: null, mode: attr(s, 'mode'), node: s };
   }
   for (var level = 1; level <= hops; level++) {
@@ -106,8 +123,8 @@ function blastRadius(seed, hops, cfg) {
     for (var qi = 0; qi < queue.length; qi++) {
       var b = queue[qi];
       var bb = best[attr(b, 'uid')];
-      if (bb.soft) { continue; } // bulkhead: soft-reached nodes do not propagate
-      var incoming = edgesOf(b, 'incoming', 'DEP_NOW').sort(byFid);
+      if (bb.soft || isConsumer(b)) { continue; } // bulkhead: soft-reached nodes do not propagate; consumers are leaves
+      var incoming = edgesOf(b, 'incoming', DEPENDENT_TYPES).sort(byFid);
       for (var ii = 0; ii < incoming.length; ii++) {
         var e = incoming[ii];
         var a = otherEnd(e, b);
@@ -115,7 +132,7 @@ function blastRadius(seed, hops, cfg) {
         if (!(auid in dist)) { continue; }
         var st = propagate(bb.sev, bb.mode, e.attributes.hard === true);
         if (st === null) { continue; }
-        var w = attr(a, 'criticality') * SEV[st.sev] * Math.floor(W / (level + 1));
+        var w = crit(a) * SEV[st.sev] * Math.floor(W / (level + 1));
         var cur = best[auid];
         if (cur === undefined || w > cur.w || (w === cur.w && attr(b, 'uid') < cur.parent)) {
           best[auid] = { sev: st.sev, d: level, w: w, soft: st.soft, parent: attr(b, 'uid'), parent_fid: fidOf(e),
@@ -138,7 +155,7 @@ function blastRadius(seed, hops, cfg) {
   var teamSet = {};
   for (var oi = 0; oi < impactedUids.length; oi++) {
     var u = impactedUids[oi];
-    var owned = edgesOf(best[u].node, 'outgoing', 'OWNER_NOW').sort(byFid);
+    var owned = edgesOf(best[u].node, 'outgoing', ['OWNER_NOW']).sort(byFid);
     for (var wi = 0; wi < owned.length; wi++) {
       var team = attr(owned[wi].target, 'uid');
       ownerEdges.push([u, team, fidOf(owned[wi])]);
@@ -150,7 +167,7 @@ function blastRadius(seed, hops, cfg) {
     return [u2, x.sev, x.d, x.w, x.parent, x.parent_fid];
   });
   return {
-    version: 1,
+    version: fed ? 2 : 1,
     region: Object.keys(dist).sort(),
     sources: sources.map(function (x) { return attr(x, 'uid'); }),
     impacted: impacted,

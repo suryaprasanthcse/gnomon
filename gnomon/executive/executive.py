@@ -17,8 +17,13 @@ from gnomon.executive import engine, envelope, scoring
 from gnomon.executive.branches import Base, BranchManager, SnapshotError
 from gnomon.kernel.outcomes import Code, Outcome
 
+SCORER_VERSION = "MATCH (s:Scorer {name: $name, sha: $sha}) WHERE s.deactivated_seq IS NULL RETURN max(s.version)"
 FLUSH_LIMIT = 6  # a decision that keeps being flushed is failed rather than looped forever
 APPROVAL_TTL_MS = 900_000
+
+
+class ScorerError(RuntimeError):
+    """A federated Executive whose scorer is not registered as version 2 (master §18)."""
 
 
 @dataclass
@@ -64,13 +69,14 @@ class Executive:
     def __init__(self, db, client, kernel, *, agent: str = "executive", mode: str = "live", library: str = "Exec",
                  clock: Callable[[], int] | None = None, k_max: int = scoring.K_MAX, hops: int = scoring.HOPS,
                  stale_retries: int = scoring.STALE_RETRIES, approval_ttl_ms: int = APPROVAL_TTL_MS,
-                 before_commit: Callable | None = None) -> None:
+                 before_commit: Callable | None = None, federation: bool = False) -> None:
         if mode != "live" and clock is None:
             raise ValueError(f"mode {mode!r} needs a clock")
         self.db, self.client, self.kernel = db, client, kernel
         self.agent, self.mode, self.library, self.clock = agent, mode, library, clock
         self.k_max, self.hops, self.stale_retries = k_max, hops, stale_retries
         self.approval_ttl_ms, self.before_commit = approval_ttl_ms, before_commit
+        self.federation = federation  # scorer v2 (master §18): consumers, proxies, channel keys in footprint and envelope
         self.branches = BranchManager(db, client, kernel.graph.name)
         self.decisions: dict[str, Decision] = {}
 
@@ -107,7 +113,7 @@ class Executive:
         d = self._new(incident, nominations, rationale, request_id, proposer)
         try:
             self._evaluate(d)
-        except SnapshotError as exc:
+        except (SnapshotError, ScorerError) as exc:
             self._fail(d, str(exc))
         else:
             d.at("SIMULATED")
@@ -168,12 +174,14 @@ class Executive:
     def _drive(self, d: Decision) -> Decision:
         try:
             self._evaluate(d)
-        except SnapshotError as exc:
+        except (SnapshotError, ScorerError) as exc:
             return self._fail(d, str(exc))
         return self._seal(d)
 
     def _evaluate(self, d: Decision) -> None:
         """SNAPSHOT, ENUMERATE, BRANCH, SIMULATE, SCORE: the futures of attempt `d.attempt` (or SIMULATED's dry run)."""
+        if self.federation:
+            self._require_v2()
         d.at("SNAPSHOT")
         d.base = self.snapshot(d.did, d.attempt)
         d.at("ENUMERATE")
@@ -184,7 +192,7 @@ class Executive:
         d.at("BRANCH")
         d.at("SIMULATE")
         d.run = engine.run(self.db, self.client, self.kernel.registry, d.base, d.did, d.attempt, d.incident, chosen,
-                           self.library, self.agent, self.hops)
+                           self.library, self.agent, self.hops, federation=self.federation)
         d.at("SCORE")
         d.base_output = d.run.base_out
         d.keys = [key for t in chosen for key in self.tuple_keys_of(d, t)]
@@ -206,7 +214,7 @@ class Executive:
         winner_result = next(r for r in d.run.results if r.k == d.winner["k"])
         algo = f"{self.library}.blastRadius"
         evidence, cites = ([], []) if winner_result.out is None else scoring.evidence(d.base_output, winner_result.out, algo)
-        footprint = scoring.footprint(d.base_output, d.incident)
+        footprint = scoring.footprint(d.base_output, d.incident, self.federation)
         d.view_keys = sorted(set(d.keys) | set(footprint))
         d.at("ENVELOPE")
         d.envelope = envelope.seal({
@@ -216,7 +224,8 @@ class Executive:
             "weight_scale": scoring.W, "lambda_n": scoring.LAMBDA_N, "lambda_d": scoring.LAMBDA_D, "tau": scoring.TAU,
             "margin": scoring.MARGIN, "baseline": engine.baseline(d.base_output), "candidates": d.candidates,
             "evidence": evidence, "cites": cites, "footprint_digest": engine.digest(footprint),
-            "workload_digest": None, "channels": {}})
+            "workload_digest": None,
+            "channels": envelope.channel_positions(self.db.select_graph(d.base.key)) if self.federation else {}})
         d.commit_params = envelope.params_for(d.winner["params"], d.envelope)
         if not self.kernel.registry.get(d.winner["rule"]).gated:
             return self._commit(d)
@@ -238,6 +247,11 @@ class Executive:
         rows = self.kernel.read("MATCH (kv:KeyVersion) WHERE kv.key IN $keys AND kv.seq > $seq RETURN count(kv)",
                                 {"keys": d.view_keys, "seq": d.base.seq})
         return rows[0][0] > 0
+
+    def _require_v2(self) -> None:
+        rows = self.kernel.read(SCORER_VERSION, {"name": f"{self.library}.blastRadius", "sha": self._library_sha()})
+        if not rows or rows[0][0] is None or rows[0][0] < 2:
+            raise ScorerError(f"{self.library}.blastRadius is not registered as version 2 (federation needs scorer v2)")
 
     def _library_sha(self) -> str:
         from gnomon.udf import loader

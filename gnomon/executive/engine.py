@@ -18,7 +18,7 @@ from gnomon.kernel.service import KernelHandle, KernelService, Proposal
 
 ESCALATE = "EscalateIncident"
 ENUMERATED = ("IsolateService", "FailoverService", "RollbackDeploy", "RestoreService")  # the order of the candidate set
-SCORE = "MATCH (i:Incident {id: $incident})-[:AFFECTS]->(s:Service) RETURN @LIB@.blastRadius(s, $hops, {federation: false})"
+SCORE = "MATCH (i:Incident {id: $incident})-[:AFFECTS]->(s:Service) RETURN @LIB@.blastRadius(s, $hops, {federation: $federation})"
 
 
 @dataclass
@@ -43,9 +43,10 @@ class Run:
     results: list[Result] = field(default_factory=list)
 
 
-def score_graph(graph, incident: str, hops: int, library: str) -> dict:
-    """Exec.blastRadius from the incident's affected service, as a read-only query on `graph`."""
-    rows = graph.ro_query(SCORE.replace("@LIB@", library), {"incident": incident, "hops": hops}).result_set
+def score_graph(graph, incident: str, hops: int, library: str, federation: bool = False) -> dict:
+    """Exec.blastRadius from the incident's affected service, as a read-only query on `graph` (scorer v2 when federated)."""
+    rows = graph.ro_query(SCORE.replace("@LIB@", library),
+                          {"incident": incident, "hops": hops, "federation": bool(federation)}).result_set
     if not rows:
         raise LookupError(f"incident {incident!r} affects no service in {graph.name}")
     return rows[0][0]
@@ -73,15 +74,15 @@ def sim_apply(db, registry, base: Base, branch: str, did: str, attempt: int, k: 
 
 
 def run(db, client, registry, base: Base, did: str, attempt: int, incident: str, candidates: Sequence[Mapping],
-        library: str, agent: str, hops: int = scoring.HOPS, keep: bool = True) -> Run:
+        library: str, agent: str, hops: int = scoring.HOPS, keep: bool = True, federation: bool = False) -> Run:
     """Score the base, then simulate and score every candidate on its own branch (candidates carry their k)."""
     manager = BranchManager(db, client, base.key[: base.key.index(":sim:")])
-    out = Run(base, score_graph(db.select_graph(base.key), incident, hops, library))
+    out = Run(base, score_graph(db.select_graph(base.key), incident, hops, library, federation))
     for cand in candidates:
         branch = manager.branch(base, cand["k"])
         result = sim_apply(db, registry, base, branch, did, attempt, cand["k"], cand["rule"], cand["params"], agent)
         if result.outcome == "scored":
-            result.out = score_graph(db.select_graph(branch), incident, hops, library)
+            result.out = score_graph(db.select_graph(branch), incident, hops, library, federation)
             result.metrics = scoring.score(out.base_out, result.out)
         if not keep:
             manager.retire([branch])

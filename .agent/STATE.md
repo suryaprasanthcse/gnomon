@@ -1,6 +1,6 @@
 # STATE
-current_module:        A12          status: green (A13 gate TD also green; wave 3 merged)
-last_green_gate:       TD (gates TC and TD both green)
+current_module:        A15          status: provisional (A14 gate TE and A15 gate TF written and their own tests green; gates not run; wave 4)
+last_green_gate:       TD (gates TC and TD both green); TE and TF provisional, not gate-run
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
@@ -40,9 +40,9 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
 fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25)]
 kernel_sha:            5711add3b4c184d96b5353682708996c7f4dc02ca3d5f542e9e265e921403834 (Head.kernel_sha: udf/kernel.js + composer.py + segments pg/p0/p1/p2/p3/q0/e0/ret, LF; changed in A13 by P2/P3 and the T2/T3 ticks; was e7814dc3... after A11)
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
-layers_active:         [core, T-A, T-B, T-C, T-D]
-open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; TC (A12) and TD (A13) merged; next module A14 (gate TE); run the cumulative gate on the merged tree before A14
+layers_active:         [core, T-A, T-B, T-C, T-D, T-E, T-F]
+open_questions:        0 (see QUESTIONS.md; D-69..D-73 await approval)
+resume_point:          wave 4 written (A14 and A15, one commit); run `python scripts/gate.py TE` and `TF` on this tree, re-run the executive, audit, mcp and ops suites that the change touches, then the human checkpoints; next module A16 (assurance sweep)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -58,3 +58,5 @@ module_table:          | module | gate | status | commit |
                        | A11    | TB   | green  | 68f8890, af50fdb |
                        | A12    | TC   | green  | a1111ee, a55d392 |
                        | A13    | TD   | green  | 26234eb, 2de3246 |
+                       | A14    | TE   | provisional | wave-4 commit (see git log: feat(wave-4)) |
+                       | A15    | TF   | provisional | wave-4 commit (see git log: feat(wave-4)) |

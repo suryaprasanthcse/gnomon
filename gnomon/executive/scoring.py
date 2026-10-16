@@ -66,12 +66,29 @@ def _service_keys(uid: str) -> list[str]:
             f"DEPLOYED:{uid}:*", f"REPLICA_OF:*:{uid}"]
 
 
-def footprint(base: Mapping, incident: str) -> list[str]:
-    """The simulation footprint (§15.8): everything in the base region a change could touch, plus the incident."""
+def _federated_keys(uid: str) -> list[str]:
+    """The T-D/T-E keys of a region node (§15.8, §18): a Consumer's subscription and its tenant's inbound channel, an
+    ExternalService proxy's state and the dependencies on it, and for a Service the subscriptions to it."""
+    kind, _, rest = uid.partition(":")
+    if kind == "cons":
+        return [f"CONSUMES:{uid}:*", f"Channel:in:{rest.split('/', 1)[0]}"]
+    if kind == "ext":
+        return [f"ExternalService:{rest}:state", f"DEPENDS_ON:*:{uid}"]
+    if kind == "svc":
+        return [f"CONSUMES:*:{uid}"]
+    return []
+
+
+def footprint(base: Mapping, incident: str, federation: bool = False) -> list[str]:
+    """The simulation footprint (§15.8): everything in the base region a change could touch, plus the incident. With
+    `federation` it also holds the consumer, channel and proxy keys, so a subscription that lands mid-decision makes the
+    decision stale (§18)."""
     keys = {f"Incident:{incident}:state", f"ROOT_CAUSE:inc:{incident}:*"}
     for uid in base["region"]:
         if uid.startswith("svc:"):
             keys.update(_service_keys(uid))
+        if federation:
+            keys.update(_federated_keys(uid))
     return sorted(keys)
 
 

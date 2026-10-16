@@ -128,6 +128,10 @@ class QueryService:
         self._read_ids = itertools.count(1)
         self._texts: dict[tuple[str, str], str] = {}
 
+    def over(self, graph) -> QueryService:
+        """The same service reading another graph with this one's registry: the as-of scratch graph of §19.2."""
+        return QueryService(KernelHandle(graph, self.kernel.registry), mode=self.mode, clock=self.clock)
+
     # ── plumbing
     def session(self, agent: str) -> Session:
         return Session(agent)

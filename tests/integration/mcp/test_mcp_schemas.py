@@ -61,13 +61,14 @@ def test_every_core_tool_and_no_other_is_listed_with_a_schema(server):
 def test_input_schemas_match_the_catalogue(server):
     tools = {n: t.input_schema for n, t in listed(server).items()}
     props = {n: set(s.get("properties", {})) for n, s in tools.items()}
-    assert props["whoami"] == set() and props["failure_domains"] == set() and props["communities"] == set()
+    asof = {"asof", "asof_seq"}  # T-F (D-71): every advisory algorithm tool takes a valid time or a seq
+    assert props["whoami"] == set() and props["failure_domains"] == asof and props["communities"] == asof
     assert props["read_entity"] == {"uid"} and props["facts"] == {"uid"}
     assert props["as_of"] == {"query", "args"} and props["incident_status"] == {"incident"}
     assert props["list_actions"] == {"rule", "args"}
-    assert props["neighborhood"] == {"svc", "depth"} and props["rank_critical"] == {"k"}
-    assert props["brokers"] == {"k", "sampling"}
-    assert props["dependency_path"] == {"source", "target", "max_len"}  # `from` is a Python keyword (D-34)
+    assert props["neighborhood"] == {"svc", "depth"} | asof and props["rank_critical"] == {"k"} | asof
+    assert props["brokers"] == {"k", "sampling"} | asof
+    assert props["dependency_path"] == {"source", "target", "max_len"} | asof  # `from` is a Python keyword (D-34)
     assert props["why"] == {"uid", "pid"}
     assert set(tools["as_of"]["properties"]["query"]["enum"]) == {"Q1", "Q2", "Q3", "Q4", "Q5", "Q6"}
 

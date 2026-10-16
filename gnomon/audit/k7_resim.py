@@ -17,7 +17,7 @@ RETURN x.id AS id, r.id AS rewrite, r.seq AS seq, r.attach AS attach, r.view_key
 ORDER BY seq"""
 ACTIVE_SCORER = """MATCH (s:Scorer {name: $name, sha: $sha})
 WHERE s.registered_seq <= $seq AND (s.deactivated_seq IS NULL OR s.deactivated_seq > $seq)
-RETURN count(s)"""
+RETURN count(s), max(s.version)"""
 RULES_AT = """MATCH (ru:Rule) WHERE ru.registered_seq <= $seq AND (ru.deactivated_seq IS NULL OR ru.deactivated_seq > $seq)
 RETURN properties(ru) ORDER BY ru.name"""
 EXECUTIVE_AGENT = "MATCH (a:Agent) WHERE a.role = 'executive' AND a.active = true RETURN a.id ORDER BY a.id LIMIT 1"
@@ -27,7 +27,7 @@ METRICS = ("benefit", "harm", "teams_new", "score_num")
 
 def resimulate(graph, db, client) -> list[dict]:
     from gnomon.audit.replay import Divergence, replay, rule_from_node
-    from gnomon.executive import engine, scoring
+    from gnomon.executive import engine, envelope, scoring
     from gnomon.executive.branches import BranchManager
     from gnomon.kernel.registry import Registry
     from gnomon.udf import loader
@@ -49,8 +49,11 @@ def resimulate(graph, db, client) -> list[dict]:
         else:
             if loaded != d["scorer_sha"]:
                 find("library_sha", library=library, loaded=loaded, recorded=d["scorer_sha"])
-        if not graph.ro_query(ACTIVE_SCORER, {"name": d["scorer"], "sha": d["scorer_sha"], "seq": seq}).result_set[0][0]:
+        active, version = graph.ro_query(ACTIVE_SCORER, {"name": d["scorer"], "sha": d["scorer_sha"],
+                                                         "seq": seq}).result_set[0]
+        if not active:
             find("scorer_inactive", scorer=d["scorer"])
+        federation = (version or 1) >= 2  # scorer v2 is the federated blast radius (§18)
         config = {"hops": scoring.HOPS, "weight_scale": scoring.W, "lambda_n": scoring.LAMBDA_N,
                   "lambda_d": scoring.LAMBDA_D, "tau": scoring.TAU, "margin": scoring.MARGIN}
         bad = sorted(name for name, value in config.items() if d.get(name) != value)
@@ -78,7 +81,7 @@ def resimulate(graph, db, client) -> list[dict]:
             incident = recorded[0]["params"]["incident"]
             run = engine.run(db, client, registry, base, f"k7-{did}", d["attempt"], incident,
                              [{"k": c["k"], "rule": c["rule"], "params": c["params"]} for c in recorded],
-                             library, agents[0][0], d["hops"], keep=False)
+                             library, agents[0][0], d["hops"], keep=False, federation=federation)
             again = engine.candidate_rows(run.results, {c["params_sha"] for c in recorded if c["outcome"] == "vetoed"})
             for was, now in zip(recorded, again):
                 differs = [f for f in ("outcome", "reason", *METRICS) if was.get(f) != now.get(f)]
@@ -90,9 +93,12 @@ def resimulate(graph, db, client) -> list[dict]:
             backing = [r for (r,) in graph.ro_query(VETOES, {"did": did}).result_set]
             if any(vetoed_rules.count(r) > backing.count(r) for r in set(vetoed_rules)):
                 find("veto_unbacked", rules=vetoed_rules)
-            footprint = scoring.footprint(run.base_out, incident)
+            footprint = scoring.footprint(run.base_out, incident, federation)
             if engine.digest(footprint) != d["footprint_digest"]:
                 find("footprint_mismatch")
+            channels = envelope.channel_positions(base_graph) if federation else {}
+            if channels != d.get("channels"):
+                find("channels_mismatch", recorded=d.get("channels"), rebuilt=channels)
             missing = sorted(set(footprint) - set(view_keys or ()))
             if missing:
                 find("footprint_not_in_view_keys", missing=missing[:5])

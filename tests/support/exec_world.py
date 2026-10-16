@@ -76,7 +76,8 @@ def exec_library(redis_raw, fresh: bool = False) -> str:
     return name
 
 
-def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), soft=True, fresh=False) -> XW:
+def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), soft=True, fresh=False,
+          c_health="down", scorer_version=1) -> XW:
     from gnomon.kernel.registry import layer_rules, register_rule_params
     from gnomon.kernel.service import KernelService
     from gnomon.udf import loader
@@ -87,7 +88,7 @@ def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), s
     ir.k.registry = ir.k.registry.with_rules(*rules)
     ir.k.service = KernelService(ir.k.graph, ir.k.registry)
     ir.ok("RegisterScorer", {"name": f"{library}.blastRadius", "sha": loader.library_sha(redis_raw, library),
-                             "kind": "udf", "version": 1}, "ops-1")
+                             "kind": "udf", "version": scorer_version}, "ops-1")
     for rule in rules:
         ir.ok("RegisterRule", register_rule_params(rule), "ops-1", pid=f"m3-{rule.name}")
     for team in ("t2", "t3"):
@@ -108,7 +109,8 @@ def build(ir: IR, db, redis_raw, *, root_cause=False, replicas=("ok", "down"), s
         if health != "ok":
             ir.ok("Observe.health", {"source_id": f"h-{rid}", "service": rid, "health": health,
                                      "observed_pt": ir.clock}, "ing-1")
-    ir.ok("Observe.health", {"source_id": "h-c", "service": "c", "health": "down", "observed_pt": ir.clock}, "ing-1")
+    ir.ok("Observe.health", {"source_id": "h-c", "service": "c", "health": c_health, "observed_pt": ir.clock},
+          "ing-1")
     deploys = {}
     if root_cause:
         for did, verified, version in (("c-prev", True, "1"), ("c-bad", False, "2")):

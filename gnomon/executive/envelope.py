@@ -32,6 +32,15 @@ def _nat(value: object) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value >= 0
 
 
+CHANNELS = "MATCH (c:Channel) WHERE c.dir = 'in' RETURN c.peer, c.next_seq ORDER BY c.peer"
+
+
+def channel_positions(graph) -> dict[str, int]:
+    """`channels = {peer: Channel(in:peer).next_seq}` of a base graph (§14.1, §18): the inbound channel positions the
+    decision was made at. K7 rebuilds the base at `read_seq`, which fixes these too. A tenant without federation has none."""
+    return {peer: seq for peer, seq in graph.ro_query(CHANNELS).result_set}
+
+
 def validate(fields: Mapping) -> None:
     for name in REQUIRED:
         if name not in fields:
@@ -46,6 +55,9 @@ def validate(fields: Mapping) -> None:
         raise EnvelopeError("aid must be <did>/<attempt>")
     if not _nat(fields["read_seq"]):
         raise EnvelopeError("read_seq must be a non-negative integer")
+    channels = fields["channels"]
+    if not isinstance(channels, Mapping) or not all(isinstance(p, str) and _nat(n) for p, n in channels.items()):
+        raise EnvelopeError("channels must map each peer to a non-negative next_seq")
     for name in ("candidates", "evidence", "cites"):
         if not isinstance(fields[name], list):
             raise EnvelopeError(f"{name} must be a list")

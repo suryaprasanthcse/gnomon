@@ -14,10 +14,10 @@ from gnomon.mcp.tools import Tools
 from gnomon.query.service import QueryError, QueryService, dumps
 
 
-def create_server(qs: QueryService, agent: str, executive=None) -> MCPServer:
+def create_server(qs: QueryService, agent: str, executive=None, asof=None) -> MCPServer:
     if qs.agent_info(agent) is None:
         raise QueryError(f"agent {agent!r} is not registered")
-    tools = Tools(qs, qs.session(agent), executive)
+    tools = Tools(qs, qs.session(agent), executive, asof)
     server = MCPServer("gnomon")
 
     @server.tool()
@@ -63,34 +63,40 @@ def create_server(qs: QueryService, agent: str, executive=None) -> MCPServer:
         return dumps(tools.propose(rule, pid, tuple_index, params, text, cite_reads))
 
     @server.tool()
-    def neighborhood(svc: str, depth: int) -> str:
-        """Services downstream and upstream of a service within depth hops over current dependencies. Advisory."""
-        return dumps(tools.neighborhood(svc, depth))
+    def neighborhood(svc: str, depth: int, asof: int | None = None, asof_seq: int | None = None) -> str:
+        """Services downstream and upstream of a service within depth hops over current dependencies. Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.neighborhood(svc, depth, asof, asof_seq))
 
     @server.tool()
-    def rank_critical(k: int) -> str:
-        """The k services most depended upon (PageRank over current dependencies). Advisory."""
-        return dumps(tools.rank_critical(k))
+    def rank_critical(k: int, asof: int | None = None, asof_seq: int | None = None) -> str:
+        """The k services most depended upon (PageRank over current dependencies). Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.rank_critical(k, asof, asof_seq))
 
     @server.tool()
-    def brokers(k: int, sampling: int) -> str:
-        """The k services that sit on the most dependency paths (betweenness, fixed seed). Advisory."""
-        return dumps(tools.brokers(k, sampling))
+    def brokers(k: int, sampling: int, asof: int | None = None, asof_seq: int | None = None) -> str:
+        """The k services that sit on the most dependency paths (betweenness, fixed seed). Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.brokers(k, sampling, asof, asof_seq))
 
     @server.tool()
-    def failure_domains() -> str:
-        """Weakly connected groups of services over current dependencies. Advisory."""
-        return dumps(tools.failure_domains())
+    def failure_domains(asof: int | None = None, asof_seq: int | None = None) -> str:
+        """Weakly connected groups of services over current dependencies. Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.failure_domains(asof, asof_seq))
 
     @server.tool()
-    def communities() -> str:
-        """Dependency communities (label propagation). Advisory."""
-        return dumps(tools.communities())
+    def communities(asof: int | None = None, asof_seq: int | None = None) -> str:
+        """Dependency communities (label propagation). Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.communities(asof, asof_seq))
 
     @server.tool()
-    def dependency_path(source: str, target: str, max_len: int) -> str:
-        """The shortest dependency path between two services, in either direction, or null. Advisory."""
-        return dumps(tools.dependency_path(source, target, max_len))
+    def dependency_path(source: str, target: str, max_len: int, asof: int | None = None, asof_seq: int | None = None) -> str:
+        """The shortest dependency path between two services, in either direction, or null. Advisory.
+        asof (a valid time) or asof_seq (a rewrite seq) answers for the topology then instead of now."""
+        return dumps(tools.dependency_path(source, target, max_len, asof, asof_seq))
 
     @server.tool()
     def why(uid: str | None = None, pid: str | None = None) -> str:

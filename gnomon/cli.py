@@ -6,6 +6,7 @@
     python -m gnomon.cli fedlog --graphs A=t:a,B=t:b[,...] [--from-pt PT] [--to-pt PT]
     python -m gnomon.cli run    --graph t:<tenant> [--seed 7] [--no-crash] [--record FILE | --replay FILE]
     python -m gnomon.cli proof  P1|P2|P3|P4|P5
+    python -m gnomon.cli counterfactual <did> --graph t:<tenant> --at-seq S
     python -m gnomon.cli approve|veto --graph t:<tenant> --aid <aid> --decision-sha <sha> --agent <human agent>
                                  [--note TEXT] [--at PT]
 
@@ -15,6 +16,8 @@ unresolved scenario or a failed proof. `run` bootstraps the tenant (it must be e
 `fedlog` merges the logs of the tenant graphs by (pt, lc, tenant, seq) (master §17.7).
 `approve` and `veto` propose R17 ApproveDecision as a human agent for exactly the decision sha given (the tenant must
 have T-A activated); `--at PT` records the proposal at that time (replay mode) instead of the wall clock.
+`counterfactual` rebuilds the base at seq S from the log, re-runs the Executive on the decision's recorded candidate
+set and prints both winners and score tables side by side (master §19.3); it writes nothing to the tenant graph.
 `proof` runs the executable proof scenario for one Core row of §26 (the pytest module tests/e2e/test_proof_pN.py).
 """
 
@@ -73,6 +76,11 @@ def _parser() -> argparse.ArgumentParser:
         sub.add_argument("--agent", required=True, help="a registered agent with role human")
         sub.add_argument("--note", default="")
         sub.add_argument("--at", type=int, help="recorded time (epoch ms); default: the wall clock")
+    cf = commands.add_parser("counterfactual")
+    cf.add_argument("did")
+    cf.add_argument("--url", default=os.environ.get("GNOMON_FALKORDB_URL", DEFAULT_URL))
+    cf.add_argument("--graph", required=True)
+    cf.add_argument("--at-seq", type=int, required=True)
     proof = commands.add_parser("proof")
     proof.add_argument("name", choices=PROOFS)
     return parser
@@ -162,6 +170,11 @@ def main(argv: list[str] | None = None) -> int:
             code, out = _decide(args, db)
         elif args.command == "fedlog":
             code, out = _fedlog(args, db)
+        elif args.command == "counterfactual":
+            from gnomon.temporal.counterfactual import counterfactual
+
+            out = counterfactual(db, client, args.graph, args.did, args.at_seq)
+            code = 1 if "error" in out else 0
         else:
             code, out = _run(args, db, client)
     finally:
