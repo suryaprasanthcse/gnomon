@@ -1,5 +1,5 @@
 # STATE
-current_module:        A12          status: provisional (gate record red: audit coverage, see LEDGER)
+current_module:        A12          status: provisional (1288 passed with the TB tests; gates/TC.json is the script's older red record, see LEDGER)
 last_green_gate:       TB (A12 gate TC recorded red/provisional; A12 is on branch a12-optimizer, worktree ../gnomon-a12)
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -42,7 +42,7 @@ kernel_sha:            e7814dc32adf336e663a0963fff0ea838b8fb28b7de354f59880071f1
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         [core, T-A, T-B] (T-C code in place on a12-optimizer; activated per tenant by M3/M5/M6)
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          A12 on branch a12-optimizer: gate TC recorded red only for audit coverage (needs the gate_tb tests in the set); explain-back and D-60..D-66 await the human; A13 runs in the main checkout
+resume_point:          A12 on branch a12-optimizer: gates/TC.json is red only for audit coverage under the TC-only test set; with the TB tests included audit is 93.1% and 1288 passed; explain-back and D-60..D-66 await the human; A13 runs in the main checkout
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
