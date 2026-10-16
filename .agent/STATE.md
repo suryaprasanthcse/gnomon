@@ -1,5 +1,5 @@
 # STATE
-current_module:        A11          status: green
+current_module:        A13          status: provisional (gate TD)
 last_green_gate:       TB
 falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
 python:                3.12.x
@@ -37,11 +37,11 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        S24 (A05 hazard): FAIL → slow write with a multi-byte char at byte 2048 of its text aborts the server; send ASCII query text (D-20)
                        S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8)
 fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25)]
-kernel_sha:            e7814dc32adf336e663a0963fff0ea838b8fb28b7de354f59880071f11980ce4 (Head.kernel_sha: udf/kernel.js + gnomon/kernel/composer.py + segments pg/p0/p1/q0/e0/ret, LF; changed in A11 by the sim argument of composer.py; was f538e727... after A10)
+kernel_sha:            5711add3b4c184d96b5353682708996c7f4dc02ca3d5f542e9e265e921403834 (Head.kernel_sha: udf/kernel.js + composer.py + segments pg/p0/p1/p2/p3/q0/e0/ret, LF; changed in A13 by P2/P3 and the T2/T3 ticks; was e7814dc3... after A11)
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
-layers_active:         [core, T-A, T-B]
+layers_active:         [core, T-A, T-B, T-D]
 open_questions:        0 (see QUESTIONS.md)
-resume_point:          none; TB complete (1226 passed); next module A12 (gate TC) or A13 (gate TD)
+resume_point:          none; TD provisional (1282 passed), awaiting human sign-off of docs/explain/A13.md and D-52..D-59; next A12 (TC) or A14 (TE)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |
@@ -55,3 +55,4 @@ module_table:          | module | gate | status | commit |
                        | A09    | G4b  | green  | 757b1c4, a0156eb |
                        | A10    | TA   | green  | e301de4, f6f365f |
                        | A11    | TB   | green  | 68f8890, af50fdb |
+                       | A13    | TD   | provisional | 2de3246 |

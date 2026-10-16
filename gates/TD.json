@@ -1,0 +1,46 @@
+{
+  "gate": "TD",
+  "module": "A13",
+  "status": "provisional",
+  "commit": "b1ff545917b5dfa0373c2b012136dfab849ced70",
+  "utc": "2026-10-16T02:33:18Z",
+  "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
+  "markers": [
+    "gate_h0",
+    "gate_g0",
+    "gate_g1a",
+    "gate_g1b",
+    "gate_g1c",
+    "gate_g2a",
+    "gate_g2b",
+    "gate_g3",
+    "gate_g4a",
+    "gate_g4b",
+    "gate_ta",
+    "gate_tb",
+    "gate_td"
+  ],
+  "tests": {
+    "passed": 1282,
+    "failed": 0,
+    "skipped": 0,
+    "duration_s": 467.425
+  },
+  "coverage": {
+    "gnomon/kernel": 0.9663,
+    "gnomon/federation": 0.887,
+    "gnomon/ops": 1.0,
+    "gnomon/audit": 0.9183
+  },
+  "tdd": {
+    "batches": 1,
+    "red_evidence": [
+      "red-1.txt"
+    ],
+    "order_ok": true
+  },
+  "forbidden_patterns": 0,
+  "human_signed": false,
+  "failures": [],
+  "forbidden": []
+}
