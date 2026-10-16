@@ -1,9 +1,9 @@
 {
   "gate": "TC",
   "module": "A12",
-  "status": "red",
-  "commit": "a55d392d52a27845d59faaec44a51fa93cf542a0",
-  "utc": "2026-10-16T04:48:25Z",
+  "status": "green",
+  "commit": "db6f4b0912c7311be2e8328dafaec52c843a992b",
+  "utc": "2026-10-16T05:55:49Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -17,19 +17,20 @@
     "gate_g4a",
     "gate_g4b",
     "gate_ta",
+    "gate_tb",
     "gate_tc"
   ],
   "tests": {
-    "passed": 1185,
-    "failed": 1,
+    "passed": 1288,
+    "failed": 0,
     "skipped": 0,
-    "duration_s": 1387.355
+    "duration_s": 1384.704
   },
   "coverage": {
-    "gnomon/optimizer": 0.9223,
+    "gnomon/optimizer": 0.9296,
     "gnomon/ops": 0.9747,
-    "gnomon/audit": 0.8401,
-    "gnomon/query": 0.88
+    "gnomon/audit": 0.9282,
+    "gnomon/query": 0.8835
   },
   "tdd": {
     "batches": 1,
@@ -39,10 +40,7 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": false,
-  "failures": [
-    "pytest exited with 1 (1 failed or errored)",
-    "coverage gnomon/audit 84.01% < 90%"
-  ],
+  "human_signed": true,
+  "failures": [],
   "forbidden": []
 }

@@ -862,7 +862,7 @@ HUMAN CHECKPOINT
 ### A12 · T-C Self-Optimizing Engine · gate TC
 
 ```text
-MODULE A12 · GATE TC · DEPENDS: TA   (parallel-safe with A13 on a separate worktree)
+MODULE A12 · GATE TC · DEPENDS: TB   (A13 now depends on TB too; see DECISIONS D-59 and D-67)
 ORRERY: barrier
 
 CAPSULE: (as A00). Build the optimizer: workload telemetry, PROFILE/EXPLAIN plan parsing,
