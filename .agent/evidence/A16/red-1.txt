@@ -1,0 +1,18 @@
+# A16 RED run 1: uv run pytest tests/mutation/test_mu32.py tests/e2e/test_proof_g.py tests/integration/mcp/test_complete_mcp_surface.py tests/integration/mcp/test_mcp_schemas.py tests/integration/executive_fed/test_federated_blast.py tests/chaos/test_chaos_suite.py::test_a_health_recovery_that_lands_mid_decision_makes_the_decision_stale_and_it_re_simulates (failure causes)
+# 11 failed, 49 passed (the stateful, determinism, perf and the other chaos tests pass on the existing code: they assert properties it already has)
+      6 mutation suite: gnomon.audit.mutations has no all_mutations, no ASSURE_MUTATIONS and no MU32 (ClaimTask_v0 forced onto a scratch copy)
+      1 proof G: needs all_mutations()
+      2 MCP: `why` takes no `did` (tool schema {pid, uid}; WHY-decision is not served)
+      1 footprint(): a proxy is cited by its id only, not by the remote_id that X3.health writes (TypeError: 4 positional arguments given)
+      1 chaos: a health recovery landing mid-decision does NOT make the decision stale (stale_flushes 0, expected 1): the footprint names ExternalService:A.pay:state, X3.health writes ExternalService:pay:state
+FAILED tests/mutation/test_mu32.py::test_the_catalogue_is_mu1_to_mu32_in_order_with_the_expected_checks_of_the_spec
+FAILED tests/mutation/test_mu32.py::test_mu32_is_refused_at_registration_by_lint_l1
+FAILED tests/mutation/test_mu32.py::test_mu32_forced_onto_a_scratch_copy_trips_k5a_and_leaves_the_live_graph_clean
+FAILED tests/mutation/test_mu32.py::test_mu32_shows_fifty_open_leases
+FAILED tests/mutation/test_mu32.py::test_mu32_refuses_a_graph_with_no_open_task
+FAILED tests/mutation/test_mu32.py::test_the_complete_suite_mu1_to_mu32_runs_and_every_mutation_is_caught
+FAILED tests/e2e/test_proof_g.py::test_proof_g_every_audit_is_green_then_three_live_corruptions_are_caught_by_their_predicted_checks
+FAILED tests/integration/mcp/test_complete_mcp_surface.py::test_decide_commits_through_the_executive_and_decision_reads_it_back
+FAILED tests/integration/mcp/test_mcp_schemas.py::test_input_schemas_match_the_catalogue
+FAILED tests/integration/executive_fed/test_federated_blast.py::test_a_proxy_is_cited_by_the_remote_id_that_x3_health_writes
+FAILED tests/chaos/test_chaos_suite.py::test_a_health_recovery_that_lands_mid_decision_makes_the_decision_stale_and_it_re_simulates

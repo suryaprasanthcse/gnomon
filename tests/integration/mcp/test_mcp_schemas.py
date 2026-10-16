@@ -69,7 +69,7 @@ def test_input_schemas_match_the_catalogue(server):
     assert props["neighborhood"] == {"svc", "depth"} | asof and props["rank_critical"] == {"k"} | asof
     assert props["brokers"] == {"k", "sampling"} | asof
     assert props["dependency_path"] == {"source", "target", "max_len"} | asof  # `from` is a Python keyword (D-34)
-    assert props["why"] == {"uid", "pid"}
+    assert props["why"] == {"uid", "pid", "did"}
     assert set(tools["as_of"]["properties"]["query"]["enum"]) == {"Q1", "Q2", "Q3", "Q4", "Q5", "Q6"}
 
 

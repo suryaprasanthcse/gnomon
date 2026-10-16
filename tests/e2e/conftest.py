@@ -2,6 +2,7 @@
 
 import pytest
 
+from tests.support.assurance_world import aw, aw_golden, make_aw  # noqa: F401
 from tests.support.ir_world import ir, opened  # noqa: F401
 from tests.support.query_world import qs  # noqa: F401
 from tests.support.sim_world import fresh_kernel, kernels  # noqa: F401

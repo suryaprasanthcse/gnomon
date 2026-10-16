@@ -165,6 +165,10 @@ def test_decide_commits_through_the_executive_and_decision_reads_it_back(world):
     err, found = call(server, "decision", {"did": out["did"]})
     assert not err and found["did"] == out["did"] and found["committed_as"] == out["pid"]
     assert any(c["won"] for c in found["candidates"])
+    err, why = call(server, "why", {"did": out["did"]})
+    assert not err and why["did"] == out["did"] and why["pid"] == out["pid"] and why["rule"] == "FailoverService"
+    assert call(server, "why", {"did": "D-none"}) == (False, None)
+    assert call(server, "why", {"did": out["did"], "uid": "svc:c"})[0]  # one of uid, pid, did
     assert call(world.server("com-1", executive=False), "whoami")[1]["role"] == "comms"
 
 

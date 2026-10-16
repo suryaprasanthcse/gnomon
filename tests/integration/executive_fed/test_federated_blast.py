@@ -155,6 +155,14 @@ def test_proxy_keys_join_the_footprint_when_a_proxy_is_in_the_region():
     assert not any(k.startswith("ExternalService") for k in scoring.footprint(base, "i1"))
 
 
+def test_a_proxy_is_cited_by_the_remote_id_that_x3_health_writes():
+    from gnomon.executive import scoring
+
+    base = {"region": ["svc:a", "ext:prov.auth"]}
+    keys = set(scoring.footprint(base, "i1", True, {"ext:prov.auth": "auth"}))
+    assert {"ExternalService:prov.auth:state", "ExternalService:auth:state"} <= keys  # the id and the remote id
+
+
 def test_envelope_channels_recorded_and_k7_rebuilds_them(fxw, db, redis_raw):
     from gnomon.audit.runner import audit
 
