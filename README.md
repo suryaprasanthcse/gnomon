@@ -455,7 +455,13 @@ Platform facts that deviated from the spec are recorded as spikes with approved 
 
 *This section is written by the author, in their own words, before submission.*
 
-VIDEO-NARRATIVE-PENDING
+Most autonomous agent frameworks treat graphs as passive retrieval targets or give models unrestrained write access to an operational database, inevitably resulting in hallucinated IDs, concurrency races, and untraceable regressions.
+
+I built GNOMON to solve this fundamental architectural flaw. GNOMON is an event-sourced, multi-agent operating system where untrusted LLMs cannot write directly to the graph. Instead, every state transition is an atomic, Cypher-composed rewrite pinned by cryptographic SHA-256 signatures, validated against explicit optimistic concurrency footprints, and evaluated through dual clocks (sequential sequence numbers and hybrid logical clocks).
+
+By leveraging FalkorDB's native capabilities, GNOMON introduces a counterfactual Executive that branches live tenant state using GRAPH.COPY to simulate candidate actions, scoring systemic blast radius via exact integer arithmetic before any change touches reality. Physical database tuning is self-optimizing: the engine detects slow access patterns, tests indexes on isolated shadow graphs, and commits schema migrations as logged, audited rewrites. Finally, cross-tenant federation preserves happens-before causality across completely isolated tenant databases.
+
+Every guarantee in GNOMON is mechanically enforced: nine stateful audit probes (K1–K9) and a 32-scenario mutation suite (MU1–MU32) verify that no state can mutate without leaving an unforgeable, replayable cryptographic trail.
 
 ## Demo video
 
