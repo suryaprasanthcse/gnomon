@@ -10,7 +10,8 @@ import pytest
 
 from tests.support.assurance_machine import Machine
 
-pytestmark = [pytest.mark.e2e, pytest.mark.integration, pytest.mark.gate_assure]
+pytestmark = [pytest.mark.e2e, pytest.mark.integration, pytest.mark.gate_assure,
+              pytest.mark.timeout(1500)]  # the three-tenant world is built in the test; a loaded CI runner exceeds the 300 s default
 
 INJECTIONS = (("MU5", "C"), ("MU16", "A"), ("MU28", "B"))
 
