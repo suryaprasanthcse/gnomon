@@ -1,6 +1,6 @@
 # Demo video script · three minutes
 
-Record this yourself, in your own voice, then replace `VIDEO-LINK-PENDING` in `README.md` with the link.
+Recorded by the author; the published video is linked from the README (Demo video section).
 About 365 spoken words: roughly 2:30 of speech at 150 words a minute, leaving about 30 seconds for terminal output to land. Track names follow the Graph Hacks brief: 01 Connected Data, 02 Agent Memory, 03 Company Brain.
 
 ## Before you hit record

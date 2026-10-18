@@ -8,7 +8,7 @@ the past. On top of that sits an advisory layer: graph algorithms exposed as MCP
 action in its own copy of the world before anything touches reality.
 
 Author: **Surya Prasanth R** (sole human author and committer). Tracks entered: **01, 02 and 03**.
-Design specification: [docs/design/master.md](docs/design/master.md). Demo video: see [Demo video](#demo-video).
+Design specification: [docs/design/master.md](docs/design/master.md). Demo video: [watch on YouTube](https://www.youtube.com/watch?v=uc4TsiwRwOQ) (also under [Demo video](#demo-video)).
 
 **Contents:** [What it is](#what-it-is) · [Setup](#setup) · [Quickstart](#quickstart) · [Architecture](#architecture) ·
 [Graph data model](#graph-data-model) · [Bitemporal time](#bitemporal-time-snapshot-and-as-of-queries) ·
@@ -465,7 +465,7 @@ Every guarantee in GNOMON is mechanically enforced: nine stateful audit probes (
 
 ## Demo video
 
-Video: VIDEO-LINK-PENDING (recorded from [docs/video_script.md](docs/video_script.md)).
+Video: [Watch the GNOMON demo video on YouTube](https://www.youtube.com/watch?v=uc4TsiwRwOQ) (recorded from [docs/video_script.md](docs/video_script.md)).
 
 ## AI assistance disclosure
 

@@ -41,7 +41,7 @@ def test_readme_contains_rule10_items():
     for heading in ("setup", "graph data model", "rule templates", "queries", "algorithms", "scoring", "demo video",
                     "tracks entered", "ai assistance"):
         assert re.search(rf"^#{{1,3}} .*{heading}", lowered, re.M), f"README has no section on {heading!r}"
-    assert "docker compose up" in README and "uv run" in README and "VIDEO-LINK-PENDING" in README
+    assert "docker compose up" in README and "uv run" in README and "(https://www.youtube.com/watch?v=uc4TsiwRwOQ)" in README and "VIDEO-LINK-PENDING" not in README
     # the graph model of §3: every kernel label, domain label and fact type
     for name in ("Head", "Rule", "KeyVersion", "Rewrite", "FactType", "Outbox", "Scorer", "Approval", "Decision",
                  "Candidate", "Evidence", "IndexEntry", "Channel", "XMsg", "Agent", "Service", "Incident", "Task",
