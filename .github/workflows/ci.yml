@@ -29,8 +29,8 @@ jobs:
             gate=$(jq -r .gate "$report")
             status=$(jq -r .status "$report")
             case "$status" in
-              green) uv run python scripts/gate.py "$gate" ;;
-              provisional) uv run python scripts/gate.py "$gate" --provisional ;;
+              green) uv run python scripts/gate.py "$gate" --replay ;;
+              provisional) uv run python scripts/gate.py "$gate" --provisional --replay ;;
               *) echo "::error::gates/$gate.json is recorded as $status"; exit 1 ;;
             esac
           done

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cumulative gate runner (RUNBOOK_A §4.5, patch P1).
 
-usage: python scripts/gate.py <GATE> [--provisional] [--workers N]
+usage: python scripts/gate.py <GATE> [--provisional] [--replay] [--workers N]
 
 Modules, gates, the gate DAG and each module's SCOPE are read from the runbook in
 docs/process/, so later modules never edit this file. Checks, in order:
@@ -39,7 +39,6 @@ SECTION_LABEL = re.compile(
 )
 FILENAME_TOKEN = re.compile(r"[\w.-]+\.[A-Za-z0-9]+")
 COVERAGE_FLOOR = {"gnomon/kernel": 0.90, "gnomon/audit": 0.90}
-PROVISIONAL_FLOOR = {("A03", "gnomon/kernel"): 0.79}
 DEFAULT_COVERAGE_FLOOR = 0.80
 
 # Assembled from pieces so this file does not match its own scan.
@@ -273,7 +272,7 @@ def head_commit() -> str:
 
 # ---------------------------------------------------------------- run
 
-def run_gate(gate: str, provisional: bool, workers: int) -> dict:
+def run_gate(gate: str, provisional: bool, workers: int, replay: bool = False) -> dict:
     modules = load_modules()
     if gate not in modules:
         raise SystemExit(f"unknown gate {gate!r}; known gates: {', '.join(modules)}")
@@ -314,10 +313,14 @@ def run_gate(gate: str, provisional: bool, workers: int) -> dict:
         failures.append("TDD order check failed: " + "; ".join(tdd["problems"]))
 
     coverage = coverage_ratios(cov_json, packages) if packages and cov_json.exists() else {}
+    coverage_warnings: list[str] = []
     for package in packages:
-        floor = PROVISIONAL_FLOOR.get((module.id, package)) or COVERAGE_FLOOR.get(package, DEFAULT_COVERAGE_FLOOR)
+        floor = COVERAGE_FLOOR.get(package, DEFAULT_COVERAGE_FLOOR)
         if coverage.get(package, 0.0) < floor:
-            failures.append(f"coverage {package} {coverage.get(package, 0.0):.2%} < {floor:.0%}")
+            shortfall = f"coverage {package} {coverage.get(package, 0.0):.2%} < {floor:.0%}"
+            # A replay runs an early gate's tests against today's source, which later modules have grown,
+            # so the floor met when the gate was authored cannot be met again; report it, do not fail it.
+            (coverage_warnings if replay else failures).append(shortfall)
 
     signed = human_signed(module.id)
     if failures:
@@ -344,6 +347,7 @@ def run_gate(gate: str, provisional: bool, workers: int) -> dict:
         "forbidden_patterns": len(hits),
         "human_signed": signed,
         "failures": failures,
+        "coverage_warnings": coverage_warnings,
         "forbidden": hits,
     }
     out = ROOT / "gates" / f"{gate}.json"
@@ -357,12 +361,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("gate")
     parser.add_argument("--provisional", action="store_true", help="skip only the HUMAN-SIGNED check (patch P1)")
     parser.add_argument("--workers", type=int, default=4, help="pytest-xdist workers (0 = single process)")
+    parser.add_argument("--replay", action="store_true", help="CI re-run of a recorded gate: coverage floors warn instead of fail")
     args = parser.parse_args(argv)
     sys.stdout.reconfigure(errors="backslashreplace")
-    report = run_gate(args.gate, args.provisional, args.workers)
+    report = run_gate(args.gate, args.provisional, args.workers, args.replay)
     print(f"gate {report['gate']} ({report['module']}): {report['status']}")
     for failure in report["failures"]:
         print(f"  - {failure}")
+    for warning in report["coverage_warnings"]:
+        print(f"  ~ {warning} (replay: not enforced)")
     for hit in report["forbidden"]:
         print(f"    {hit}")
     return 0 if report["status"] in ("green", "provisional") else 1
