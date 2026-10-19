@@ -728,7 +728,14 @@ def test_a_decision_to_drop_an_unused_optimizer_index_is_trialled_logged_and_exe
     ow.reconciler().tick()
     opt.resume(second)
     assert ow.entry(key)["state"] == "retired" and key not in ow.physical()
-    assert audit(ow.db, ow.client, ow.key, checks=["K7", "K8"]).ok
+    # K7 re-derives the plan on fresh shadow copies, and on a slow runner the server can still report the
+    # dropped index's plan for a moment, so re-run the whole audit (new copies each time) until it settles.
+    report = audit(ow.db, ow.client, ow.key, checks=["K7", "K8"])
+    deadline = time.monotonic() + 15
+    while not report.ok and time.monotonic() < deadline:
+        time.sleep(0.25)
+        report = audit(ow.db, ow.client, ow.key, checks=["K7", "K8"])
+    assert report.ok, report.as_dict()
 
 
 # ───────────────────────────────────────────────────────────── K7 for index decisions
