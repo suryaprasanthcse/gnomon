@@ -115,6 +115,7 @@ def script_command(proof: str) -> list[str]:
     return ["bash", str(ROOT / "scripts" / "demo_proofs.sh"), proof]
 
 
+@pytest.mark.timeout(1500)  # the script runs the proof's tests in a subprocess (timeout 1500 below); proof C passes 300 s under -n 4
 @pytest.mark.parametrize("proof", PROOF_NAMES)
 def test_demo_scripts_run(stack, proof):
     env = {**os.environ, "GNOMON_FALKORDB_URL": stack["url"], "GNOMON_PYTHON": sys.executable}
