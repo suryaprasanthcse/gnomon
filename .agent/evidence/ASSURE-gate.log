@@ -32,6 +32,6 @@ created: 4/4 workers
 ........................................................................ [ 95%]
 ........................................................................ [100%]
 - generated xml file: C:\myspace\hacckathons\gnomon\.agent\evidence\ASSURE\junit.xml -
-====================== 1440 passed in 1532.71s (0:25:32) ======================
-gate ASSURE (A16): green
+====================== 1440 passed in 1478.98s (0:24:38) ======================
+gate ASSURE (A16): provisional
 exit 0

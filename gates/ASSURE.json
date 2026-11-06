@@ -1,9 +1,9 @@
 {
   "gate": "ASSURE",
   "module": "A16",
-  "status": "green",
-  "commit": "d28913fee394d1ddfa9d5e7504de0ce6ef8b91bf",
-  "utc": "2026-10-16T14:38:28Z",
+  "status": "provisional",
+  "commit": "4244e85c21df275d3dc8c9f5d2614f9b74fdeb3f",
+  "utc": "2026-11-06T19:21:50Z",
   "image_digest": "sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6",
   "markers": [
     "gate_h0",
@@ -28,7 +28,7 @@
     "passed": 1440,
     "failed": 0,
     "skipped": 0,
-    "duration_s": 1532.211
+    "duration_s": 1478.938
   },
   "coverage": {},
   "tdd": {
@@ -39,7 +39,8 @@
     "order_ok": true
   },
   "forbidden_patterns": 0,
-  "human_signed": true,
+  "human_signed": false,
   "failures": [],
+  "coverage_warnings": [],
   "forbidden": []
 }

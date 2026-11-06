@@ -44,11 +44,15 @@ def render(ledger: str) -> str:
     models = sorted({r["model"] for r in rows})
     lines = [
         "Every module of this repository was implemented by an AI coding assistant (Claude Code, desktop app) working "
-        "against tests written first, under the design in `docs/design/master.md`, which was itself drafted with Claude. "
-        "The human author, Surya Prasanth R, approved every design decision (`.agent/DECISIONS.md`), answered every "
-        "module's explain-back in their own words (`docs/explain/`) and is the sole committer in the git history. "
-        "The demos use recorded model responses produced by a deterministic rule-based stand-in (`PolicyLLM`); no live "
-        "language model is called by the product.",
+        "against tests written first, under the design in `docs/design/master.md`, which was itself drafted with Claude; "
+        "maintenance after Gate SHIP is done the same way. The human author, Surya Prasanth R, approved the design "
+        "decisions in `.agent/DECISIONS.md` (five of them, D-32, D-35, D-36, D-47 and D-49, were logged under a module "
+        "brief and reviewed at the next checkpoint rather than approved one by one) and is the sole committer in the git "
+        "history. Explain-backs (`docs/explain/`): the author answered and signed A00 to A11 and reviewed and signed A12 "
+        "and A13; the assistant drafted the A17 answers at the author's instruction (machine-assisted); A14 and A15 have "
+        "none and A16's answers are blank, so gates TE and TF are not recorded and gate ASSURE stays provisional until "
+        "A16 is answered. The demos use recorded model responses produced by a deterministic rule-based stand-in "
+        "(`PolicyLLM`); no live language model is called by the product.",
         "",
         "| Model | Runs | Modules | First run (UTC) | Last run (UTC) |",
         "|---|---|---|---|---|",
