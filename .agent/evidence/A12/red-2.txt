@@ -1,0 +1,42 @@
+$ uv run pytest tests/integration/test_a12_optimizer.py -k trial_drop_returns_only_once -q   (pinned image 6.0.2, before the apply_ddl fix; 3 of 3 runs failed the same way)
+F                                                                        [100%]
+================================== FAILURES ===================================
+_ test_a_trial_drop_returns_only_once_the_rest_of_the_label_index_is_operational _
+
+db = <falkordb.falkordb.FalkorDB object at 0x…>
+redis_raw = <redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>
+tenant = 't:test-4a80b031'
+
+    def test_a_trial_drop_returns_only_once_the_rest_of_the_label_index_is_operational(db, redis_raw, tenant):
+        # FalkorDB keeps one index per label, so dropping one property rebuilds the label's index, and until it is
+        # OPERATIONAL again a lookup on another property of the label plans as a label scan (FACTS S27). A trial,
+        # its evidence and K7 all EXPLAIN right after apply_ddl, so a drop must not return inside that window.
+        from gnomon.audit.k8 import physical_indexes
+        from gnomon.optimizer import detect, trials
+    
+        key = f"{tenant}:opt:ddl"
+        graph = db.select_graph(key)
+        graph.query("UNWIND range(1, 100000) AS i CREATE (:Service {id: 's' + toString(i), tier: i % 7})")
+        for prop in ("id", "tier"):
+            graph.query(f"CREATE INDEX FOR (n:Service) ON (n.{prop})")
+        deadline = time.monotonic() + 120
+        while any(status != "OPERATIONAL" for status in physical_indexes(graph).values()):
+            assert time.monotonic() < deadline, physical_indexes(graph)
+            time.sleep(0.05)
+        lookup = "MATCH (s:Service {id: $id}) RETURN s.id"
+        assert ("node", "Service") in trials.explain(redis_raw, key, lookup).index_scans()
+    
+        trials.apply_ddl(db, redis_raw, key, detect.candidate_of("S27", "node", "Service", "tier", "drop"), 60_000)
+    
+>       assert ("node", "Service") in trials.explain(redis_raw, key, lookup).index_scans(), physical_indexes(graph)
+E       AssertionError: {'node:Service:id': '[Indexing] 0/100000: UNDER CONSTRUCTION'}
+E       assert ('node', 'Service') in []
+E        +  where [] = index_scans()
+E        +    where index_scans = <gnomon.optimizer.plan.Plan object at 0x…>.index_scans
+E        +      where <gnomon.optimizer.plan.Plan object at 0x…> = <function explain at 0x…>(<redis.client.Redis(<redis.connection.ConnectionPool(<redis.connection.Connection(db=0,username=<REDACTED>,password=<R...d_timeout=10, endpoint_type=None),orig_host_address=localhost,orig_socket_timeout=5,orig_socket_connect_timeout=5)>)>)>, 't:test-4a80b031:opt:ddl', 'MATCH (s:Service {id: $id}) RETURN s.id')
+E        +        where <function explain at 0x…> = <module 'gnomon.optimizer.trials' from 'C:\\myspace\\hacckathons\\gnomon\\gnomon\\optimizer\\trials.py'>.explain
+
+tests\integration\test_a12_optimizer.py:349: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/integration/test_a12_optimizer.py::test_a_trial_drop_returns_only_once_the_rest_of_the_label_index_is_operational
+1 failed, 62 deselected in 2.20s

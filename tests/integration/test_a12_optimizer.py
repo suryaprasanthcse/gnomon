@@ -325,6 +325,31 @@ def test_trials_only_on_scratch(ow):
     assert ow.scratch() == [] and Q5_VF in ow.physical()
 
 
+def test_a_trial_drop_returns_only_once_the_rest_of_the_label_index_is_operational(db, redis_raw, tenant):
+    # FalkorDB keeps one index per label, so dropping one property rebuilds the label's index, and until it is
+    # OPERATIONAL again a lookup on another property of the label plans as a label scan (FACTS S27). A trial,
+    # its evidence and K7 all EXPLAIN right after apply_ddl, so a drop must not return inside that window.
+    from gnomon.audit.k8 import physical_indexes
+    from gnomon.optimizer import detect, trials
+
+    key = f"{tenant}:opt:ddl"
+    graph = db.select_graph(key)
+    graph.query("UNWIND range(1, 100000) AS i CREATE (:Service {id: 's' + toString(i), tier: i % 7})")
+    for prop in ("id", "tier"):
+        graph.query(f"CREATE INDEX FOR (n:Service) ON (n.{prop})")
+    deadline = time.monotonic() + 120
+    while any(status != "OPERATIONAL" for status in physical_indexes(graph).values()):
+        assert time.monotonic() < deadline, physical_indexes(graph)
+        time.sleep(0.05)
+    lookup = "MATCH (s:Service {id: $id}) RETURN s.id"
+    assert ("node", "Service") in trials.explain(redis_raw, key, lookup).index_scans()
+
+    trials.apply_ddl(db, redis_raw, key, detect.candidate_of("S27", "node", "Service", "tier", "drop"), 60_000)
+
+    assert ("node", "Service") in trials.explain(redis_raw, key, lookup).index_scans(), physical_indexes(graph)
+    assert physical_indexes(graph) == {"node:Service:id": "OPERATIONAL"}
+
+
 def test_plan_change_required_a_candidate_whose_plan_does_not_change_is_discarded(ow):
     from gnomon.optimizer import detect
 
@@ -728,13 +753,7 @@ def test_a_decision_to_drop_an_unused_optimizer_index_is_trialled_logged_and_exe
     ow.reconciler().tick()
     opt.resume(second)
     assert ow.entry(key)["state"] == "retired" and key not in ow.physical()
-    # K7 re-derives the plan on fresh shadow copies, and on a slow runner the server can still report the
-    # dropped index's plan for a moment, so re-run the whole audit (new copies each time) until it settles.
     report = audit(ow.db, ow.client, ow.key, checks=["K7", "K8"])
-    deadline = time.monotonic() + 15
-    while not report.ok and time.monotonic() < deadline:
-        time.sleep(0.25)
-        report = audit(ow.db, ow.client, ow.key, checks=["K7", "K8"])
     assert report.ok, report.as_dict()
 
 
