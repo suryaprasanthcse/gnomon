@@ -1,5 +1,7 @@
 # RUNBOOK_A §4.6: every push re-runs every recorded gate, so a regression in any earlier gate fails
-# the build. The nightly job runs the stateful, chaos and mutation suites under the "nightly" profile.
+# the build. Each recorded gate replays in its own job (D-77): one after another they outgrew the
+# 60-minute job limit. The nightly job runs the stateful, chaos and mutation suites under the
+# "nightly" profile.
 name: ci
 
 on:
@@ -10,30 +12,46 @@ on:
   workflow_dispatch:
 
 jobs:
-  gates:
+  recorded-gates:
     if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    outputs:
+      gates: ${{ steps.list.outputs.gates }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: |
+          shopt -s nullglob
+          reports=(gates/*.json)
+          if [ ${#reports[@]} -eq 0 ]; then echo "gates=[]" >> "$GITHUB_OUTPUT"; exit 0; fi
+          echo "gates=$(jq -cs 'map({gate, status})' "${reports[@]}")" >> "$GITHUB_OUTPUT"
+
+  gates:
+    needs: recorded-gates
+    if: needs.recorded-gates.outputs.gates != '[]'
+    name: gate ${{ matrix.gate }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90 # SHIP replays the whole suite: 29 min on a laptop, ASSURE alone took 28 min on a runner
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.recorded-gates.outputs.gates) }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # check_tdd.py walks the full history
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --locked
-      - name: Re-run every recorded gate
+      - name: Re-run the recorded gate
+        env:
+          GATE: ${{ matrix.gate }}
+          STATUS: ${{ matrix.status }}
         run: |
-          shopt -s nullglob
-          reports=(gates/*.json)
-          if [ ${#reports[@]} -eq 0 ]; then echo "no gate recorded yet"; exit 0; fi
-          for report in "${reports[@]}"; do
-            gate=$(jq -r .gate "$report")
-            status=$(jq -r .status "$report")
-            case "$status" in
-              green) uv run python scripts/gate.py "$gate" --replay ;;
-              provisional) uv run python scripts/gate.py "$gate" --provisional --replay ;;
-              *) echo "::error::gates/$gate.json is recorded as $status"; exit 1 ;;
-            esac
-          done
+          case "$STATUS" in
+            green) uv run python scripts/gate.py "$GATE" --replay ;;
+            provisional) uv run python scripts/gate.py "$GATE" --provisional --replay ;;
+            *) echo "::error::gates/$GATE.json is recorded as $STATUS"; exit 1 ;;
+          esac
 
   nightly:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
