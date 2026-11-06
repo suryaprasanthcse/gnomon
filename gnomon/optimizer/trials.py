@@ -93,7 +93,9 @@ def delete_all(client, prefix: str) -> None:
 
 
 def apply_ddl(db, client, key: str, cand, timeout_ms: int, sleep=time.sleep, monotonic=time.monotonic) -> None:
-    """The create or drop of `cand` on scratch graph `key`, then a poll of db.indexes() until it took effect."""
+    """The create or drop of `cand` on scratch graph `key`, then a poll of db.indexes() until it took effect and every
+    index of the graph is OPERATIONAL: one index serves all the properties of a label, so a drop rebuilds what is left
+    of it, and until then lookups on the label's other properties plan as label scans (FACTS S27)."""
     graph = db.select_graph(key)
     statement = (create_statement if cand.op == "create" else drop_statement)(cand.entity, cand.label, cand.prop)
     try:
@@ -102,11 +104,14 @@ def apply_ddl(db, client, key: str, cand, timeout_ms: int, sleep=time.sleep, mon
         raise TrialError(f"{statement}: {exc}") from exc
     started = monotonic()
     while True:
-        status = physical_indexes(graph).get(cand.key)
-        if (cand.op == "create" and status == "OPERATIONAL") or (cand.op == "drop" and status is None):
+        indexes = physical_indexes(graph)
+        status = indexes.get(cand.key)
+        done = (cand.op == "create" and status == "OPERATIONAL") or (cand.op == "drop" and status is None)
+        waiting = sorted(k for k, s in indexes.items() if s != "OPERATIONAL")
+        if done and not waiting:
             return
-        if status == "FAILED" or (monotonic() - started) * 1000 >= timeout_ms:
-            raise TrialError(f"{statement}: index not ready (status {status})")
+        if "FAILED" in indexes.values() or (monotonic() - started) * 1000 >= timeout_ms:
+            raise TrialError(f"{statement}: index not ready (status {status}; not operational: {waiting})")
         sleep(0.02)
 
 

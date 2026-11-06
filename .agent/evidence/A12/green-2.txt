@@ -1,0 +1,15 @@
+$ uv run pytest tests/integration/test_a12_optimizer.py tests/unit -n 4 -q   (pinned image 6.0.2, after the apply_ddl fix)
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 60%]
+........................................................................ [ 80%]
+.....................................................................    [100%]
+357 passed in 1233.54s (0:20:33)
+
+$ uv run pytest tests/integration/test_a12_optimizer.py -k trial_drop_returns_only_once -q   (3 runs)
+1 passed, 62 deselected in 2.00s
+1 passed, 62 deselected in 2.02s
+1 passed, 62 deselected in 2.02s
