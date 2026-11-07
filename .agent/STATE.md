@@ -1,7 +1,7 @@
 # STATE
 current_module:        A17          status: green (gate SHIP)
 last_green_gate:       SHIP (1466 passed, 0 failed; gates/SHIP.json green)
-falkordb_image:        falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+falkordb_image:        falkordb/falkordb@sha256:bef8acb1d8ed9ff8d2ea251767e75c6c05cfa759f7c6bc7e1c122f27d0ea4d7f
 python:                3.12.x
 platform_facts:        (full text in .agent/FACTS.md; each line is enforced by its tests/spikes test)
                        S1: PASS → UDFs in WHERE/SET of writes; maps and null-holding lists are not storable as properties
@@ -35,15 +35,15 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        A07 observation (D-30): an inline map in a later MATCH that references an earlier variable ({id: e.rw}) fails "Variable not found"; use WHERE
                        S27 (A12 hazard): FAIL → a drop rebuilds the rest of the label's index; until it is OPERATIONAL the label's other lookups are label scans; trial DDL waits for every index (D-79)
                        S26 (A12 hazard): FAIL → the genesis (OWNED_BY, te) index preempts a later vf index for a query with `f.te = $INF`; Q5 now uses `NOT f.te < $INF` (D-60)
-                       S25 (A06 hazard): FAIL → planner pushes an OPTIONAL MATCH filter below its traverse after an aggregation; filter in sum(CASE…) instead (D-25)
-                       S24 (A05 hazard): FAIL → slow write with a multi-byte char at byte 2048 of its text aborts the server; send ASCII query text (D-20)
-                       S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8)
+                       S25 (A06 hazard): FAIL → planner pushes an OPTIONAL MATCH filter below its traverse after an aggregation; filter in sum(CASE…) instead (D-25); still on 6.0.4 (FalkorDB PR #3521 open)
+                       S24 (A05 hazard): FAIL → slow write with a multi-byte char at byte 2048 of its text aborts the server; send ASCII query text (D-20); fixed upstream since 6.0.3, fallback kept
+                       S23 (A02 hazard): FAIL → a property projected after an aggregate in RETURN/WITH panics the server; keep aggregates last (D-8); fixed upstream in 6.0.4 (FalkorDB #3150), fallback kept
 fallbacks_in_effect:   [S8: Docker Compose for live (D-3), S14: index-count budget (D-4), S17: var-length upstream (D-5), F3: FOR-pattern relationship index drop (D-6), S23: aggregates last in RETURN/WITH (D-8), S24: comment-stripped ASCII wire text (D-20), S25: R11 counts root causes in sum(CASE) (D-25), S27: trial DDL waits for every index to be OPERATIONAL (D-79)]
 kernel_sha:            5711add3b4c184d96b5353682708996c7f4dc02ca3d5f542e9e265e921403834 (Head.kernel_sha: udf/kernel.js + composer.py + segments pg/p0/p1/p2/p3/q0/e0/ret, LF; changed in A13 by P2/P3 and the T2/T3 ticks; was e7814dc3... after A11)
 kernel_udf_sha:        de41d9c0706340937cd1b3731d5e998f0f2f64622504151fce8993d0bd1f8f74 (Kernel, udf/kernel.js, LF; = sha256 of GRAPH.UDF LIST Kernel WITHCODE)
 layers_active:         [core, T-A, T-B, T-C, T-D, T-E, T-F]
 open_questions:        0 (see QUESTIONS.md; D-69..D-73 approved by Surya Prasanth R)
-resume_point:        none; A17 done, maintenance after SHIP under D-77 and D-78. Remaining human task: answer the A14, A15 and A16 explain-backs (gate ASSURE is provisional until A16 is answered; TE and TF are unrecorded)
+resume_point:        none; A17 done, maintenance after SHIP under D-77 to D-80. Remaining human task: answer the A14, A15 and A16 explain-backs (gate ASSURE is provisional until A16 is answered; TE and TF are unrecorded)
 module_table:          | module | gate | status | commit |
                        | A00    | H0   | green  | 384ce89 |
                        | A01    | G0   | green  | 15bd2c1 |

@@ -3,7 +3,7 @@
 # The host port is GNOMON_PORT (default 6379); the demo scripts and the clean-install test read GNOMON_FALKORDB_URL.
 services:
   falkordb:
-    image: falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6
+    image: falkordb/falkordb@sha256:bef8acb1d8ed9ff8d2ea251767e75c6c05cfa759f7c6bc7e1c122f27d0ea4d7f
     ports:
       - "${GNOMON_PORT:-6379}:6379"
     environment:

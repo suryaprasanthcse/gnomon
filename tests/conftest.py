@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 UDF_DIR = ROOT / "udf"
 
 # Pinned by A01 (gate G0); the same digest heads .agent/FACTS.md and docker-compose.yml.
-FALKORDB_IMAGE = "falkordb/falkordb@sha256:107455e862a824e45e8e9f5a7fbfdf5e00a08b14e13eae2577c72fd9e3f59ba6"
+FALKORDB_IMAGE = "falkordb/falkordb@sha256:bef8acb1d8ed9ff8d2ea251767e75c6c05cfa759f7c6bc7e1c122f27d0ea4d7f"
 FALKORDB_PORT = 6379
 URL_ENV = "GNOMON_FALKORDB_URL"
 PING_TIMEOUT_S = 60.0
