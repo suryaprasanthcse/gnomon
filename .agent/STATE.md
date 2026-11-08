@@ -33,6 +33,7 @@ platform_facts:        (full text in .agent/FACTS.md; each line is enforced by i
                        F6: PASS → algo signatures as §10.5; maxFlow YIELD nodes, edges, edgeFlows, maxFlow
                        F7: PASS → UDF graph API read-only; traverse ignores `distance`
                        A07 observation (D-30): an inline map in a later MATCH that references an earlier variable ({id: e.rw}) fails "Variable not found"; use WHERE
+                       S28 (hazard after SHIP): FAIL → GRAPH.COPY stops the whole server for its full duration and writes the whole graph to the AOF; no fallback (K_MAX bounds the copies per decision, not their size)
                        S27 (A12 hazard): FAIL → a drop rebuilds the rest of the label's index; until it is OPERATIONAL the label's other lookups are label scans; trial DDL waits for every index (D-79)
                        S26 (A12 hazard): FAIL → the genesis (OWNED_BY, te) index preempts a later vf index for a query with `f.te = $INF`; Q5 now uses `NOT f.te < $INF` (D-60)
                        S25 (A06 hazard): FAIL → planner pushes an OPTIONAL MATCH filter below its traverse after an aggregation; filter in sum(CASE…) instead (D-25); still on 6.0.4 (FalkorDB PR #3521 open)
